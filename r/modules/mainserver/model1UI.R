@@ -121,6 +121,8 @@ model1UI <- function(id) {
   
   ui_body <- tagList(
     
+    
+    div(id = ns("myalert"), style = "position: absolute; bottom: 0; right: 0;"),
     # Infobox
     column(
       width = 12,
