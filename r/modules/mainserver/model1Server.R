@@ -30,20 +30,20 @@ main_plotserver <- function(id, data) {
             shinyFeedback::feedbackWarning(
               inputId = "pt_control",
               !isTruthy(input$pt_control),
-              text = "Intet Valgt!"
+              text = "Vælg Sammenligningsgruppe!",icon = NULL
             )            
             
             
             shinyFeedback::feedbackWarning(
               inputId = "pt_target",
               !isTruthy(input$pt_target),
-              text = "Intet Valgt!"
+              text = "Vælg Gruppe!",icon = NULL
             )   
             
             shinyFeedback::feedbackWarning(
               inputId = "pt_outcome",
               !isTruthy(input$pt_outcome),
-              text = "Intet Valgt!",icon = NULL
+              text = "Vælg Outcome(s)!",icon = NULL
             )   
             
             
@@ -141,20 +141,20 @@ main_infobox <- function(id, data) {
     shinyFeedback::feedbackWarning(
       inputId = "pt_control",
       !isTruthy(input$pt_control),
-      text = "Intet Valgt!"
+      text = "Vælg Sammenligningsgruppe!",icon = NULL
     )            
     
     
     shinyFeedback::feedbackWarning(
       inputId = "pt_target",
       !isTruthy(input$pt_target),
-      text = "Intet Valgt!"
+      text = "Vælg Gruppe!",icon = NULL
     )   
     
     shinyFeedback::feedbackWarning(
       inputId = "pt_outcome",
       !isTruthy(input$pt_outcome),
-      text = "Intet Valgt!",icon = NULL
+      text = "Vælg Outcome(s)!",icon = NULL
     )   
     
     
@@ -338,7 +338,7 @@ main_choiceserver <- function(id, data) {
         
         if (is.null(chosen_demographics()) | length(educ) == 0){
           
-          "Alle uddannelser"
+          "Alle Uddannelser"
           
         } else {
           
@@ -361,7 +361,7 @@ main_choiceserver <- function(id, data) {
         
         if (is.null(chosen_demographics()) | length(socio) == 0){
           
-          "Alle tilknytninger"
+          "Alle Tilknytninger"
           
         } else {
           

@@ -104,6 +104,11 @@ server <- function(input, output, session) {
   
   
   observe({
+    # Generate Chosen Parameters
+    main_choiceserver(
+      id = "model1",
+      data = data()
+    )
     
     # Generate Plots
     main_plotserver(
@@ -116,11 +121,6 @@ server <- function(input, output, session) {
       data = data()
     )
     
-    # Generate Chosen Parameters
-    main_choiceserver(
-      id = "model1",
-      data = data()
-    )
     
     
     

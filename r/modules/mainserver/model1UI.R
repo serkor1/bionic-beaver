@@ -7,46 +7,46 @@ model1UI <- function(id) {
   # Generate Sidebar; ####
   ui_sidebar <- tagList(
     
-    sidebarHeader(h5(("Vælg Gruppe"))),
+    sidebarHeader(h5(("Vælg gruppe"))),
     
     vive_picker(
       id = ns("pt_target"),
-      title = "Intervention",
-      header = "Vælg Intervention",
+      title = "Gruppe",
+      header = "Vælg Gruppe",
       choices = diseases,
-      selected = sample(
-        c("Psykiske Lidelser_Svær", "Psykiske Lidelser_Moderat"),
-        size = 1
-        ),
+      # selected = sample(
+      #   c("Psykiske Lidelser_Svær", "Psykiske Lidelser_Moderat"),
+      #   size = 1
+      #   ),
       multiple = FALSE
     ),
     
     vive_picker(
       id = ns("pt_control"),
-      title = "Kontrol",
-      header = "Vælg Kontrol",
+      title = "Sammenligningsgruppe",
+      header = "Vælg Sammenligningsgruppe",
       choices = diseases,
       multiple = TRUE,
-      selected = c("Psykiske Lidelser_Mild"),
+      #selected = c("Psykiske Lidelser_Mild"),
       max = 1,
       selectAllText = "Matching",
       deselectAllText = "Nulstil"
     ),
     
-    sidebarHeader(h5(("Vælg Parametre"))),
+    sidebarHeader(h5(("Vælg parametre"))),
     
     vive_picker(
       id = ns("pt_outcome"),
       title = "Outcomes",
       header = "Vælg Outcomes",
       choices = outcomes,
-      selected = c(
-        "Primær Sektor_Almen Praksis",
-        "Primær Sektor_Psykolog",
-        "Psykiatrien_Ambulant",
-        "Somatikken_Ambulant",
-        "Overførsel_Midlertidig Overførselsindkomst"
-        ),
+      # selected = c(
+      #   "Primær Sektor_Almen Praksis",
+      #   "Primær Sektor_Psykolog",
+      #   "Psykiatrien_Ambulant",
+      #   "Somatikken_Ambulant",
+      #   "Overførsel_Midlertidig Overførselsindkomst"
+      #   ),
       multiple = TRUE,
       selectAllText = "Vælg Alle",
       deselectAllText = "Nulstil"
@@ -59,24 +59,28 @@ model1UI <- function(id) {
       title = "Demografi",
       header = "Vælg Demografiske",
       choices = demographics,
-      selected = c(
-        sample(demographics$alder, 1),
-        sample(demographics$køn, 1),
-        sample(demographics$uddannelse, 1)
-        ),
+      # selected = c(
+      #   sample(demographics$alder, 1),
+      #   sample(demographics$køn, 1),
+      #   sample(demographics$uddannelse, 1)
+      #   ),
       multiple = TRUE,
       selectAllText = "Vælg Alle",
       deselectAllText = "Nulstil"
     ),
     
-    sidebarHeader(h5("Vælg Beregningsgrundlag")),
+    sidebarHeader(h5("Vælg beregningsgrundlag")),
     
     materialSwitch(
       inputId = ns("do_incident"),
       label = "Incidente Patienter?",
       value = FALSE,
       status = "primary"
-    )
+    ) %>% popover(
+      title = "Klik for at vælge Incidente patienter.",
+      placement = "right",
+      content = "Klik for at vælge Incidente patienter."
+      )
     
     
     
@@ -101,8 +105,7 @@ model1UI <- function(id) {
               inputId = ns(paste0("effect_", i)),
               label = paste("Tid", i),
               min = 0,
-              max = 100
-              ,
+              max = 100,
               value = round(runif(1, min = 0, max = 100))
             )
           }
@@ -137,7 +140,7 @@ model1UI <- function(id) {
         column(
           width = 4,
           bs4InfoBox(
-            title = strong("Interventionsgruppe"),
+            title = strong("Valgt Gruppe"),
             subtitle =  textOutput(ns("chosen_target"),inline = TRUE),
             color = "primary",
             width = 12,
@@ -146,7 +149,7 @@ model1UI <- function(id) {
             icon = icon("lungs-virus")
           ),
           bs4InfoBox(
-            title = strong("Kontrolgruppe"),
+            title = strong("Valgt Sammenligningsgruppe"),
             subtitle =  textOutput(ns("chosen_control"),inline = TRUE),
             color = "primary",
             width = 12,
@@ -233,9 +236,9 @@ model1UI <- function(id) {
               tabPanel(
                 title = paste(
                   fcase(
-                    tabset_names[i] %chin% c("primary_care"), "Almen Praksis",
-                    tabset_names[i] %chin% c("psychiatric_care"), "Psykiatrien",
-                    tabset_names[i] %chin% c("somatic_care"), "Somtatikken",
+                    tabset_names[i] %chin% c("primary_care"), "Almen praksis",
+                    tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
+                    tabset_names[i] %chin% c("somatic_care"), "Somatik",
                     tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
                     
                   )

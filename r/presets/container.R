@@ -68,7 +68,7 @@ vive_infobox <- function(effect, data) {
           numberColor = data$outcome_status,#ns("infobox_outcome"),#data$outcome_status,
           numberIcon = icon(data$outcome_icon),
           header = data$outcome_label,
-          text = "Uden Intervention",
+          text = "Faktisk Forskel",
           rightBorder = TRUE,
           marginBottom = FALSE
         )
@@ -81,7 +81,7 @@ vive_infobox <- function(effect, data) {
           numberColor = data$counter_status,
           numberIcon = icon(data$counter_icon),
           header = data$counter_label,
-          text = "Med Intervention",
+          text = "Kontrafaktisk Forskel",
           rightBorder = TRUE,
           marginBottom = FALSE
         )
@@ -94,7 +94,7 @@ vive_infobox <- function(effect, data) {
           numberColor = "lime",
           numberIcon = icon("caret-up"),
           header = "Ændring",
-          text = "Interventionseffekt",
+          text = "Effekt",
           rightBorder = FALSE,
           marginBottom = FALSE
         )

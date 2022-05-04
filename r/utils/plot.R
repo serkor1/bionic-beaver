@@ -288,7 +288,7 @@
             type   = "scatter",
             mode   = "lines+markers",
             showlegend = legend,
-            name = "Intervention"
+            name = "Valgt Gruppe"
           ) %>% add_trace(
             data = data[!is.na(effect)],
             x = ~year,
@@ -303,7 +303,7 @@
             type   = "scatter",
             mode   = "lines+markers",
             showlegend = legend,
-            name = "Kontrafaktisk Intervention"
+            name = "Kontrafaktisk Værdi"
           ) %>% 
           
           # Add Control Group
@@ -320,7 +320,7 @@
             type   = "scatter",
             mode   = "lines+markers",
             showlegend = legend,
-            name = "Kontrol"
+            name = "Sammenligningsgruppe"
           ) %>% .base_layout(legend = legend, data = data) 
         
         
@@ -341,9 +341,9 @@
   
   # Set Title;
   yaxis_text <- fcase(
-    inherits(data, c("primary_care")), "Gennemsnitlig Besøg pr. Person",
-    inherits(data, c("psychiatric_care", "somatic_care")), "Gennemsnitlig Sengedage pr. Person",
-    inherits(data, c("transfers")), "Gennemsnitlig Antal Uger pr. Person"
+    inherits(data, c("primary_care")), "Gennemsnitlig besøg pr. person",
+    inherits(data, c("psychiatric_care", "somatic_care")), "Gennemsnitlig sengedage pr. person",
+    inherits(data, c("transfers")), "Gennemsnitlig antal uger pr. person"
   )
   
   
@@ -352,7 +352,7 @@
       showgrid = FALSE,
       title = paste(
         yaxis_text, "\n",
-        str_remove(unique(data$allocator), "[:graph:]*[:blank:]*[:graph:]*_")
+        str_to_sentence(str_remove(unique(data$allocator), "[:graph:]*[:blank:]*[:graph:]*_"))
       )
     ),
     
@@ -373,13 +373,6 @@
 
 .base_plot <- function(data,difference) {
   
-  
-  # Set Title;
-  yaxis_text <- fcase(
-    inherits(data, c("primary_care")), "Gennemsnitlig Besøg pr. Person",
-    inherits(data, c("psychiatric_care", "somatic_care")), "Gennemsnitlig Sengedage pr. Person",
-    inherits(data, c("transfers")), "Gennemsnitlig Antal Uger pr. Person"
-  )
   
   # yaxis_text <- fifelse(
   #   isTRUE(difference), yes = paste(yaxis_text, "(Forskellen)"), yaxis_text
@@ -412,7 +405,7 @@
     ),
     
     annotations = list(
-      text = "Intervention Start",
+      text = "Intervention start",
       yref = "paper",
       x = 0,
       y = 1.1,

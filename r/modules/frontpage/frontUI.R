@@ -21,7 +21,7 @@ frontUI <- function(id) {
           
           
             
-            h3("Den Sunhedsøkonomiske Investeringsmodel"),
+            h3("Den Sundhedsøkonomiske Investeringsmodel"),
             hr(),
             p(
               "Modellen er udviklet af VIVEs Sundhedsafdeling i samarbejde med LIF. Modellen er open-source og er derfor til fri afbenyttelse."
@@ -47,7 +47,7 @@ frontUI <- function(id) {
           status = "info",height = "500px",
           collapsible = FALSE,
           
-          h3("Hvordan Starter jeg?"),
+          h3("Hvordan starter jeg?"),
           
           p(
             "Der er to modeller. Model1 og Model2."
