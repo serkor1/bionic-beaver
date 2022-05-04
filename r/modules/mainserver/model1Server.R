@@ -3,6 +3,10 @@ main_plotserver <- function(id, data) {
     
     
     
+    
+    
+    
+    
     intervention_effect <- reactive(
       c(
         input$effect_1,
@@ -17,10 +21,36 @@ main_plotserver <- function(id, data) {
       1:length(data()),
       .f = function(i) {
         
+        
         output[[paste0("plot", i)]] <- renderPlotly(
           {
+            # Check wether user chose
+            # needed inputs and give feedback
             
-           
+            shinyFeedback::feedbackWarning(
+              inputId = "pt_control",
+              !isTruthy(input$pt_control),
+              text = "Intet Valgt!"
+            )            
+            
+            
+            shinyFeedback::feedbackWarning(
+              inputId = "pt_target",
+              !isTruthy(input$pt_target),
+              text = "Intet Valgt!"
+            )   
+            
+            shinyFeedback::feedbackWarning(
+              inputId = "pt_outcome",
+              !isTruthy(input$pt_outcome),
+              text = "Intet Valgt!",icon = NULL
+            )   
+            
+            
+            
+            req(input$pt_control)
+            req(input$pt_target)
+            req(input$pt_outcome)
             
             # TODO: Isolate These
             # so they dont keep running!
@@ -38,8 +68,17 @@ main_plotserver <- function(id, data) {
         )
         
         
+        
+        
+       
+        
+        
       }
     )
+    
+    
+    
+    
     
     
    
@@ -99,10 +138,31 @@ main_dataserver <- function(id) {
 main_infobox <- function(id, data) {
   moduleServer(id, function(input, output, session) {
 
+    shinyFeedback::feedbackWarning(
+      inputId = "pt_control",
+      !isTruthy(input$pt_control),
+      text = "Intet Valgt!"
+    )            
+    
+    
+    shinyFeedback::feedbackWarning(
+      inputId = "pt_target",
+      !isTruthy(input$pt_target),
+      text = "Intet Valgt!"
+    )   
+    
+    shinyFeedback::feedbackWarning(
+      inputId = "pt_outcome",
+      !isTruthy(input$pt_outcome),
+      text = "Intet Valgt!",icon = NULL
+    )   
+    
     
     
     req(input$pt_control)
     req(input$pt_target)
+    req(input$pt_outcome)
+
     # Server Information; #####
     #' @param data a reactive list of data.
     #'
