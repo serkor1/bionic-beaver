@@ -1,210 +1,5 @@
 # Grouped Plot; #####
 
-.plot_difference <- function(data, effect = rep(50,5)) {
-  
-  # Function Information; ####
-  #' @param data data.table that has been grinded for
-  #' for plotting.
-  #' 
-  #' @param effect vector of numeric values that serves as
-  #' intervention effect
-  #' 
-  #' @return list of plots
-  
-  # Prepare Data; ####
-  
-  # Step 1) 
-  # Cast to Wide Format
-  data <- data %>% dcast(
-    year + allocator ~ allocation,
-    value.var = "outcome"
-  )
-  
-  # Step 2)
-  # Add Effects
-  data[
-    year > 0,
-    effect := (1 - effect/100)
-    ,
-    by = .(allocator)
-  ]
-  
-  
-  # Step 2)
-  # Calculate Differences
-  data[
-    ,
-    `:=`(
-      outcome = sum(
-        -Control,
-        Intervention
-      ),
-      counterfactual = sum(
-        -Control,
-        Intervention * effect
-      )
-    )
-    
-    ,
-    by = 1:nrow(data)
-  ]
-  
-  data[
-    year == 0,
-    counterfactual := outcome
-  ]
-  
-  
-  
-  
-  
-  
-  
-  # Return Value; ####
-  
-  plot_counter <- 0
-  
-  
-  plot_list <- data %>%
-    split(.$allocator) %>%
-    map(
-      .f = function(data) {
-        
-        # Set Legend; ####
-        plot_counter <<- plot_counter + 1
-        
-        legend <- fifelse(
-          plot_counter > 1,
-          yes = FALSE,
-          no = TRUE
-        )
-        
-        plot_ly(
-          data   = data,
-          x      = ~year,
-          y      = ~outcome,
-          name   = "Forskel",
-          type = "scatter",
-          mode = "lines+markers",
-          showlegend = legend,
-          line = list(
-            color = "steelblue"
-          ),
-          marker = list(
-            color = "steelblue"
-          )
-        ) %>% add_trace(
-          y = ~counterfactual,
-          name = "Interventionseffekt",
-          colors = "steelblue",
-          type = "scatter",
-          mode = "lines+markers",
-          line = list(
-            dash = "dot",
-            color = "steelblue"
-          ),
-          marker = list(
-            color = "steelblue"
-          )
-          
-        )  %>% layout(
-          paper_bgcolor = '#ffffff00',
-          plot_bgcolor='#ffffff00',
-          annotations = list(
-            text = unique(data$allocator),
-            xref = "paper",
-            yref = "paper",
-            xanchor = "center",
-            x = 0.5,
-            y = 1,
-            yanchor = "bottom",
-            showarrow = FALSE
-          ),
-          yaxis = list(
-            title = "Forskellen",
-            showgrid = FALSE,
-            range = c(~min(outcome)*3, ~max(abs(outcome)*3))
-          ),
-          xaxis = list(
-            title = NULL,
-            showgrid = FALSE
-          ),
-          legend = list(
-            title = list("Gruppe"),
-            orientation = 'h'
-          ),
-          font = list(
-            size = 14,
-            color = "white"
-          )
-        ) %>% layout(
-          shapes = list(
-            list(
-              type = "line",
-              line = list(
-                color = "white",
-                dash  = "dot"
-              ),
-              y0 = 0, y1 = 1,
-              yref = "paper", # i.e. y as a proportion of visible region
-              x0 = 0, x1 = 0,
-              layer = "above"
-            ),
-            
-            # Add Rectange
-            list(
-              type = "rect",
-              fillcolor = "green",
-              line = list(color = "green"),
-              opacity = 0.1,
-              yref = "y",
-              xref = "x",
-              y0 = 0,
-              y1 = -1000,
-              x0 = -2,
-              x1 = 5,
-              layer = "below"
-            ),
-            
-            list(
-              type = "rect",
-              fillcolor = "red",
-              line = list(color = "red"),
-              opacity = 0.1,
-              yref = "y",
-              xref = "x",
-              y0 = 0,
-              y1 = 1000,
-              x0 = -2,
-              x1 = 5,
-              layer = "below"
-            )
-          ),
-          annotations = list(
-            text = "Intervention Start",
-            yref = "paper",
-            x = 0,
-            y = 1.1,
-            showarrow = FALSE
-          )
-        ) 
-        
-        
-      }
-    )
-  
-  
-  return(plot_list)
-  
-}
-
-
-
-
-
-
-
-
 .plot_data <- function(plot, effect = rep(50,5)) {
   
   # Function Information; ####
@@ -224,7 +19,6 @@
   # plot grinder!
   
   # Prepare Data; ####
-  
   
   data[
     year > 0,
@@ -273,7 +67,8 @@
           no = TRUE
         )
         
-        base_plot %>% 
+        base_plot %>%
+          .base_layout(data = data) %>% 
           # Add Intervention Group
           add_trace(
             data = data,
@@ -304,13 +99,13 @@
             mode   = "lines+markers",
             showlegend = legend,
             name = "Kontrafaktisk Værdi"
-          ) %>% 
-          
+          ) %>%
+
           # Add Control Group
           add_trace(
             data = data,
             x = ~year,
-            y = ~Control,
+            y = ~Control, # Was COntrol
             line = list(
               color = "orange"
             ),
@@ -321,7 +116,7 @@
             mode   = "lines+markers",
             showlegend = legend,
             name = "Sammenligningsgruppe"
-          ) %>% .base_layout(legend = legend, data = data) 
+          )
         
         
         
@@ -336,7 +131,7 @@
 
 
 
-.base_layout <- function(plot, legend, data) {
+.base_layout <- function(plot, data) {
   
   
   # Set Title;
@@ -358,6 +153,8 @@
     
     xaxis = list(
       showgrid = FALSE,
+      
+      
       title = "Tid"
     )
     
@@ -371,12 +168,7 @@
 
 
 
-.base_plot <- function(data,difference) {
-  
-  
-  # yaxis_text <- fifelse(
-  #   isTRUE(difference), yes = paste(yaxis_text, "(Forskellen)"), yaxis_text
-  # )
+.base_plot <- function(data = NULL, difference = NULL) {
   
   
   # Generate Baseplot
@@ -387,6 +179,20 @@
   ) %>% layout(
     paper_bgcolor = '#ffffff00',
     plot_bgcolor='#ffffff00',
+    
+    # Set X-Axis Range
+    xaxis = list(
+      range = list(-2,5),
+      zeroline = FALSE,
+      showgrid  = FALSE,
+      linecolor = "white",
+      title     = "Tid"
+    ),
+    yaxis = list(
+      showgrid = FALSE,
+      zeroline = FALSE,
+      linecolor = "white"
+    ),
     
     
     
@@ -442,33 +248,24 @@
 }
 
 
-
-
-
-do_plot <- function(data, effect, difference = FALSE) {
+do_plot <- function(data, effect, difference = NULL) {
   
   
+ 
   
   plot_list <- .base_plot(
-    data = data,
+    data = data %>% setDT(),
     difference = difference
   )
   
   
-  if (nrow(data) != 0) {
-    if (difference) {
+  if (!is.null(data)) {
       
-      plot_list <- data %>%
-        .plot_difference(effect = effect)
-      
-      
-    } else {
-      
-      plot_list <- .plot_data(plot = plot_list,effect = effect)
-      
-    }
-    
-    
+    plot_list <- .plot_data(
+      plot = plot_list,
+      effect = effect
+      )
+
     plot_list %>% subplot(
       titleX = TRUE,
       titleY = TRUE

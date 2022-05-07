@@ -1,5 +1,33 @@
 server <- function(input, output, session) {
   
+  message("Frontpage Rendered")
+  
+  
+  front_ui <- frontUI(
+    id = "front"
+  )
+  
+  mainDownload_server(
+    "front"
+  )
+  output$gen_body <- renderUI(
+    {
+      front_ui$body
+    }
+  )
+  
+  
+  output$sidebar_ui <- renderUI(
+    NULL
+    
+  )
+  
+  output$gen_header <- renderUI(
+    {
+      NULL
+    }
+  )
+  
   # Frontpage; #####
   observeEvent(
     input$front_page,
@@ -83,10 +111,10 @@ server <- function(input, output, session) {
       
       
       
+      
+      
     }
   )
-  
-  
   
   
   
@@ -104,6 +132,14 @@ server <- function(input, output, session) {
   
   
   observe({
+    
+    
+    main_warnings(
+      id = "model1"
+    )
+    
+    
+    
     # Generate Chosen Parameters
     main_choiceserver(
       id = "model1",
@@ -116,10 +152,12 @@ server <- function(input, output, session) {
       data = data()
     )
     
-    main_infobox(
-      id = "model1",
-      data = data()
-    )
+    
+    
+    # main_infobox(
+    #   id = "model1",
+    #   data = data()
+    # )
     
     
     

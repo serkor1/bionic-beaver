@@ -255,23 +255,32 @@ model1UI <- function(id) {
                   column(
                     width = 12,
                     bs4Card(
-                      width = 12,
                       id = "test",
-                      collapsible = TRUE,
+                      width = 12,
+                      # sidebar = bs4CardSidebar(
+                      #   width = 25,
+                      #   id = "id",
+                      #   p("Graf Indstillinger"),
+                      #   
+                      #   
+                      #   
+                      #   
+                      #   ),
+                      collapsible = FALSE,
                       closable = FALSE,
                       title = "Visuelt Overblik",
                       icon = icon("chart-line", verify_fa = FALSE),
-                      footer = fluidRow(
-                        materialSwitch(
-                          inputId = ns("do_difference"),
-                          label = "Vis Forskelle",
-                          value = FALSE,
-                          status = "primary"
-                        )
-                        
-                        
-                        
-                      ),
+                      # footer = fluidRow(
+                      #   materialSwitch(
+                      #     inputId = ns("do_difference"),
+                      #     label = "Vis Forskelle",
+                      #     value = FALSE,
+                      #     status = "primary"
+                      #   )
+                      #   
+                      #   
+                      #   
+                      # ),
                       status = "primary",
                       
                       
