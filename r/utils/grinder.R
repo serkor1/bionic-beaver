@@ -159,54 +159,102 @@ plot_grinder <- function(data, group_value = NULL) {
   #' for example, primary care.
   
   
-  # Store Class of the data;
-  get_class <- class(data)[3]
-  
-  
-  
-  # Message; #####
-  message(
-    "Preparing Data for Plotting"
-  )
-  message(
-    "---------------------------"
-  )
-  
-  
-  data <- data[
-    ,
-    list(
-      outcome = mean(
-        outcome, na.rm = TRUE
-      )
+  if (nrow(data) != 0) {
+    
+    # Store Class of the data;
+    get_class <- class(data)[3]
+    
+    
+    
+    # Message; #####
+    message(
+      "Preparing Data for Plotting"
     )
-    ,
-    by = .(year, allocation, allocator)
-  ]
-
+    message(
+      "---------------------------"
+    )
+    
+    
+    data <- data[
+      ,
+      list(
+        outcome = mean(
+          outcome, na.rm = TRUE
+        )
+      )
+      ,
+      by = .(year, allocation, allocator)
+    ]
+    
+    
+    data <- data %>% dcast(
+      year + allocator ~ allocation,
+      value.var = "outcome"
+    )
+    
+    
+    # Outcome is the difference between
+    # Treatment and Control.
+    
+    tryCatch(
+      expr = {
+        
+        data[,
+             difference := sum(Intervention, -Control)
+             ,
+             by = 1:nrow(data)
+        ]
+        
+      },
+      
+      error = function(cond){
+        
+        # Test for missing column name and add
+        existing_columns <- colnames(data) %>%
+          str_extract(pattern = "Control|Intervention") %>% na.omit()
+        
+        # Needs the colums
+        needed_colums <- c("Control", "Intervention")
+        
+        # Extract missing COlums
+        missing_column <- needed_colums[!(needed_colums %chin% existing_columns)]
+        
+        data[
+          ,
+          (missing_column) := NA
+          ,
+        ]
+        
+        
+        data[,
+             `:=`(
+               difference = 0
+             )
+             
+             ,
+             by = 1:nrow(data)
+        ]
+        
+    
+      }
+    )
+    
+    
+    
+    # Reclass the data
+    class(data) <- c(class(data), get_class) 
+    
+  } else {
+    
+    data = NULL
+    
+  }
   
-  data <- data %>% dcast(
-    year + allocator ~ allocation,
-    value.var = "outcome"
-  )
   
-  
-  # Outcome is the difference between
-  # Treatment and Control.
-  
-  data[,
-       difference := sum(Intervention, -Control)
-       ,
-       by = 1:nrow(data)
-       ]
-  
-  
-  # Reclass the data
-  class(data) <- c(class(data), get_class) 
-  
+  message("Plotgrinder Done!")
   
   return(
-    data
+    data  
   )
   
   
