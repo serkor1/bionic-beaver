@@ -1,10 +1,80 @@
+main_warnings <- function(id){
+  moduleServer(id, function(input, output, session)
+  {
+    
+      # Check wether user chose
+      # needed inputs and give feedback
+      message(paste("Chosen:",input$pt_control, "Truthy:", isTruthy(input$pt_control)))
+      
+    
+    observe(
+      {
+        if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+          
+          if (input$pt_target == input$pt_control) {
+            
+            shinyFeedback::feedbackDanger(
+              inputId = "pt_control",
+              TRUE,
+              text = "Skift gruppe!",icon = NULL
+            )
+            
+          }
+          
+          
+        }
+      }
+    )
+    
+   
+    
+        
+        shinyFeedback::feedbackWarning(
+          inputId = "pt_control",
+          !isTruthy(input$pt_control),
+          text = "Vælg Sammenligningsgruppe!",icon = NULL
+        )            
+        
+        
+        shinyFeedback::feedbackWarning(
+          inputId = "pt_target",
+          !isTruthy(input$pt_target),
+          text = "Vælg Gruppe!",icon = NULL
+        )   
+        
+        
+        
+        shinyFeedback::feedbackWarning(
+          inputId = "pt_outcome",
+          !isTruthy(input$pt_outcome),
+          text = "Vælg Outcome(s)!",icon = NULL
+        ) 
+        
+        
+        
+
+        
+   
+      
+      
+ 
+    
+    
+  }
+    
+    
+    )
+}
+
+
+
 main_plotserver <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     
     
     
     
-    
+   
     
     
     intervention_effect <- reactive(
@@ -16,57 +86,62 @@ main_plotserver <- function(id, data) {
         input$effect_5
       ) %>% as.numeric()
     )
+    
+    
+    
+    
 
     map(
       1:length(data()),
       .f = function(i) {
         
+        # TODO: Isolate These
+        # so they dont keep running!
+        plot_data <- data()[[i]] %>%
+          plot_grinder(
+            group_value = input$pt_demographic
+          )
         
         output[[paste0("plot", i)]] <- renderPlotly(
           {
-            # Check wether user chose
-            # needed inputs and give feedback
-            
-            shinyFeedback::feedbackWarning(
-              inputId = "pt_control",
-              !isTruthy(input$pt_control),
-              text = "Vælg Sammenligningsgruppe!",icon = NULL
-            )            
-            
-            
-            shinyFeedback::feedbackWarning(
-              inputId = "pt_target",
-              !isTruthy(input$pt_target),
-              text = "Vælg Gruppe!",icon = NULL
-            )   
-            
-            shinyFeedback::feedbackWarning(
-              inputId = "pt_outcome",
-              !isTruthy(input$pt_outcome),
-              text = "Vælg Outcome(s)!",icon = NULL
-            )   
             
             
             
-            req(input$pt_control)
-            req(input$pt_target)
-            req(input$pt_outcome)
             
-            # TODO: Isolate These
-            # so they dont keep running!
-            plot_data <- data()[[i]] %>%
-              plot_grinder(
-                group_value = input$pt_demographic
-              )
             
             plot_data  %>%
               do_plot(
                 difference = input$do_difference,
                 effect = intervention_effect()
               )
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           }
         )
         
+        if (isTruthy(plot_data)) {
+          
+          req(input$pt_target)
+          req(input$pt_control)
+          req(input$pt_target != input$pt_control)
+          
+          shinyFeedback::feedbackDanger(
+            inputId = "pt_demographic",
+            !(isTruthy(plot_data$Control) & isTruthy(plot_data$Intervention)),
+            text = "Sammenligningen er problematisk!",
+            icon = NULL
+          )       
+          
+          
+        }
         
         
         
@@ -75,6 +150,9 @@ main_plotserver <- function(id, data) {
         
       }
     )
+    
+    
+    
     
     
     
@@ -112,8 +190,9 @@ main_dataserver <- function(id) {
           intervention     = paste(input$pt_target),
           control          = paste(input$pt_control),
           allocator_vector = paste(input$pt_outcome),
-          group_value      =  paste(input$pt_demographic),
-          type             = input$do_incident
+          group_value      = paste(input$pt_demographic),
+          type             = input$do_incident,
+          cost             = input$do_cost
         )
         
       }
@@ -138,30 +217,7 @@ main_dataserver <- function(id) {
 main_infobox <- function(id, data) {
   moduleServer(id, function(input, output, session) {
 
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_control",
-      !isTruthy(input$pt_control),
-      text = "Vælg Sammenligningsgruppe!",icon = NULL
-    )            
-    
-    
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_target",
-      !isTruthy(input$pt_target),
-      text = "Vælg Gruppe!",icon = NULL
-    )   
-    
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_outcome",
-      !isTruthy(input$pt_outcome),
-      text = "Vælg Outcome(s)!",icon = NULL
-    )   
-    
-    
-    
-    req(input$pt_control)
-    req(input$pt_target)
-    req(input$pt_outcome)
+   
 
     # Server Information; #####
     #' @param data a reactive list of data.
@@ -177,15 +233,6 @@ main_infobox <- function(id, data) {
         input$effect_5
       ) %>% as.numeric()
     )
-    
-    
-    
-    
-    # 
-    # 
-    # req(input$pt_control)
-    # req(input$pt_target)
-
     
 
 

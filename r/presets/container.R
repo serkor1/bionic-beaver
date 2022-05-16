@@ -120,6 +120,98 @@ vive_infobox <- function(effect, data) {
 
 
 
+bar <- function(data, session = getDefaultReactiveDomain()) {
+  
+  
+  
+  # outcome_label <- fcase(
+  #   inherits(data, "primary_care"), "Besøg",
+  #   inherits(data, c("psychiatric_care", "somatic_care")), "Sengedage",
+  #   inherits(data, c("transfers")), "Uger"
+  # )
+  
+  outcome_label ="placeholder"
+  
+  # This works
+  # data <- data %>% foo()
+  
+  
+  bs4Card(
+    solidHeader = FALSE,
+    id = "test",
+    gradient = TRUE,
+    collapsible = TRUE,
+    background = "primary",
+    width = 12,
+    headerBorder = FALSE,
+    title = NULL,
+    fluidRow(
+      
+      # Effect
+      column(
+        width = 3,
+        descriptionBlock(
+          number = sum(data$outcome) %>% round(),
+          numberColor = "lime",
+          numberIcon = icon("cog"),
+          header = HTML("&nbsp"),
+          text = "Årlig Forventet Effekt",
+          rightBorder = TRUE,
+          marginBottom = FALSE
+        )
+      ),
+      
+      # Actual Difference
+      column(
+        width = 3,
+        descriptionBlock(
+          number = sum(data$Control) %>% round(),
+          numberColor = "lime",
+          numberIcon = icon("cog"),
+          header = outcome_label,
+          text = "Faktisk Forskel",
+          rightBorder = TRUE,
+          marginBottom = FALSE
+        )
+      ),
+      
+      column(
+        width = 3,
+        descriptionBlock(
+          number = sum(data$Intervention) %>% round(),
+          numberColor = "lime",
+          numberIcon = icon("cog"),
+          header = outcome_label,
+          text = "Kontrafaktisk Forskel",
+          rightBorder = TRUE,
+          marginBottom = FALSE
+        )
+      ),
+      
+      column(
+        width = 3,
+        descriptionBlock(
+          number = sum(data$Intervention) %>% round(),
+          numberColor = "lime",
+          numberIcon = icon("cog"),
+          header = "Ændring",
+          text = "Effekt",
+          rightBorder = TRUE,
+          marginBottom = FALSE
+        )
+      )
+  )
+  )
+    
+    
+  
+  
+  
+  
+}
+
+
+
 
 
 
