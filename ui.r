@@ -1,5 +1,5 @@
 
-bs4DashPage(
+bs4DashPage(help = TRUE,
   
   # Loaader; ####
   preloader = list(
