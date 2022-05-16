@@ -57,6 +57,8 @@ options <- get_options()
 
 diseases <- options$diseases
 
+
+
 outcomes <- options$allocator
 
 # demographics are constructed as
