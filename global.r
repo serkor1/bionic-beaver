@@ -44,10 +44,8 @@ system.time(
 )
 
 
-data_list[[1]]
-
 # version;
-version <- c("v0.2")
+version <- c("v0.2.1")
 
 
 
@@ -58,6 +56,8 @@ version <- c("v0.2")
 options <- get_options()
 
 diseases <- options$diseases
+
+
 
 outcomes <- options$allocator
 
