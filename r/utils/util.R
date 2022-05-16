@@ -214,7 +214,8 @@ preload_data <- function(developper_mode = FALSE) {
         
         data <- fread(
           get_path[i],
-          encoding = 'UTF-8',nThread = 4
+          encoding = 'UTF-8',
+          nThread = 4,na.strings = ""
           )
         
         class(data) <- c(
@@ -288,12 +289,17 @@ generate_data <- function() {
   
   
   
+  # Name Vector
+  name_vector <- c("primary_care","psychiatric_care", "somatic_care","transfers")
+  iterator <- 0
+  
   
   
   
   unique_class %>% map(
     .f = function(unique_class) {
       
+      iterator <<- iterator + 1
       
       allocator <- options[[1]][class %chin% unique_class]$x
       
@@ -316,18 +322,24 @@ generate_data <- function() {
       
       data[
         ,
-        outcome := runif(.N, min =10, max = 100)
+        `:=`(
+          qty = runif(.N, min =10, max = 100),
+          cost = runif(.N, min =1000, max = 10000)
+        )
         ,
       ]
       
       
+      # Change Class
+      class(data) <- c(class(data), name_vector[iterator])
       
       
+      return(data)
       
       
       
     }
-  ) %>% set_names(c("primary_care","psychiatric_care", "somatic_care","transfers"))
+  ) %>% set_names(name_vector)
   
   
   

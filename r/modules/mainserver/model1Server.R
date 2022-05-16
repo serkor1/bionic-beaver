@@ -191,7 +191,8 @@ main_dataserver <- function(id) {
           control          = paste(input$pt_control),
           allocator_vector = paste(input$pt_outcome),
           group_value      = paste(input$pt_demographic),
-          type             = input$do_incident
+          type             = input$do_incident,
+          cost             = input$do_cost
         )
         
       }
@@ -216,30 +217,7 @@ main_dataserver <- function(id) {
 main_infobox <- function(id, data) {
   moduleServer(id, function(input, output, session) {
 
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_control",
-      !isTruthy(input$pt_control),
-      text = "Vælg Sammenligningsgruppe!",icon = NULL
-    )            
-    
-    
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_target",
-      !isTruthy(input$pt_target),
-      text = "Vælg Gruppe!",icon = NULL
-    )   
-    
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_outcome",
-      !isTruthy(input$pt_outcome),
-      text = "Vælg Outcome(s)!",icon = NULL
-    )   
-    
-    
-    
-    req(input$pt_control)
-    req(input$pt_target)
-    req(input$pt_outcome)
+   
 
     # Server Information; #####
     #' @param data a reactive list of data.

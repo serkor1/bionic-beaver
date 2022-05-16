@@ -135,7 +135,7 @@ bs4DashPage(
     useShinyjs(),
     shinyFeedback::useShinyFeedback(),
     uiOutput("gen_body"),
-    uiOutput("info_box")
+    uiOutput("value_box")
     
   ),
   

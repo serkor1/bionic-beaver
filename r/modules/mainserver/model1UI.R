@@ -1,9 +1,9 @@
-model1UI <- function(id) {
+model1UI <- function(id, output) {
   
   # Generate Namespace
   ns <- NS(id)
   
-  
+ 
   # Generate Sidebar; ####
   ui_sidebar <- tagList(
     
@@ -80,7 +80,21 @@ model1UI <- function(id) {
       title = "Klik for at vælge Incidente patienter.",
       placement = "right",
       content = "Klik for at vælge Incidente patienter."
-      )
+      ),
+    
+    
+    materialSwitch(
+      inputId = ns("do_cost"),
+      label = "Omkostninger?",
+      value = FALSE,
+      status = "primary"
+    ) %>% popover(
+      title = "Klik for at vælge Omkostning pr. patient.",
+      placement = "right",
+      content = "Klik for at vælge Omkostning pr. patient."
+    )
+    
+    
     
     
     
@@ -292,8 +306,19 @@ model1UI <- function(id) {
                         )
                       )
                       
-                    ),
-                    uiOutput(ns(paste0("infobox",i)))
+                    )
+                    
+                    # ,
+                    # 
+                    # # Information Box;
+                    # renderUI({
+                    #   
+                    #   bar(data()[[i]])
+                    #   
+                    #   
+                    # })
+                    
+                    
                     
                     
                     
@@ -339,3 +364,78 @@ model1UI <- function(id) {
   
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' 
+#' 
+#' 
+#' model1_valuebox <- function(id, data, session = getDefaultReactiveDomain()) {
+#'   
+#'   #' Function Information;
+#'   #' 
+#'   #' 
+#'   
+#'   # Generate Namespace
+#'   ns <- NS(id)
+#'   
+#'   tagList(
+#'       bs4Card(
+#'         solidHeader = FALSE,
+#'         id = "test",
+#'         gradient = TRUE,
+#'         collapsible = TRUE,
+#'         background = "primary",
+#'         width = 12,
+#'         headerBorder = FALSE,
+#'         title = NULL,
+#'         fluidRow(
+#'           
+#'           column(
+#'             width = 3,
+#'             descriptionBlock(
+#'               number = sum(data()[[1]]$outcome),
+#'               numberColor = "lime",
+#'               numberIcon = icon("caret-up"),
+#'               header = HTML("&nbsp"),
+#'               text = "Årlig Forventet Effekt",
+#'               rightBorder = TRUE,
+#'               marginBottom = FALSE
+#'             )
+#'           )
+#'           
+#'         )
+#'         
+#'         
+#'       )
+#'       
+#'       
+#'     
+#'     
+#'     
+#'   )
+#'     
+#' 
+#'  
+#'   
+#'   
+#'   
+#' }

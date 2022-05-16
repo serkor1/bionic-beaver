@@ -4,7 +4,7 @@
 
 
 # main grinder; ####
-grinder <- function(data_list, intervention, control, allocator_vector = NULL, group_value = NULL, type = TRUE) {
+grinder <- function(data_list, intervention, control, allocator_vector = NULL, group_value = NULL, type = TRUE, cost = FALSE) {
   
   #' @param data_list input data in its raw
   #' format.
@@ -37,12 +37,13 @@ grinder <- function(data_list, intervention, control, allocator_vector = NULL, g
     default = 0
   )
   
+  cost <- fcase(
+    isTRUE(cost), TRUE,
+    default = FALSE
+  )
   
- # base::setdiff(
- #   c("A","B"),
- #   c("A")
- #   
- # )
+  
+  
   
   
   
@@ -58,11 +59,21 @@ grinder <- function(data_list, intervention, control, allocator_vector = NULL, g
         type == type_char
       ]
       
+      if (cost) {
+        
+        data[,`:=`(outcome = cost, qty = NULL),]
+        
+      } else {
+        
+        data[,`:=`(outcome = qty, cost = NULL),]
+        
+      }
       
       # Steo 2)
       # Classify the data according to
       # intevention and control based on the
       # chosen intervention and control values
+      
       
       data <- data[,
                    allocation := fcase(
@@ -438,6 +449,153 @@ table_grinder <- function(data, group_value = NULL, do_aggregate = TRUE, interve
 
 
 
+foo <- function(data) {
+  
+  #' This function converts the data to wide
+  #' 
+  #' TODO: This should replace info_grinder and
+  #' plot_grinder
+  
+  message(paste(class(data)))
+  
+  if (nrow(data) == 0) {
+
+    return(NULL)
+
+  }
+  
+  
+  # Extract the Class; 
+  store_class <- class(data)[3]
+  
+  
+  
+  data <- data[
+    ,
+    list(
+      outcome = mean(
+        outcome, na.rm = TRUE
+      )
+    )
+    ,
+    by = .(year, allocation, allocator)
+  ]
+  
+  
+  data <- data %>% dcast(
+    year + allocator ~ allocation,
+    value.var = "outcome"
+  )
+  
+  
+  
+  tryCatch(
+    expr = {
+      
+      data[,
+           difference := sum(Intervention, -Control)
+           ,
+           by = 1:nrow(data)
+      ]
+      
+    },
+    
+    error = function(cond){
+      
+      # Test for missing column name and add
+      existing_columns <- colnames(data) %>%
+        str_extract(pattern = "Control|Intervention") %>% na.omit()
+      
+      # Needs the colums
+      needed_colums <- c("Control", "Intervention")
+      
+      # Extract missing COlums
+      missing_column <- needed_colums[!(needed_colums %chin% existing_columns)]
+      
+      data[
+        ,
+        (missing_column) := NA
+        ,
+      ]
+      
+      
+      data[,
+           `:=`(
+             difference = 0
+           )
+           
+           ,
+           by = 1:nrow(data)
+      ]
+      
+      
+    }
+  )
+  
+  
+  # Reclass the data
+  class(data) <- c(class(data), store_class) 
+  
+  
+  return(data)
+  
+
+}
+
+
+baz <- function(data, effect, aggregate = FALSE) {
+  
+  
+  
+  #' Get data
+  
+  if (aggregate) {
+    
+    by_vector <- c("allocator")
+    
+  } else {
+    
+    by_vector <- c("allocator", "year")
+    
+  }
+  
+  
+  
+  data[
+    year > 0,
+    effect := (effect/100),
+    by = .(allocator)
+  ]
+  
+  data[
+    !is.na(effect),
+    `:=`(
+      cDifference   = difference * effect,
+      # Was abs - but not used.
+      cIntervention = max(Intervention - ((difference * effect)),0)
+    ),
+    by = by_vector
+  ]
+  
+  data[
+    year == 0,
+    `:=`(
+      effect = 0,
+      cIntervention = Intervention
+    )
+    
+  ]
+  
+  
+  
+  
+  
+  
+  
+  
+}
+
+
 
 info_grinder <- function(data, group_value = NULL, aggregrate = TRUE, effect =  rep(50,5)) {
   
@@ -621,11 +779,6 @@ info_grinder <- function(data, group_value = NULL, aggregrate = TRUE, effect =  
     
     
   }
-  
-  
-  
-  
-  
   
   
   return(
