@@ -26,11 +26,11 @@ model1UI <- function(id, output) {
       title = "Sammenligningsgruppe",
       header = "Vælg Sammenligningsgruppe",
       choices = diseases,
-      multiple = TRUE,
+      multiple = FALSE,
       #selected = c("Psykiske Lidelser_Mild"),
-      max = 1,
-      selectAllText = "Matching",
-      deselectAllText = "Nulstil"
+      # max = 1,
+      # selectAllText = "Matching",
+      # deselectAllText = "Nulstil"
     ),
     
     sidebarHeader(h5(("Vælg parametre"))),
@@ -108,27 +108,214 @@ model1UI <- function(id, output) {
   ui_header <- tagList(
     
     tags$li(
-      dropdownButton(
-        label = "Effektforventinger",circle = FALSE,
-        tooltip = "Vælg Årlig Effekt",
-        map(
-          1:5,
-          .f = function(i) {
-            
-            sliderInput(
-              inputId = ns(paste0("effect_", i)),
-              label = paste("Tid", i),
-              min = 0,
-              max = 100,
-              value = round(runif(1, min = 0, max = 100))
-            )
-          }
+      (
+        dropdownButton(
+          label = "Effektforventinger",circle = FALSE,
+          tooltip = "Vælg Årlig Effekt",
+          map(
+            1:5,
+            .f = function(i) {
+              
+              sliderInput(
+                inputId = ns(paste0("effect_", i)),
+                label = paste("Tid", i),
+                min = 0,
+                max = 100,
+                value = round(runif(1, min = 0, max = 100))
+              )
+            }
+          )
         )
-      ),
+        
+      )
+      ,
       class = "dropdown"
     )
     
   )
+  
+  
+  ui_controlbar <- tagList(
+    
+      # materialSwitch(
+      #   inputId = ns("show_baseline"),
+      #   value = TRUE,
+      #   status = "info",
+      #   label = "Vis Befolkningsværdi"
+      # ),
+      # 
+      # 
+      # # column(
+      # #   width = 12,
+      # 
+      #   # fluidRow(
+      #   #   pickerInput(
+      #   #     inputId = ns("col_intervention"),
+      #   #     label = "Intevention",
+      #   #     selected = "steelblue",
+      #   #     choices = colors(),
+      #   #     options = list(
+      #   #       `live-search` = TRUE,
+      #   #       `size` = 5)
+      #   #   ),
+      #   #   pickerInput(
+      #   #     inputId = ns("col_control"),
+      #   #     label = "Control",
+      #   #     selected = "orange",
+      #   #     choices = colors(),
+      #   #     options = list(
+      #   #       `live-search` = TRUE,
+      #   #       `size` = 5)
+      #   #   ),
+      #   #   pickerInput(
+      #   #     inputId = ns("col_background"),
+      #   #     label = "Population",
+      #   #     selected = "white",
+      #   #     choices = colors(),
+      #   #     options = list(
+      #   #       `live-search` = TRUE,
+      #   #       `size` = 5)
+      #   #   )
+      # 
+      #  # )
+      #   # ,
+      #   #
+      # 
+      # 
+      #   column(
+      #     width = 12,
+      #     pickerInput(
+      #       inputId = ns("col_intervention"),
+      #       label = "Intevention",
+      #       selected = "steelblue",
+      #       choices = colors(),
+      #       options = list(
+      #         `live-search` = TRUE,
+      #         `size` = 5)
+      #     ),
+      # 
+      #     pickerInput(
+      #       inputId = ns("col_control"),
+      #       label = "Control",
+      #       selected = "orange",
+      #       choices = colors(),
+      #       options = list(
+      #         `live-search` = TRUE,
+      #         `size` = 5)
+      #     ),
+      # 
+      #     pickerInput(
+      #       inputId = ns("col_background"),
+      #       label = "Population",
+      #       selected = "white",
+      #       choices = colors(),
+      #       options = list(
+      #         `live-search` = TRUE,
+      #         `size` = 5)
+      #     ),
+      # 
+      #     actionButton(
+      #       inputId = ns("col_reset"),
+      #       label = "Nulstil Farver"
+      #     )
+      # 
+      # 
+      #   )
+    
+  )
+  
+  
+  
+  
+  box_placeholder <- function(...) {
+    
+    
+    bs4Card(
+      width = 12,headerBorder = FALSE,
+      sidebar = bs4CardSidebar(
+        width = 25,icon = span("Indstillinger", icon("cog")),
+        startOpen = TRUE,
+        id = "id_placeholder",
+        p("Grafindstillinger"),
+        column(
+          width = 4,
+
+          materialSwitch(
+            inputId = ns("show_baseline"),
+            value = TRUE,
+            status = "info",
+            label = "Vis Befolkningsværdi"
+          ) %>% popover(
+            placement = "bottom",
+            title = "Skal den generelle befolkning vises?",
+            content = "Skal den generelle befolkning vises?"
+          ),
+
+          pickerInput(
+            inputId = ns("col_intervention"),
+            label = "Intevention",
+            selected = "steelblue",
+            choices = colors(),
+            options = list(
+              `live-search` = TRUE,
+              `size` = 5)
+          ),
+
+          pickerInput(
+            inputId = ns("col_control"),
+            label = "Control",
+            selected = "orange",
+            choices = colors(),
+            options = list(
+              `live-search` = TRUE,
+              `size` = 5)
+          ),
+
+          pickerInput(
+            inputId = ns("col_background"),
+            label = "Population",
+            selected = "white",
+            choices = colors(),
+            options = list(
+              `live-search` = TRUE,
+              `size` = 5)
+          ),
+
+          actionButton(
+            inputId = ns("col_reset"),
+            label = "Nulstil Farver"
+          )
+
+
+        )
+      ),
+      collapsible = FALSE,
+      closable = FALSE,
+      # title = "Visuelt Overblik",
+      # icon = icon("chart-line", verify_fa = FALSE),
+      title = span(
+
+          radioGroupButtons(
+            inputId = "Id069",width = "500px",
+            label = NULL, 
+            choices = c(`Grafik <i class='fa fa-bar-chart'></i>` = "see_plot", ` Tabel <i class='fa fa-line-chart'></i>` = "see_table"),
+            justified = TRUE, size = "sm"
+          )
+        
+        
+        
+      ),
+      status = "primary",
+      
+      
+     ...
+      
+    )
+    
+    
+  }
+  
+  
   
   
   
@@ -220,131 +407,119 @@ model1UI <- function(id, output) {
         
         
         
-      )
+      ),
+      
+      
+      progressBar(
+        id = ns("mean_pbar"),
+        value = 0,
+        display_pct = TRUE,
+        title = "Gennemsnitlig Effekt"
+        ) 
+      
+      
       
       
     ),
     
-    column(
-      width = 12,
-      do.call(
-        tabsetPanel,
-        c(
-          type = "pills",
-          map(
-            seq_along(tabset_names),
-            .f = function(i) {
-              
-              
-              
-              icon_name <- fcase(
-                tabset_names[i] %chin% c("primary_care"), "stethoscope",
-                tabset_names[i] %chin% c("psychiatric_care"), "couch",
-                tabset_names[i] %chin% c("somatic_care"), "hospital",
-                tabset_names[i] %chin% c("transfers"), "briefcase"
+    
+    box_placeholder(
+      column(
+        width = 12,
+        do.call(
+          tabsetPanel,
+          c(
+            type = "pills",
+            map(
+              seq_along(tabset_names),
+              .f = function(i) {
                 
-              )
-              
-              
-              
-              tabPanel(
-                title = paste(
-                  fcase(
-                    tabset_names[i] %chin% c("primary_care"), "Almen praksis",
-                    tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
-                    tabset_names[i] %chin% c("somatic_care"), "Somatik",
-                    tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
-                    
-                  )
+                
+                
+                icon_name <- fcase(
+                  tabset_names[i] %chin% c("primary_care"), "stethoscope",
+                  tabset_names[i] %chin% c("psychiatric_care"), "couch",
+                  tabset_names[i] %chin% c("somatic_care"), "hospital",
+                  tabset_names[i] %chin% c("transfers"), "briefcase"
                   
-                  
-                ),
-                
-                
-                icon = icon(icon_name),
-                value = ns(paste0("tab",i)),
-                
-                
-                fluidRow(
-                  column(
-                    width = 12,
-                    bs4Card(
-                      id = "test",
-                      width = 12,
-                      # sidebar = bs4CardSidebar(
-                      #   width = 25,
-                      #   id = "id",
-                      #   p("Graf Indstillinger"),
-                      #   
-                      #   
-                      #   
-                      #   
-                      #   ),
-                      collapsible = FALSE,
-                      closable = FALSE,
-                      title = "Visuelt Overblik",
-                      icon = icon("chart-line", verify_fa = FALSE),
-                      # footer = fluidRow(
-                      #   materialSwitch(
-                      #     inputId = ns("do_difference"),
-                      #     label = "Vis Forskelle",
-                      #     value = FALSE,
-                      #     status = "primary"
-                      #   )
-                      #   
-                      #   
-                      #   
-                      # ),
-                      status = "primary",
-                      
-                      
-                      column(
-                        width = 12,
-                        br(),
-                        plotlyOutput(
-                          outputId = ns(paste0("plot",i))
-                        )
-                      )
-                      
-                    )
-                    
-                    # ,
-                    # 
-                    # # Information Box;
-                    # renderUI({
-                    #   
-                    #   bar(data()[[i]])
-                    #   
-                    #   
-                    # })
-                    
-                    
-                    
-                    
-                    
-                    
-                  )
                 )
                 
                 
                 
+                tabPanel(
+                  title = paste(
+                    fcase(
+                      tabset_names[i] %chin% c("primary_care"), "Almen praksis",
+                      tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
+                      tabset_names[i] %chin% c("somatic_care"), "Somatik",
+                      tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+                      
+                    )
+                    
+                    
+                  ),
+                  
+                  
+                  icon = icon(icon_name),
+                  value = ns(paste0("tab",i)),
+                  
+                  
+                  fluidRow(
+                    column(
+                      width = 12,
+                      br(),
+                      plotlyOutput(
+                        outputId = ns(paste0("plot",i))
+                      )
+                      # box_placeholder(
+                      #   column(
+                      #     width = 12,
+                      #     br(),
+                      #     
+                      #   )
+                      # )
+                      # # Information Box;
+                      # renderUI({
+                      #   
+                      #   bar(data()[[i]])
+                      #   
+                      #   
+                      # })
+                      
+                      
+                      
+                      
+                      
+                      
+                    )
+                  )
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                )
                 
-                
-                
-                
-                
-                
-                
-                
-                
-              )
+              }
               
-            }
-            
+            )
           )
         )
       )
-    )
+    ),
+    
+
+    
+    
+    
+    
     
   )
   
@@ -354,7 +529,8 @@ model1UI <- function(id, output) {
     list(
       sidebar    = ui_sidebar,
       body       = ui_body,
-      header     = ui_header
+      header     = ui_header,
+      control    = ui_controlbar
     )
     
   )
