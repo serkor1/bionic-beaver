@@ -1,5 +1,5 @@
 
-bs4DashPage(help = TRUE
+bs4DashPage(help = TRUE,
   # Loaader; ####
   preloader = list(
     html = tagList(spin_1(),"Indlæser ...")
