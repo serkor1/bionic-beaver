@@ -108,6 +108,7 @@ server <- function(input, output, session) {
           }
         )
         
+        
       
       
       
@@ -139,6 +140,7 @@ server <- function(input, output, session) {
   
   observe({
     
+    effect <- main_effectserver(id = "model1")
     
     
     main_warnings(
@@ -156,7 +158,8 @@ server <- function(input, output, session) {
     # Generate Plots
     main_plotserver(
       id = "model1",
-      data = data()
+      data = data(),
+      intervention_effect = effect
     )
     
     # Generate
