@@ -1,6 +1,5 @@
 
 bs4DashPage(
-  
   # Loaader; ####
   preloader = list(
     html = tagList(spin_1(),"Indlæser ...")
