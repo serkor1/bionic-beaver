@@ -5,7 +5,6 @@
 
 # main grinder; ####
 grinder <- function(data_list, intervention, control, allocator_vector = NULL, group_value = NULL, type = TRUE, cost = FALSE) {
-  
   #' @param data_list input data in its raw
   #' format.
   #' @param intervention character. The disease
@@ -46,11 +45,21 @@ grinder <- function(data_list, intervention, control, allocator_vector = NULL, g
   
   
   
-  
   data_list %>% map(
     .f = function(data) {
       
       get_char <- which(sapply(data, is.character))
+      
+      
+      
+      # NOTE: All matching obs have type as NA.
+      # if we do not replace these it will vanish
+      data[
+        disease %chin% "matching",
+        type := type_char
+      ]
+      
+      
       
       # Step 1)
       # Filter the data to include 
@@ -74,13 +83,21 @@ grinder <- function(data_list, intervention, control, allocator_vector = NULL, g
       # intevention and control based on the
       # chosen intervention and control values
       
-      
       data <- data[,
                    allocation := fcase(
+                     disease %chin% "matching", "Population",
                      disease %chin% intervention, "Intervention",
                      disease %chin% control, "Control"
                    )
                    ,][!is.na(allocation)]
+      
+     
+      
+      
+      
+      
+      
+      
       
       
       

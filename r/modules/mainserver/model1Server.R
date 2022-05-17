@@ -67,15 +67,8 @@ main_warnings <- function(id){
 }
 
 
-
-main_plotserver <- function(id, data) {
-  moduleServer(id, function(input, output, session) {
-    
-    
-    
-    
-   
-    
+main_effectserver <- function(id) {
+  moduleServer(id, function(input,output, session){
     
     intervention_effect <- reactive(
       c(
@@ -87,7 +80,152 @@ main_plotserver <- function(id, data) {
       ) %>% as.numeric()
     )
     
+    status <- "success"
     
+    if (isTruthy(intervention_effect())) {
+      
+      # Calculate Mean Effect;
+      mean_effect <- mean(
+        intervention_effect()
+      )
+      
+      
+      
+      
+      if (mean_effect < 20) {
+        
+        status <- "success"
+        
+        closeAlert(
+          id = "myalert"
+        )
+        
+      }
+      
+      if (data.table::between(mean_effect,lower = 20,upper = 50)) {
+        
+        status <- "warning"
+        
+        closeAlert(
+          id = "myalert"
+        )
+        
+      }
+      
+      if (data.table::between(mean_effect,lower = 50,upper = 100)) {
+        
+        status <- "danger"
+        
+        message("Here")
+        
+        
+        createAlert(
+          id = "myalert",
+          options = list(
+            title = "Alert",
+            closable = TRUE,
+            width = 12,
+            elevations = 10,
+            status = "danger",
+            content = paste("Din valgte effekt er", mean_effect, "%.")
+          )
+        )
+        
+        
+        
+        
+      } 
+      
+    }
+    
+    
+    
+    
+    
+    
+    # Update Effect slider
+    updateProgressBar(
+      session = session,
+      id = "mean_pbar",
+      value = mean(intervention_effect()),
+      status = "danger"
+      )
+    
+    return(intervention_effect)
+    
+    
+    
+    
+  })
+  
+}
+
+
+main_plotserver <- function(id, data, intervention_effect) {
+  moduleServer(id, function(input, output, session) {
+    
+    
+    
+    
+   
+    observeEvent(
+      input$col_reset,ignoreInit = TRUE,ignoreNULL = TRUE,
+      {
+
+        updatePickerInput(
+          inputId = "col_background",selected = "white",
+          session = session
+        )
+
+        updatePickerInput(
+          inputId = "col_intervention",selected = "steelblue",
+          session = session
+        )
+
+
+        updatePickerInput(
+          inputId = "col_control",selected = "orange",
+          session = session
+        )
+
+        createAlert(
+          id = "myalert",
+          options = list(
+            title = "Alert",
+            closable = TRUE,
+            width = 12,
+            elevations = 10,
+            status = "info",
+            content = "Farverne er nulstillet!"
+          )
+        )
+
+
+        delay(
+          3000,
+          closeAlert(
+            id = "myalert"
+          )
+        )
+
+
+
+      }
+    )
+    
+    
+    
+    
+    
+    
+    
+    # Create Reactive Value
+    chosen_colors <- reactiveValues(
+      control_color = input$col_control,
+      color_background = input$col_background,
+      color_intervention = input$col_intervention
+
+    )
     
     
 
@@ -97,6 +235,11 @@ main_plotserver <- function(id, data) {
         
         # TODO: Isolate These
         # so they dont keep running!
+        message(
+          paste("Iteration", i)
+        )
+        
+        
         plot_data <- data()[[i]] %>%
           plot_grinder(
             group_value = input$pt_demographic
@@ -107,13 +250,18 @@ main_plotserver <- function(id, data) {
             
             
             
+              plot_data  %>%
+                do_plot(
+                  difference = input$do_difference,
+                  effect = intervention_effect()
+                  ,
+                  show_baseline = input$show_baseline,
+                  color_intervention = chosen_colors$color_intervention,
+                  color_background    = chosen_colors$color_background,
+                  color_control      = chosen_colors$control_color
+                )
             
             
-            plot_data  %>%
-              do_plot(
-                difference = input$do_difference,
-                effect = intervention_effect()
-              )
             
             
             
@@ -301,23 +449,36 @@ main_choiceserver <- function(id, data) {
     })
     
     output$chosen_control <- renderText({
-      if (is.null(input$pt_control)) {
-        "Intet Valgt"
+      
+      if (isTruthy(input$pt_control)) {
+        
+        input$pt_control %>% str_replace("_", ": ")
         
       } else {
         
-        if (length(input$pt_control) > 1) {
-          
-          "Matchet Gruppe"
-          
-        } else {
-          
-          input$pt_control %>% str_replace("_", ": ")
-          
-        }
-        
+        "Intet Valgt"
         
       }
+      
+      
+      
+      # if (is.null(input$pt_control)) {
+      #   "Intet Valgt"
+      #   
+      # } else {
+      #   
+      #   if (length(input$pt_control) > 1) {
+      #     
+      #     "Matchet Gruppe"
+      #     
+      #   } else {
+      #     
+      #     input$pt_control %>% str_replace("_", ": ")
+      #     
+      #   }
+      #   
+      #   
+      # }
       
       
       
