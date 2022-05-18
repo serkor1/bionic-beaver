@@ -471,7 +471,7 @@ foo <- function(data) {
   #' This function converts the data to wide
   #' 
   #' TODO: This should replace info_grinder and
-  #' plot_grinder
+  #' plot_grinder and table_grinder
   
   message(paste(class(data)))
   
@@ -562,7 +562,7 @@ foo <- function(data) {
 
 baz <- function(data, effect, aggregate = FALSE) {
   
-  
+  # I forgot what this was
   
   #' Get data
   

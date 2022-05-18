@@ -2,10 +2,10 @@ main_warnings <- function(id){
   moduleServer(id, function(input, output, session)
   {
     
-      # Check wether user chose
-      # needed inputs and give feedback
-      message(paste("Chosen:",input$pt_control, "Truthy:", isTruthy(input$pt_control)))
-      
+    # Check wether user chose
+    # needed inputs and give feedback
+    message(paste("Chosen:",input$pt_control, "Truthy:", isTruthy(input$pt_control)))
+    
     
     observe(
       {
@@ -26,44 +26,44 @@ main_warnings <- function(id){
       }
     )
     
-   
     
-        
-        shinyFeedback::feedbackWarning(
-          inputId = "pt_control",
-          !isTruthy(input$pt_control),
-          text = "Vælg Sammenligningsgruppe!",icon = NULL
-        )            
-        
-        
-        shinyFeedback::feedbackWarning(
-          inputId = "pt_target",
-          !isTruthy(input$pt_target),
-          text = "Vælg Gruppe!",icon = NULL
-        )   
-        
-        
-        
-        shinyFeedback::feedbackWarning(
-          inputId = "pt_outcome",
-          !isTruthy(input$pt_outcome),
-          text = "Vælg Outcome(s)!",icon = NULL
-        ) 
-        
-        
-        
-
-        
-   
-      
-      
- 
+    
+    
+    shinyFeedback::feedbackWarning(
+      inputId = "pt_control",
+      !isTruthy(input$pt_control),
+      text = "Vælg Sammenligningsgruppe!",icon = NULL
+    )            
+    
+    
+    shinyFeedback::feedbackWarning(
+      inputId = "pt_target",
+      !isTruthy(input$pt_target),
+      text = "Vælg Gruppe!",icon = NULL
+    )   
+    
+    
+    
+    shinyFeedback::feedbackWarning(
+      inputId = "pt_outcome",
+      !isTruthy(input$pt_outcome),
+      text = "Vælg Outcome(s)!",icon = NULL
+    ) 
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
   }
-    
-    
-    )
+  
+  
+  )
 }
 
 
@@ -149,7 +149,7 @@ main_effectserver <- function(id) {
       id = "mean_pbar",
       value = mean(intervention_effect()),
       status = "danger"
-      )
+    )
     
     return(intervention_effect)
     
@@ -167,27 +167,27 @@ main_plotserver <- function(id, data, intervention_effect) {
     
     
     
-   
+    
     observeEvent(
       input$col_reset,ignoreInit = TRUE,ignoreNULL = TRUE,
       {
-
+        
         updatePickerInput(
           inputId = "col_background",selected = "white",
           session = session
         )
-
+        
         updatePickerInput(
           inputId = "col_intervention",selected = "steelblue",
           session = session
         )
-
-
+        
+        
         updatePickerInput(
           inputId = "col_control",selected = "orange",
           session = session
         )
-
+        
         createAlert(
           id = "myalert",
           options = list(
@@ -199,17 +199,17 @@ main_plotserver <- function(id, data, intervention_effect) {
             content = "Farverne er nulstillet!"
           )
         )
-
-
+        
+        
         delay(
           3000,
           closeAlert(
             id = "myalert"
           )
         )
-
-
-
+        
+        
+        
       }
     )
     
@@ -224,11 +224,11 @@ main_plotserver <- function(id, data, intervention_effect) {
       control_color = input$col_control,
       color_background = input$col_background,
       color_intervention = input$col_intervention
-
+      
     )
     
     
-
+    
     map(
       1:length(data()),
       .f = function(i) {
@@ -250,16 +250,16 @@ main_plotserver <- function(id, data, intervention_effect) {
             
             
             
-              plot_data  %>%
-                do_plot(
-                  difference = input$do_difference,
-                  effect = intervention_effect()
-                  ,
-                  show_baseline = input$show_baseline,
-                  color_intervention = chosen_colors$color_intervention,
-                  color_background    = chosen_colors$color_background,
-                  color_control      = chosen_colors$control_color
-                )
+            plot_data  %>%
+              do_plot(
+                difference = input$do_difference,
+                effect = intervention_effect()
+                ,
+                show_baseline = input$show_baseline,
+                color_intervention = chosen_colors$color_intervention,
+                color_background    = chosen_colors$color_background,
+                color_control      = chosen_colors$control_color
+              )
             
             
             
@@ -293,7 +293,7 @@ main_plotserver <- function(id, data, intervention_effect) {
         
         
         
-       
+        
         
         
       }
@@ -307,7 +307,7 @@ main_plotserver <- function(id, data, intervention_effect) {
     
     
     
-   
+    
     
     
     
@@ -315,7 +315,7 @@ main_plotserver <- function(id, data, intervention_effect) {
     
   }
   
- 
+  
   )
   
   
@@ -351,7 +351,7 @@ main_dataserver <- function(id) {
     
     return(
       data
-      )
+    )
     
     
   }
@@ -364,14 +364,14 @@ main_dataserver <- function(id) {
 
 main_infobox <- function(id, data) {
   moduleServer(id, function(input, output, session) {
-
-   
-
+    
+    
+    
     # Server Information; #####
     #' @param data a reactive list of data.
     #'
     #' @return Rendered Text Outputs
-
+    
     intervention_effect <- reactive(
       c(
         input$effect_1,
@@ -382,13 +382,13 @@ main_infobox <- function(id, data) {
       ) %>% as.numeric()
     )
     
-
-
+    
+    
     # Server Logic; #####
     map(
       1:length(data()),
       .f = function(i) {
-
+        
         # Extract Data by Index
         # as this is consequtive
         data <- data()[[i]] %>%
@@ -406,22 +406,22 @@ main_infobox <- function(id, data) {
           
         })
         
-
         
         
         
         
-
         
-
-
+        
+        
+        
+        
       }
     ) 
     
     
-
-
-
+    
+    
+    
   }
   )
 }
@@ -584,4 +584,99 @@ main_choiceserver <- function(id, data) {
     
     
   })
+}
+
+
+
+main_tableserver <- function(id, data){
+  moduleServer(
+    id,
+    function(input,output, session){
+      
+      
+      # This sever Generates a table for 
+      # the frontpage
+      
+      # table_data <- map(
+      #   1:length(data()),
+      #   .f = function(i) {
+      #     
+      #     
+      #     data()[[i]] %>% foo()
+      #     
+      #     
+      #   }
+      # ) %>% rbindlist()
+      # 
+      
+      
+      map(
+        1:length(data()),
+        .f = function(i) {
+
+          # Extract Data by Index
+          # as this is consequtive
+
+          # message(
+          #   paste("Class:", class(table_data[[i]]))
+          # )
+          #
+          #
+          data <- data()[[i]] %>% foo()
+
+
+          output[[paste0("table",i)]] <- DT::renderDataTable({
+
+
+            data[order(allocator)] %>% DT::datatable(
+              rownames = FALSE,
+              extensions = c("Buttons", "RowGroup"),
+              caption = "Tabel",
+             
+              options = list(
+                pageLength = 8,
+                dom = "Bfrtip",
+                columnDefs =list(
+                  list(
+                    className = "dt-head-center dt-center", targets = 1:(ncol(data) - 1)
+                  )
+                ),
+                rowGroup = list(dataSrc = c(1)),
+                buttons = c("csv", "excel"),
+                fixedHeader = TRUE,
+                initComplete = JS(
+                  "function(settings, json) {",
+                  "$(this.api().table().header()).css({'background-color': '#5E81AC', 'color': '#fff'});",
+                  "}")
+              )
+              
+              )
+
+
+          })
+          
+          
+          
+          message("In render DT")
+
+
+
+
+
+
+
+
+
+
+        }
+      )
+      
+      
+      
+      
+      
+      
+      
+    }
+  )
 }

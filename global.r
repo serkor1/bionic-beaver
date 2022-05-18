@@ -13,7 +13,7 @@ library(waiter)
 library(plotly)
 library(waiter)
 library(DT)
-
+library(fresh)
 
 # Shiny BS
 

@@ -164,7 +164,10 @@ server <- function(input, output, session) {
     
     # Generate
     
-    
+    main_tableserver(
+      id = "model1",
+      data = data()
+    )
     # main_infobox(
     #   id = "model1",
     #   data = data()
