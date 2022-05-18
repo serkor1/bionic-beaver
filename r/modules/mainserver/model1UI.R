@@ -229,7 +229,6 @@ model1UI <- function(id, output) {
   
   box_placeholder <- function(...) {
     
-    
     bs4Card(
       width = 12,headerBorder = FALSE,
       sidebar = bs4CardSidebar(
@@ -293,22 +292,21 @@ model1UI <- function(id, output) {
       closable = FALSE,
       # title = "Visuelt Overblik",
       # icon = icon("chart-line", verify_fa = FALSE),
+      status = "primary",
       title = span(
-
-          radioGroupButtons(
-            inputId = "Id069",width = "500px",
-            label = NULL, 
-            choices = c(`Grafik <i class='fa fa-bar-chart'></i>` = "see_plot", ` Tabel <i class='fa fa-line-chart'></i>` = "see_table"),
-            justified = TRUE, size = "sm"
-          )
+        
+        radioGroupButtons(
+          inputId = paste0("change_view"),width = "500px",
+          label = NULL,
+          choices = c(`Grafik <i class='fa fa-bar-chart'></i>` = "see_plot", ` Tabel <i class='fa fa-line-chart'></i>` = "see_table"),
+          justified = TRUE, size = "sm"
+        )
         
         
         
       ),
-      status = "primary",
       
-      
-     ...
+      ...
       
     )
     
@@ -423,97 +421,146 @@ model1UI <- function(id, output) {
     ),
     
     
+    
     box_placeholder(
-      column(
-        width = 12,
-        do.call(
-          tabsetPanel,
-          c(
-            type = "pills",
-            map(
-              seq_along(tabset_names),
-              .f = function(i) {
+      
+      conditionalPanel(
+        condition = "input.change_view == 'see_plot'",
+        {
+          column(
+            width = 12,
+            do.call(
+              tabsetPanel,
+              c(
+                type = "pills",
                 
-                
-                
-                icon_name <- fcase(
-                  tabset_names[i] %chin% c("primary_care"), "stethoscope",
-                  tabset_names[i] %chin% c("psychiatric_care"), "couch",
-                  tabset_names[i] %chin% c("somatic_care"), "hospital",
-                  tabset_names[i] %chin% c("transfers"), "briefcase"
-                  
-                )
-                
-                
-                
-                tabPanel(
-                  title = paste(
-                    fcase(
-                      tabset_names[i] %chin% c("primary_care"), "Almen praksis",
-                      tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
-                      tabset_names[i] %chin% c("somatic_care"), "Somatik",
-                      tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+                map(
+                  seq_along(tabset_names),
+                  .f = function(i) {
+                    
+                    
+                    
+                    
+                    icon_name <- fcase(
+                      tabset_names[i] %chin% c("primary_care"), "stethoscope",
+                      tabset_names[i] %chin% c("psychiatric_care"), "couch",
+                      tabset_names[i] %chin% c("somatic_care"), "hospital",
+                      tabset_names[i] %chin% c("transfers"), "briefcase"
                       
                     )
                     
                     
-                  ),
+                    
+                    
+                    
+                    tabPanel(
+                      title = paste(
+                        fcase(
+                          tabset_names[i] %chin% c("primary_care"), "Almen praksis",
+                          tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
+                          tabset_names[i] %chin% c("somatic_care"), "Somatik",
+                          tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+                          
+                        )
+                        
+                        
+                      ),
+                      
+                      
+                      icon = icon(icon_name),
+                      value = ns(paste0("tab",i)),
+                      
+                      
+                      
+                      # Add Conditional Panel
+                      # to view graph or tables
                   
-                  
-                  icon = icon(icon_name),
-                  value = ns(paste0("tab",i)),
-                  
-                  
-                  fluidRow(
-                    column(
-                      width = 12,
-                      br(),
-                      plotlyOutput(
-                        outputId = ns(paste0("plot",i))
-                      )
-                      # box_placeholder(
-                      #   column(
-                      #     width = 12,
-                      #     br(),
-                      #     
-                      #   )
-                      # )
-                      # # Information Box;
-                      # renderUI({
-                      #   
-                      #   bar(data()[[i]])
-                      #   
-                      #   
-                      # })
-                      
-                      
-                      
-                      
-                      
+                          
+                          plotlyOutput(
+                            outputId = ns(paste0("plot",i))
+                          )
+                        
+                     
                       
                     )
-                  )
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
+                    
+                    
+                    
+                  }
                   
                 )
-                
-              }
-              
+              )
             )
           )
-        )
+        }
+      ),
+      
+      conditionalPanel(
+        condition = "input.change_view == 'see_table'",
+        {
+          column(
+            width = 12,
+            do.call(
+              tabsetPanel,
+              c(
+                type = "pills",
+                
+                map(
+                  seq_along(tabset_names),
+                  .f = function(i) {
+                    
+                    
+                    
+                    
+                    icon_name <- fcase(
+                      tabset_names[i] %chin% c("primary_care"), "stethoscope",
+                      tabset_names[i] %chin% c("psychiatric_care"), "couch",
+                      tabset_names[i] %chin% c("somatic_care"), "hospital",
+                      tabset_names[i] %chin% c("transfers"), "briefcase"
+                      
+                    )
+                    
+                    
+                    
+                    
+                    
+                    tabPanel(
+                      title = paste(
+                        fcase(
+                          tabset_names[i] %chin% c("primary_care"), "Almen praksis",
+                          tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
+                          tabset_names[i] %chin% c("somatic_care"), "Somatik",
+                          tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+                          
+                        )
+                        
+                        
+                      ),
+                      
+                      
+                      icon = icon(icon_name),
+                      value = ns(paste0("tabs",i)),
+                      
+                      DT::dataTableOutput(
+                        outputId = ns(paste0("table",i))
+                      )
+                      
+                      
+                    )
+                    
+                    
+                    
+                  }
+                  
+                )
+              )
+            )
+          )
+        }
       )
-    ),
+
+    )
+    ,
     
 
     
