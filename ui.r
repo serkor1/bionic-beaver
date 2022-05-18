@@ -2,44 +2,39 @@
 bs4DashPage(
   help = TRUE,
   freshTheme = create_theme(
-              bs4dash_vars(
-                main_header_dark_form_control_bg = "#000000",
-                navbar_dark_color = "#000000",
-                navbar_dark_active_color = "#000000"
-                # navbar_light_color = "#000000"
-                # navbar_light_active_color = "#FFF",
-                # navbar_light_hover_color = "#FFF",
-              ),
-              # bs4dash_yiq(
-              #   contrasted_threshold = 10,
-              #   text_dark = "#FFF",
-              #   text_light = "#272c30"
-              # ),
-              bs4dash_layout(
-                sidebar_width = "350px"
-              ),
-              # bs4dash_sidebar_light(
-              #   bg = "#272c30",
-              #   color = "#bec5cb",
-              #   hover_color = "#FFF",
-              #   submenu_bg = "#272c30",
-              #   submenu_color = "#FFF",
-              #   submenu_hover_color = "#FFF"
-              # ),
-              bs4dash_status(
-                primary = "#5E81AC",
-                danger = "#BF616A",
-                light = "#272c30"
-              )
-              # ,
-              # bs4dash_color(
-              #   gray_900 = "#FFF", white = "#272c30"
-              # )
-            ),
+    bs4dash_vars(
+      navbar_light_color = "#bec5cb",
+      navbar_light_active_color = "#FFF",
+      navbar_light_hover_color = "#FFF"
+    ),
+    bs4dash_yiq(
+      contrasted_threshold = 10,
+      text_dark = "#FFF",
+      text_light = "#272c30"
+    ),
+    bs4dash_layout(
+      main_bg = "#353c42",
+      sidebar_width = "350px"
+    ),
+    bs4dash_sidebar_light(
+      bg = "#272c30",
+      color = "#bec5cb",
+      hover_color = "#FFF",
+      submenu_bg = "#272c30",
+      submenu_color = "#FFF",
+      submenu_hover_color = "#FFF"
+    ),
+    bs4dash_status(
+      primary = "#5E81AC", danger = "#BF616A", light = "#272c30"
+    ),
+    bs4dash_color(
+      gray_900 = "#FFF", white = "#272c30"
+    )
+  ),
   # Loaader; ####
   preloader = list(
     html = tagList(spin_1(),"Indlæser ...")
-    ),
+  ),
   
   # Global Options; ###
   fullscreen = TRUE,
@@ -52,31 +47,31 @@ bs4DashPage(
   
   # header; ####
   header = bs4DashNavbar(border = FALSE,
-    fixed = TRUE,
-    titleWidth = "350px",
-    
-    title = bs4DashBrand(
-      color = "primary",
-      opacity = 0,image = NULL,
-      # title = div(
-      #   align = 'center',
-        # span(
-        #   icon("dashboard", verify_fa = FALSE),
-        #   strong("Dashboard")
-        # )
-      # )
-      title = column(
-        width = 6,offset = 4,
-        span(
-          icon("dashboard", verify_fa = FALSE),
-          strong("Dashboard")
-        )
-      )
-    ),
-    rightUi = tags$li(
-      uiOutput("gen_header"),
-      class = "dropdown"
-      )
+                         fixed = TRUE,
+                         titleWidth = "350px",
+                         
+                         title = bs4DashBrand(
+                           color = "primary",
+                           opacity = 0,image = NULL,
+                           # title = div(
+                           #   align = 'center',
+                           # span(
+                           #   icon("dashboard", verify_fa = FALSE),
+                           #   strong("Dashboard")
+                           # )
+                           # )
+                           title = column(
+                             width = 6,offset = 4,
+                             span(
+                               icon("dashboard", verify_fa = FALSE),
+                               strong("Dashboard")
+                             )
+                           )
+                         ),
+                         rightUi = tags$li(
+                           uiOutput("gen_header"),
+                           class = "dropdown"
+                         )
   ),
   
   
@@ -86,7 +81,7 @@ bs4DashPage(
     minified = FALSE,
     width = "350px",
     
-
+    
     
     
     sidebarMenu(
@@ -198,7 +193,7 @@ bs4DashPage(
                   
                 )
                 
-                ),
+    ),
     right = span(
       a(
         icon("r-project"),
