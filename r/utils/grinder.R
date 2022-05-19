@@ -192,17 +192,7 @@ plot_grinder <- function(data, group_value = NULL) {
     # Store Class of the data;
     get_class <- class(data)[3]
     
-    
-    
-    # Message; #####
-    message(
-      "Preparing Data for Plotting"
-    )
-    message(
-      "---------------------------"
-    )
-    
-    
+
     data <- data[
       ,
       list(
@@ -278,8 +268,6 @@ plot_grinder <- function(data, group_value = NULL) {
     
   }
   
-  
-  message("Plotgrinder Done!")
   
   return(
     data  
@@ -473,7 +461,7 @@ foo <- function(data) {
   #' TODO: This should replace info_grinder and
   #' plot_grinder and table_grinder
   
-  message(paste(class(data)))
+  
   
   if (nrow(data) == 0) {
 

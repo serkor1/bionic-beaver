@@ -1,10 +1,19 @@
+# Script; Server Logic
+# for the main model.
+# main warning logic; #####
 main_warnings <- function(id){
   moduleServer(id, function(input, output, session)
   {
     
     # Check wether user chose
     # needed inputs and give feedback
-    message(paste("Chosen:",input$pt_control, "Truthy:", isTruthy(input$pt_control)))
+    message(
+      paste("Chosen:",input$pt_control, "as Control.", "Truthy:", isTruthy(input$pt_control), "\n")
+      )
+    
+    message(
+      paste("Chosen:",input$pt_target, "as Intervention." , "Truthy:", isTruthy(input$pt_target), "\n")
+    )
     
     
     observe(
@@ -53,20 +62,13 @@ main_warnings <- function(id){
     
     
     
-    
-    
-    
-    
-    
-    
-    
   }
   
   
   )
 }
 
-
+# effect logic; ####
 main_effectserver <- function(id) {
   moduleServer(id, function(input,output, session){
     
@@ -160,12 +162,18 @@ main_effectserver <- function(id) {
   
 }
 
-
-main_plotserver <- function(id, data, intervention_effect) {
+# plot logic; #####
+main_plotserver <- function(id, data, intervention_effect, light_mode) {
   moduleServer(id, function(input, output, session) {
     
     
-    
+    #' Server Information;
+    #' 
+    #' @param data ReactiveExpression. This is the data
+    #' that are plot ready.
+    #' 
+    #' @param intervention_effect ReactiveExpression. This
+    #' is the intervention effects that the user choses.
     
     
     observeEvent(
@@ -188,6 +196,8 @@ main_plotserver <- function(id, data, intervention_effect) {
           session = session
         )
         
+        # Notify the user that 
+        # that the colors are reset.
         createAlert(
           id = "myalert",
           options = list(
@@ -200,7 +210,8 @@ main_plotserver <- function(id, data, intervention_effect) {
           )
         )
         
-        
+        # Autoclose the 
+        # the Alert after 3 seconds.
         delay(
           3000,
           closeAlert(
@@ -215,11 +226,37 @@ main_plotserver <- function(id, data, intervention_effect) {
     
     
     
+    observe(
+      {
+        
+        if (!isTRUE(light_mode())){
+          message("In Ture")
+          updatePickerInput(
+            inputId = "col_background",selected = "black",
+            session = session
+          )
+        } else {
+          
+          updatePickerInput(
+            inputId = "col_background",selected = "white",
+            session = session
+          )
+          
+        }
+        
+        
+      }
+    )
     
     
     
     
-    # Create Reactive Value
+    
+    
+    
+    
+    # Create a container for the chosen
+    # colors so the changes are applied globally.
     chosen_colors <- reactiveValues(
       control_color = input$col_control,
       color_background = input$col_background,
@@ -236,14 +273,14 @@ main_plotserver <- function(id, data, intervention_effect) {
         # TODO: Isolate These
         # so they dont keep running!
         message(
-          paste("Iteration", i)
+          paste("Grinding plots. Currently at", i, "of", length(data()), "iterations.")
         )
-        
         
         plot_data <- data()[[i]] %>%
           plot_grinder(
             group_value = input$pt_demographic
           )
+        
         
         output[[paste0("plot", i)]] <- renderPlotly(
           {
@@ -325,11 +362,11 @@ main_plotserver <- function(id, data, intervention_effect) {
 
 
 
-
+# main data logic; ####
 main_dataserver <- function(id) {
   moduleServer(id, function(input, output, session) {
     
-    message("In Main Dataserver")
+    
     
     data <- reactive(
       {
@@ -361,7 +398,7 @@ main_dataserver <- function(id) {
 
 
 
-
+# information box; #####
 main_infobox <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     
@@ -428,7 +465,7 @@ main_infobox <- function(id, data) {
 
 
 
-
+# choice logic; #####
 main_choiceserver <- function(id, data) {
   moduleServer(id, function(input, output,session){
     
@@ -460,25 +497,7 @@ main_choiceserver <- function(id, data) {
         
       }
       
-      
-      
-      # if (is.null(input$pt_control)) {
-      #   "Intet Valgt"
-      #   
-      # } else {
-      #   
-      #   if (length(input$pt_control) > 1) {
-      #     
-      #     "Matchet Gruppe"
-      #     
-      #   } else {
-      #     
-      #     input$pt_control %>% str_replace("_", ": ")
-      #     
-      #   }
-      #   
-      #   
-      # }
+
       
       
       
@@ -587,7 +606,7 @@ main_choiceserver <- function(id, data) {
 }
 
 
-
+# table logic; #####
 main_tableserver <- function(id, data){
   moduleServer(
     id,
@@ -613,15 +632,12 @@ main_tableserver <- function(id, data){
       map(
         1:length(data()),
         .f = function(i) {
+          
+          
+          message(
+            paste("Grinding tables. Currently at", i, "of", length(data()), "iterations.")
+          )
 
-          # Extract Data by Index
-          # as this is consequtive
-
-          # message(
-          #   paste("Class:", class(table_data[[i]]))
-          # )
-          #
-          #
           data <- data()[[i]] %>% foo()
 
 
@@ -657,9 +673,7 @@ main_tableserver <- function(id, data){
           
           
           
-          message("In render DT")
-
-
+         
 
 
 
