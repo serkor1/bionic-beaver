@@ -312,42 +312,30 @@ main_plotserver <- function(id, data, intervention_effect, light_mode) {
           }
         )
         
+        
         if (isTruthy(plot_data)) {
           
-          req(input$pt_target)
-          req(input$pt_control)
-          req(input$pt_target != input$pt_control)
+          if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+            
+            shinyFeedback::feedbackDanger(
+              inputId = "pt_demographic",
+              !(isTruthy(plot_data$Control) & isTruthy(plot_data$Intervention)),
+              text = "Sammenligningen er problematisk!",
+              icon = NULL
+            )
+            
+          }
           
-          shinyFeedback::feedbackDanger(
-            inputId = "pt_demographic",
-            !(isTruthy(plot_data$Control) & isTruthy(plot_data$Intervention)),
-            text = "Sammenligningen er problematisk!",
-            icon = NULL
-          )       
           
           
         }
         
-        
-        
-        
-        
+
         
       }
     )
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
   }
