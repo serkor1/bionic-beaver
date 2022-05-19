@@ -120,6 +120,58 @@ model1UI_header <- function(id, output){
 
 # body; ####
 
+
+
+model1UI_performance <- function(id, output, id_value) {
+  
+  ns <- NS(id)
+  
+  column(
+    width = 6,
+    bs4ListGroup(
+      width = 12,
+      type = "heading",
+      
+      bs4ListGroupItem(
+        
+        progressBar(
+          id = ns(paste0("e_", id_value)),
+          value = 0,
+          display_pct = TRUE,
+          title = NULL
+        ),
+        title = "Effekt",
+        subtitle = "Gennemsnitlig forventet effekt",
+        disabled = TRUE
+      ),
+      
+      bs4ListGroupItem(
+        title = NULL,
+        subtitle = "Gennemsnitlig faktisk effekt",
+        disabled = TRUE,
+        progressBar(
+          value = 50,
+          total = 100,
+          display_pct =TRUE,
+          id = ns(paste0("r_", id_value))
+        )
+      )
+      
+      
+      
+      
+    )
+  )
+  
+  
+  
+  
+  
+  
+}
+
+
+
 model1UI_body <- function(id,output) {
   
   ns <- NS(id)
@@ -300,15 +352,7 @@ model1UI_body <- function(id,output) {
         
         
         
-      ),
-      
-      
-      progressBar(
-        id = ns("mean_pbar"),
-        value = 0,
-        display_pct = TRUE,
-        title = "Gennemsnitlig Effekt"
-      ) 
+      )
       
       
       
@@ -373,6 +417,13 @@ model1UI_body <- function(id,output) {
                       
                       plotlyOutput(
                         outputId = ns(paste0("plot",i))
+                      ),
+                      
+                      
+                      model1UI_performance(
+                        id_value = paste0("effect",i),
+                        id,
+                        output
                       )
                       
                       
@@ -455,7 +506,7 @@ model1UI_body <- function(id,output) {
       )
       
     )
-    ,
+    
     
     
     
@@ -471,6 +522,9 @@ model1UI_body <- function(id,output) {
   
 }
 
+
+
+
 model1UI <- function(id, output) {
   
   # Generate Namespace
@@ -484,8 +538,16 @@ model1UI <- function(id, output) {
   ui_header <- model1UI_header(id, output)
   
   ui_body <- model1UI_body(id, output)
+  
+  
+  ui_performance <- NULL
     
     
+  #   model1UI_performance(
+  #   id,output
+  # )
+  #   
+  #   
   
   
   
@@ -494,7 +556,8 @@ model1UI <- function(id, output) {
     list(
       sidebar    = ui_sidebar,
       body       = ui_body,
-      header     = ui_header
+      header     = ui_header,
+      performance = ui_performance
     )
     
   )

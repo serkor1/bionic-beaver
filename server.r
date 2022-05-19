@@ -109,6 +109,12 @@ server <- function(input, output, session) {
             model1_ui$header
           }
         )
+        
+        output$performance <- renderUI(
+          {
+            model1_ui$performance
+          }
+        )
       
       
     }
@@ -128,9 +134,13 @@ server <- function(input, output, session) {
   
   observe({
     
-    effect <- main_effectserver(id = "model1")
-    
-    
+    effect <- reactive({
+      main_effectserver(
+      id = "model1",
+      data = data()
+      )
+    })
+
     main_warnings(
       id = "model1"
     )
@@ -147,21 +157,15 @@ server <- function(input, output, session) {
     main_plotserver(
       id = "model1",
       data = data(),
-      intervention_effect = effect,
+      intervention_effect = effect(),
       light_mode = reactive(input$customSwitch1)
     )
     
-    # Generate
-    
     main_tableserver(
       id = "model1",
-      data = data()
+      data = data(),
+      intervention_effect = effect()
     )
-    # main_infobox(
-    #   id = "model1",
-    #   data = data()
-    # )
-    
     
     
     

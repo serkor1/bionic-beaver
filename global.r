@@ -74,5 +74,3 @@ demographics <-  options$demographics %>%
       }
     
     )
-
-

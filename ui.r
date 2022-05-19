@@ -173,8 +173,9 @@ bs4DashPage(
     
     useShinyjs(),
     shinyFeedback::useShinyFeedback(),
+    
     uiOutput("gen_body"),
-    uiOutput("value_box")
+    uiOutput("performance")
     
   ),
   

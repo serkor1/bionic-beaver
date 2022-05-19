@@ -69,7 +69,7 @@ main_warnings <- function(id){
 }
 
 # effect logic; ####
-main_effectserver <- function(id) {
+main_effectserver <- function(id, data) {
   moduleServer(id, function(input,output, session){
     
     intervention_effect <- reactive(
@@ -83,44 +83,44 @@ main_effectserver <- function(id) {
     )
     
     status <- "success"
-    
+
     if (isTruthy(intervention_effect())) {
-      
+
       # Calculate Mean Effect;
       mean_effect <- mean(
         intervention_effect()
       )
-      
-      
-      
-      
+
+
+
+
       if (mean_effect < 20) {
-        
+
         status <- "success"
-        
+
         closeAlert(
           id = "myalert"
         )
-        
+
       }
-      
+
       if (data.table::between(mean_effect,lower = 20,upper = 50)) {
-        
+
         status <- "warning"
-        
+
         closeAlert(
           id = "myalert"
         )
-        
+
       }
-      
+
       if (data.table::between(mean_effect,lower = 50,upper = 100)) {
-        
+
         status <- "danger"
-        
+
         message("Here")
-        
-        
+
+
         createAlert(
           id = "myalert",
           options = list(
@@ -132,28 +132,60 @@ main_effectserver <- function(id) {
             content = paste("Din valgte effekt er", mean_effect, "%.")
           )
         )
-        
-        
-        
-        
-      } 
-      
+
+
+
+
+      }
+
     }
-    
-    
-    
-    
-    
-    
-    # Update Effect slider
-    updateProgressBar(
-      session = session,
-      id = "mean_pbar",
-      value = mean(intervention_effect()),
-      status = "danger"
+
+
+    map(
+      1:4,
+      .f = function(i) {
+
+        # tmpData <- data()[[i]] %>% foo()
+        # 
+        # tmpData <- tmpData[
+        #   ,
+        #   lapply(
+        #     .SD,
+        #     mean
+        #   )
+        #   ,
+        #   .SDcols = c("Control", "Intervention", "difference")
+        # ]
+
+
+        # Update Effect slider
+        # updateProgressBar(
+        #   session = session,
+        #   id = paste0("e_effect",i),
+        #   value = mean(intervention_effect()),
+        #   status = "danger"
+        # )
+
+        # updateProgressBar(
+        #   session = session,
+        #   id      = paste0("r_effect",i),
+        #   value   = abs(
+        #     (tmpData$Intervention-abs(tmpData$difference))/tmpData$Intervention * 100
+        #   )
+        # )
+
+      }
     )
     
-    return(intervention_effect)
+    
+    
+    
+    
+    
+    
+    return(
+      intervention_effect
+    )
     
     
     
@@ -163,7 +195,7 @@ main_effectserver <- function(id) {
 }
 
 # plot logic; #####
-main_plotserver <- function(id, data, intervention_effect, light_mode) {
+main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
   moduleServer(id, function(input, output, session) {
     
     
@@ -226,35 +258,47 @@ main_plotserver <- function(id, data, intervention_effect, light_mode) {
     
     
     
-    observe(
-      {
-        
-        if (!isTRUE(light_mode())){
-          message("In Ture")
-          updatePickerInput(
-            inputId = "col_background",selected = "black",
-            session = session
-          )
-        } else {
-          
-          updatePickerInput(
-            inputId = "col_background",selected = "white",
-            session = session
-          )
-          
-        }
-        
-        
-      }
-    )
+    # observe(
+    #   {
+    #     
+    #     if (!isTRUE(light_mode())){
+    #       message("In Ture")
+    #       updatePickerInput(
+    #         inputId = "col_background",selected = "black",
+    #         session = session
+    #       )
+    #     } else {
+    #       
+    #       updatePickerInput(
+    #         inputId = "col_background",selected = "white",
+    #         session = session
+    #       )
+    #       
+    #     }
+    #     
+    #     
+    #   }
+    # )
+    # 
+    # 
+    # message(class(data()))
+    
+    
+    plot_data <- reactive(
+      data() %>% 
+        baz(effect = intervention_effect())
+      )
+    
+    
+      
+      
+      
+    
+      
     
     
     
-    
-    
-    
-    
-    
+   
     # Create a container for the chosen
     # colors so the changes are applied globally.
     chosen_colors <- reactiveValues(
@@ -276,22 +320,29 @@ main_plotserver <- function(id, data, intervention_effect, light_mode) {
           paste("Grinding plots. Currently at", i, "of", length(data()), "iterations.")
         )
         
-        plot_data <- data()[[i]] %>%
-          plot_grinder(
-            group_value = input$pt_demographic
-          )
         
+        
+
         
         output[[paste0("plot", i)]] <- renderPlotly(
           {
             
+            # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+            #   
+            #   shinyFeedback::feedbackDanger(
+            #     inputId = "pt_demographic",
+            #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
+            #     text = "Sammenligningen er problematisk!",
+            #     icon = NULL
+            #   )
+            #   
+            # }
             
             
-            plot_data  %>%
+            
+            plot_data()[[i]]  %>%
               do_plot(
                 difference = input$do_difference,
-                effect = intervention_effect()
-                ,
                 show_baseline = input$show_baseline,
                 color_intervention = chosen_colors$color_intervention,
                 color_background    = chosen_colors$color_background,
@@ -299,36 +350,11 @@ main_plotserver <- function(id, data, intervention_effect, light_mode) {
               )
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
           }
         )
         
         
-        if (isTruthy(plot_data)) {
-          
-          if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
-            
-            shinyFeedback::feedbackDanger(
-              inputId = "pt_demographic",
-              !(isTruthy(plot_data$Control) & isTruthy(plot_data$Intervention)),
-              text = "Sammenligningen er problematisk!",
-              icon = NULL
-            )
-            
-          }
-          
-          
-          
-        }
+        
         
 
         
@@ -366,12 +392,13 @@ main_dataserver <- function(id) {
           group_value      = paste(input$pt_demographic),
           type             = input$do_incident,
           cost             = input$do_cost
-        )
+        ) %>% foo()
         
       }
     )
     
     
+    message("data server done")
     
     
     return(
@@ -595,7 +622,7 @@ main_choiceserver <- function(id, data) {
 
 
 # table logic; #####
-main_tableserver <- function(id, data){
+main_tableserver <- function(id, data, intervention_effect){
   moduleServer(
     id,
     function(input,output, session){
@@ -615,7 +642,10 @@ main_tableserver <- function(id, data){
       #   }
       # ) %>% rbindlist()
       # 
-      
+    
+      table_data <- reactive(
+        data() %>% baz(effect = intervention_effect())
+        )
       
       map(
         1:length(data()),
@@ -626,17 +656,21 @@ main_tableserver <- function(id, data){
             paste("Grinding tables. Currently at", i, "of", length(data()), "iterations.")
           )
 
-          data <- data()[[i]] %>% foo()
+          
+          
+          
 
 
           output[[paste0("table",i)]] <- DT::renderDataTable({
+            
+            data <- table_data()[[i]]
 
 
             data[order(allocator)] %>% DT::datatable(
               rownames = FALSE,
               extensions = c("Buttons", "RowGroup"),
               caption = "Tabel",
-             
+
               options = list(
                 pageLength = 8,
                 dom = "Bfrtip",
@@ -653,7 +687,7 @@ main_tableserver <- function(id, data){
                   "$(this.api().table().header()).css({'background-color': '#5E81AC', 'color': '#fff'});",
                   "}")
               )
-              
+
               )
 
 
