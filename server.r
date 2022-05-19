@@ -109,20 +109,6 @@ server <- function(input, output, session) {
             model1_ui$header
           }
         )
-        
-        
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
       
     }
