@@ -1,11 +1,13 @@
-model1UI <- function(id, output) {
+# script; UI of
+# the main model.
+
+# sidebar; #####
+model1UI_sidebar <- function(id, output){
   
-  # Generate Namespace
   ns <- NS(id)
-  
  
-  # Generate Sidebar; ####
-  ui_sidebar <- tagList(
+  
+  tagList(
     
     sidebarHeader(h5(("Vælg gruppe"))),
     
@@ -14,10 +16,6 @@ model1UI <- function(id, output) {
       title = "Gruppe",
       header = "Vælg Gruppe",
       choices = diseases,
-      # selected = sample(
-      #   c("Psykiske Lidelser_Svær", "Psykiske Lidelser_Moderat"),
-      #   size = 1
-      #   ),
       multiple = FALSE
     ),
     
@@ -26,11 +24,7 @@ model1UI <- function(id, output) {
       title = "Sammenligningsgruppe",
       header = "Vælg Sammenligningsgruppe",
       choices = diseases,
-      multiple = FALSE,
-      #selected = c("Psykiske Lidelser_Mild"),
-      # max = 1,
-      # selectAllText = "Matching",
-      # deselectAllText = "Nulstil"
+      multiple = FALSE
     ),
     
     sidebarHeader(h5(("Vælg parametre"))),
@@ -40,13 +34,6 @@ model1UI <- function(id, output) {
       title = "Outcomes",
       header = "Vælg Outcomes",
       choices = outcomes,
-      # selected = c(
-      #   "Primær Sektor_Almen Praksis",
-      #   "Primær Sektor_Psykolog",
-      #   "Psykiatrien_Ambulant",
-      #   "Somatikken_Ambulant",
-      #   "Overførsel_Midlertidig Overførselsindkomst"
-      #   ),
       multiple = TRUE,
       selectAllText = "Vælg Alle",
       deselectAllText = "Nulstil"
@@ -59,11 +46,6 @@ model1UI <- function(id, output) {
       title = "Demografi",
       header = "Vælg Demografiske",
       choices = demographics,
-      # selected = c(
-      #   sample(demographics$alder, 1),
-      #   sample(demographics$køn, 1),
-      #   sample(demographics$uddannelse, 1)
-      #   ),
       multiple = TRUE,
       selectAllText = "Vælg Alle",
       deselectAllText = "Nulstil"
@@ -80,7 +62,7 @@ model1UI <- function(id, output) {
       title = "Klik for at vælge Incidente patienter.",
       placement = "right",
       content = "Klik for at vælge Incidente patienter."
-      ),
+    ),
     
     
     materialSwitch(
@@ -93,19 +75,18 @@ model1UI <- function(id, output) {
       placement = "right",
       content = "Klik for at vælge Omkostning pr. patient."
     )
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
   )
   
-  ui_header <- tagList(
+}
+
+# header; ####
+model1UI_header <- function(id, output){
+  
+  ns <- NS(id)
+  
+  tagList(
     
     tags$li(
       (
@@ -134,98 +115,14 @@ model1UI <- function(id, output) {
     
   )
   
+}
+
+
+# body; ####
+
+model1UI_body <- function(id,output) {
   
-  ui_controlbar <- tagList(
-    
-      # materialSwitch(
-      #   inputId = ns("show_baseline"),
-      #   value = TRUE,
-      #   status = "info",
-      #   label = "Vis Befolkningsværdi"
-      # ),
-      # 
-      # 
-      # # column(
-      # #   width = 12,
-      # 
-      #   # fluidRow(
-      #   #   pickerInput(
-      #   #     inputId = ns("col_intervention"),
-      #   #     label = "Intevention",
-      #   #     selected = "steelblue",
-      #   #     choices = colors(),
-      #   #     options = list(
-      #   #       `live-search` = TRUE,
-      #   #       `size` = 5)
-      #   #   ),
-      #   #   pickerInput(
-      #   #     inputId = ns("col_control"),
-      #   #     label = "Control",
-      #   #     selected = "orange",
-      #   #     choices = colors(),
-      #   #     options = list(
-      #   #       `live-search` = TRUE,
-      #   #       `size` = 5)
-      #   #   ),
-      #   #   pickerInput(
-      #   #     inputId = ns("col_background"),
-      #   #     label = "Population",
-      #   #     selected = "white",
-      #   #     choices = colors(),
-      #   #     options = list(
-      #   #       `live-search` = TRUE,
-      #   #       `size` = 5)
-      #   #   )
-      # 
-      #  # )
-      #   # ,
-      #   #
-      # 
-      # 
-      #   column(
-      #     width = 12,
-      #     pickerInput(
-      #       inputId = ns("col_intervention"),
-      #       label = "Intevention",
-      #       selected = "steelblue",
-      #       choices = colors(),
-      #       options = list(
-      #         `live-search` = TRUE,
-      #         `size` = 5)
-      #     ),
-      # 
-      #     pickerInput(
-      #       inputId = ns("col_control"),
-      #       label = "Control",
-      #       selected = "orange",
-      #       choices = colors(),
-      #       options = list(
-      #         `live-search` = TRUE,
-      #         `size` = 5)
-      #     ),
-      # 
-      #     pickerInput(
-      #       inputId = ns("col_background"),
-      #       label = "Population",
-      #       selected = "white",
-      #       choices = colors(),
-      #       options = list(
-      #         `live-search` = TRUE,
-      #         `size` = 5)
-      #     ),
-      # 
-      #     actionButton(
-      #       inputId = ns("col_reset"),
-      #       label = "Nulstil Farver"
-      #     )
-      # 
-      # 
-      #   )
-    
-  )
-  
-  
-  
+  ns <- NS(id)
   
   box_placeholder <- function(...) {
     
@@ -238,7 +135,7 @@ model1UI <- function(id, output) {
         p("Grafindstillinger"),
         column(
           width = 4,
-
+          
           materialSwitch(
             inputId = ns("show_baseline"),
             value = TRUE,
@@ -249,7 +146,7 @@ model1UI <- function(id, output) {
             title = "Skal den generelle befolkning vises?",
             content = "Skal den generelle befolkning vises?"
           ),
-
+          
           pickerInput(
             inputId = ns("col_intervention"),
             label = "Intevention",
@@ -259,7 +156,7 @@ model1UI <- function(id, output) {
               `live-search` = TRUE,
               `size` = 5)
           ),
-
+          
           pickerInput(
             inputId = ns("col_control"),
             label = "Control",
@@ -269,7 +166,7 @@ model1UI <- function(id, output) {
               `live-search` = TRUE,
               `size` = 5)
           ),
-
+          
           pickerInput(
             inputId = ns("col_background"),
             label = "Population",
@@ -279,13 +176,13 @@ model1UI <- function(id, output) {
               `live-search` = TRUE,
               `size` = 5)
           ),
-
+          
           actionButton(
             inputId = ns("col_reset"),
             label = "Nulstil Farver"
           )
-
-
+          
+          
         )
       ),
       collapsible = FALSE,
@@ -315,13 +212,11 @@ model1UI <- function(id, output) {
   
   
   
-  
-  
   # Generate Tabsets;
   tabset_names <- data_list %>% names()
   
   
-  ui_body <- tagList(
+  tagList(
     
     
     div(id = ns("myalert"), style = "position: absolute; bottom: 0; right: 0;"),
@@ -333,7 +228,7 @@ model1UI <- function(id, output) {
       # )
       fluidRow(
         
-       
+        
         
         
         column(
@@ -413,7 +308,7 @@ model1UI <- function(id, output) {
         value = 0,
         display_pct = TRUE,
         title = "Gennemsnitlig Effekt"
-        ) 
+      ) 
       
       
       
@@ -474,13 +369,13 @@ model1UI <- function(id, output) {
                       
                       # Add Conditional Panel
                       # to view graph or tables
-                  
-                          
-                          plotlyOutput(
-                            outputId = ns(paste0("plot",i))
-                          )
-                        
-                     
+                      
+                      
+                      plotlyOutput(
+                        outputId = ns(paste0("plot",i))
+                      )
+                      
+                      
                       
                     )
                     
@@ -558,27 +453,15 @@ model1UI <- function(id, output) {
           )
         }
       )
-
+      
     )
     ,
     
-
     
     
     
     
     
-  )
-  
-  
-  
-  return(
-    list(
-      sidebar    = ui_sidebar,
-      body       = ui_body,
-      header     = ui_header,
-      control    = ui_controlbar
-    )
     
   )
   
@@ -588,77 +471,33 @@ model1UI <- function(id, output) {
   
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' 
-#' 
-#' 
-#' model1_valuebox <- function(id, data, session = getDefaultReactiveDomain()) {
-#'   
-#'   #' Function Information;
-#'   #' 
-#'   #' 
-#'   
-#'   # Generate Namespace
-#'   ns <- NS(id)
-#'   
-#'   tagList(
-#'       bs4Card(
-#'         solidHeader = FALSE,
-#'         id = "test",
-#'         gradient = TRUE,
-#'         collapsible = TRUE,
-#'         background = "primary",
-#'         width = 12,
-#'         headerBorder = FALSE,
-#'         title = NULL,
-#'         fluidRow(
-#'           
-#'           column(
-#'             width = 3,
-#'             descriptionBlock(
-#'               number = sum(data()[[1]]$outcome),
-#'               numberColor = "lime",
-#'               numberIcon = icon("caret-up"),
-#'               header = HTML("&nbsp"),
-#'               text = "Årlig Forventet Effekt",
-#'               rightBorder = TRUE,
-#'               marginBottom = FALSE
-#'             )
-#'           )
-#'           
-#'         )
-#'         
-#'         
-#'       )
-#'       
-#'       
-#'     
-#'     
-#'     
-#'   )
-#'     
-#' 
-#'  
-#'   
-#'   
-#'   
-#' }
+model1UI <- function(id, output) {
+  
+  # Generate Namespace
+  ns <- NS(id)
+  
+ 
+  # Generate Sidebar; ####
+  ui_sidebar <- model1UI_sidebar(id, output)
+  
+  # Generate Hader; ####
+  ui_header <- model1UI_header(id, output)
+  
+  ui_body <- model1UI_body(id, output)
+    
+    
+  
+  
+  
+  
+  return(
+    list(
+      sidebar    = ui_sidebar,
+      body       = ui_body,
+      header     = ui_header
+    )
+    
+  )
+  
+  
+}

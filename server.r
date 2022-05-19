@@ -74,6 +74,8 @@ server <- function(input, output, session) {
   
   
   
+  
+  
   # Model 1; ####
   
   observeEvent(
@@ -159,7 +161,8 @@ server <- function(input, output, session) {
     main_plotserver(
       id = "model1",
       data = data(),
-      intervention_effect = effect
+      intervention_effect = effect,
+      light_mode = reactive(input$customSwitch1)
     )
     
     # Generate

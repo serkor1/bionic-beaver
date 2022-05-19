@@ -13,8 +13,7 @@ bs4DashPage(
       text_light = "#272c30"
     ),
     bs4dash_layout(
-      main_bg = "#353c42",
-      sidebar_width = "350px"
+      main_bg = "#353c42",sidebar_width = "350px"
     ),
     bs4dash_sidebar_light(
       bg = "#272c30",
@@ -157,17 +156,20 @@ bs4DashPage(
   
   # body; ####
   body = bs4DashBody(
-    
+    # tags$head(
+    #   includeCSS("www/theme.css")
+    # ),
+    includeCSS("www/theme.css"),
     # CSS Code;
     # TODO: Migrate to External file
-    tags$head(tags$style('#test .card-header{ display: none}')),
-    tags$head(
-      tags$style(HTML("
-      .shiny-output-error-validation {
-        color: white;
-      }
-    "))
-    ),
+    # tags$head(tags$style('#test .card-header{ display: none}')),
+    # tags$head(
+    #   tags$style(HTML("
+    #   .shiny-output-error-validation {
+    #     color: white;
+    #   }
+    # "))
+    # ),
     
     useShinyjs(),
     shinyFeedback::useShinyFeedback(),
