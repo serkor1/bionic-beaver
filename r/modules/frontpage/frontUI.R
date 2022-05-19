@@ -24,7 +24,9 @@ frontUI <- function(id) {
             h3("Den Sundhedsøkonomiske Investeringsmodel"),
             hr(),
             p(
-              "Modellen er udviklet af VIVEs Sundhedsafdeling i samarbejde med LIF. Modellen er open-source og er derfor til fri afbenyttelse."
+              "Modellen giver mulighed for at foretage økonomiske sammenligninger af en række patientgrupper. For hver patientgruppe er opgjort deres gennemsnitlige forbrug af en række offentlige ydelser samt deres tilknytning til arbejdsmarkedet. 
+Tallene kan bruges til at sammenligne forskellige patientgrupper eller beregne det økonomiske potentiale ved tilbud til patientgrupperne.
+Modellen er udviklet af VIVE finansieret af Lægemiddelindustriforeningen. Data til modellen er dokumenteret her (der skal komme et link, når tid er)."
             )
             
             
@@ -73,9 +75,9 @@ frontUI <- function(id) {
           icon = icon("exclamation", verify_fa = FALSE),
           
           p(
-            "Brugen af modellen er på eget ansvar. 
-            Modellen er ubegrænset ift. sammenligninger og det er derfor hensigtsmæssigt at bruge den med sund fornuft.
-            Hvis man er interesseret i data kan det downloades her."
+            "Brugen af modellen sker efter den enkelte brugers valg af beregningsgrupper og antagelser. 
+VIVE har udtrukket data for alle individer med de pågældende diagnoser og opstillet modellens beregningsramme. 
+Der er ingen tekniske begrænsninger på, hvilke grupper man kan sammenligne, så det er brugeren af modellen, der skal stå inde for, at beregningen giver mening."
             ),
           
           

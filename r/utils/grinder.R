@@ -85,9 +85,9 @@ grinder <- function(data_list, intervention, control, allocator_vector = NULL, g
       
       data <- data[,
                    allocation := fcase(
-                     disease %chin% "matching", "Population",
-                     disease %chin% intervention, "Intervention",
-                     disease %chin% control, "Control"
+                     disease %chin% "matching", "population",
+                     disease %chin% intervention, "intervention",
+                     disease %chin% control, "control"
                    )
                    ,][!is.na(allocation)]
       
@@ -460,86 +460,116 @@ foo <- function(data) {
   #' 
   #' TODO: This should replace info_grinder and
   #' plot_grinder and table_grinder
+  message("Foo Invokes")
   
-  
-  
-  if (nrow(data) == 0) {
-
-    return(NULL)
-
-  }
-  
-  
-  # Extract the Class; 
-  store_class <- class(data)[3]
-  
-  
-  
-  data <- data[
-    ,
-    list(
-      outcome = mean(
-        outcome, na.rm = TRUE
-      )
-    )
-    ,
-    by = .(year, allocation, allocator)
-  ]
-  
-  
-  data <- data %>% dcast(
-    year + allocator ~ allocation,
-    value.var = "outcome"
-  )
-  
-  
-  
-  tryCatch(
-    expr = {
+  data <- map(
+    seq_along(data),
+    .f = function(i) {
       
-      data[,
-           difference := sum(Intervention, -Control)
-           ,
-           by = 1:nrow(data)
+      data  <- data[[i]]
+      
+      if (nrow(data) == 0) {
+        
+        return(NULL)
+        
+      }
+      
+      
+      # Extract the Class; 
+      store_class <- class(data)[3]
+      
+      
+      
+      data <- data[
+        ,
+        list(
+          outcome = mean(
+            outcome, na.rm = TRUE
+          )
+        )
+        ,
+        by = .(year, allocation, allocator)
       ]
       
-    },
-    
-    error = function(cond){
       
-      # Test for missing column name and add
-      existing_columns <- colnames(data) %>%
-        str_extract(pattern = "Control|Intervention") %>% na.omit()
+      data <- data %>% dcast(
+        year + allocator ~ allocation,
+        value.var = "outcome"
+      )
       
-      # Needs the colums
-      needed_colums <- c("Control", "Intervention")
       
-      # Extract missing COlums
-      missing_column <- needed_colums[!(needed_colums %chin% existing_columns)]
+      
+      tryCatch(
+        expr = {
+          
+          data[,
+               `:=`(
+                 cintervention = 0,
+                 difference = sum(-control, intervention),
+                 cdifference = 0
+               )
+               
+               ,
+               by = 1:nrow(data)
+          ]
+          
+        },
+        
+        error = function(cond){
+          
+          # Test for missing column name and add
+          existing_columns <- colnames(data) %>%
+            str_extract(pattern = "control|intervention") %>% na.omit()
+          
+          # Needs the colums
+          needed_colums <- c("control", "intervention")
+          
+          # Extract missing COlums
+          missing_column <- needed_colums[!(needed_colums %chin% existing_columns)]
+          
+          data[
+            ,
+            (missing_column) := NA
+            ,
+          ]
+          
+          
+          data[,
+               `:=`(
+                 cintervention = 0,
+                 difference = 0,
+                 cdifference = 0
+               )
+               
+               ,
+               by = 1:nrow(data)
+          ]
+          
+          
+        }
+      )
+      
       
       data[
-        ,
-        (missing_column) := NA
-        ,
+        year <= 0,
+        `:=`(
+          cintervention = NA,
+          cdifference   = NA,
+          difference    = NA
+        )
       ]
       
       
-      data[,
-           `:=`(
-             difference = 0
-           )
-           
-           ,
-           by = 1:nrow(data)
-      ]
+      # Reclass the data
+      class(data) <- c(class(data), store_class)
+      
+      setDT(data)
+      
+      return(data)
       
       
     }
   )
-  
-  
-  # Reclass the data
-  class(data) <- c(class(data), store_class) 
   
   
   return(data)
@@ -548,48 +578,82 @@ foo <- function(data) {
 }
 
 
-baz <- function(data, effect, aggregate = FALSE) {
+baz <- function(data, effect) {
   
-  # I forgot what this was
+  #' Function Information
+  #' 
+  #' @param data, list. This is the data
+  #' in wide format processed by foo().
+  #' @param effect, numeric vector of effects.
   
-  #' Get data
+  counter <- 0
   
-  if (aggregate) {
-    
-    by_vector <- c("allocator")
-    
-  } else {
-    
-    by_vector <- c("allocator", "year")
-    
-  }
+  map(
+    seq_along(data),
+    .f = function(i) {
+      
+      counter <<- counter + 1
+      
+      if (counter == 1) {
+        
+        message(
+          "Calculating effects!"
+        )
+        
+      }
+      
+      
+      # It has to be a copy
+      # otherwise it overwrites data
+      # in memory!!!
+      data <- copy(data[[i]])
+      
+      
+      if (is.null(data)) {
+        
+        return(NULL)
+        
+      }
+      
+      # Extract the Class; 
+      store_class <- class(data)[3]
+      
+      data[
+        year > 0
+        ,
+        effect := (effect/100)
+        ,
+        by = .(allocator)
+      ]
+      
+      data[
+        !is.na(effect),
+        `:=`(
+          cdifference   = difference * effect,
+          # Was abs - but not used.
+          cintervention = max(intervention - ((difference * effect)),0)
+        ),
+        by = .(allocator, year)
+      ]
+
+      data[
+        year == 0,
+        `:=`(
+          cintervention = intervention
+        )
+
+      ]
+      
+      class(data) <- c(class(data), store_class)
+      
+      return(data)
+      
+    }
+  )
   
   
   
-  data[
-    year > 0,
-    effect := (effect/100),
-    by = .(allocator)
-  ]
   
-  data[
-    !is.na(effect),
-    `:=`(
-      cDifference   = difference * effect,
-      # Was abs - but not used.
-      cIntervention = max(Intervention - ((difference * effect)),0)
-    ),
-    by = by_vector
-  ]
-  
-  data[
-    year == 0,
-    `:=`(
-      effect = 0,
-      cIntervention = Intervention
-    )
-    
-  ]
   
   
   

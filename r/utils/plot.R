@@ -27,35 +27,35 @@
   base_plot <- plot$plot
   
   
-  # TODO: This part should be migrated to 
-  # plot grinder!
-  
-  # Prepare Data; ####
-  
-  data[
-    year > 0,
-    effect := (effect/100),
-    by = .(allocator)
-  ]
-  
-  data[
-    !is.na(effect),
-    `:=`(
-      cDifference   = difference * effect,
-      # Was abs - but not used.
-      cIntervention = max(Intervention - ((difference * effect)),0)
-    ),
-    by = c("allocator", "year")
-  ]
-  
-  data[
-    year == 0,
-    `:=`(
-      effect = 0,
-      cIntervention = Intervention
-    )
-    
-  ]
+  # # TODO: This part should be migrated to 
+  # # plot grinder!
+  # 
+  # # Prepare Data; ####
+  # 
+  # data[
+  #   year > 0,
+  #   effect := (effect/100),
+  #   by = .(allocator)
+  # ]
+  # 
+  # data[
+  #   !is.na(effect),
+  #   `:=`(
+  #     cDifference   = difference * effect,
+  #     # Was abs - but not used.
+  #     cIntervention = max(Intervention - ((difference * effect)),0)
+  #   ),
+  #   by = c("allocator", "year")
+  # ]
+  # 
+  # data[
+  #   year == 0,
+  #   `:=`(
+  #     effect = 0,
+  #     cIntervention = Intervention
+  #   )
+  #   
+  # ]
   
   
   
@@ -85,7 +85,7 @@
           add_trace(
             data = data,
             x = ~year,
-            y = ~Intervention,
+            y = ~intervention,
             line = list(
               color = color_intervention
             ),
@@ -97,9 +97,9 @@
             showlegend = legend,
             name = "Valgt Gruppe"
           ) %>% add_trace(
-            data = data[!is.na(effect)],
+            data = data,
             x = ~year,
-            y = ~cIntervention,
+            y = ~cintervention,
             line = list(
               color = color_intervention,
               dash = "dot"
@@ -117,7 +117,7 @@
           add_trace(
             data = data,
             x = ~year,
-            y = ~Control, # Was COntrol
+            y = ~control, # Was COntrol
             line = list(
               color = color_control
             ),
@@ -136,7 +136,7 @@
               add_trace(
                 data = data,
                 x = ~year,
-                y = ~Population, # Was COntrol
+                y = ~population, # Was COntrol
                 line = list(
                   color = color_background,
                   dash = "dot"
