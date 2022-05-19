@@ -94,7 +94,7 @@ grinder <- function(data_list, intervention, control, allocator_vector = NULL, g
      
       
       
-      
+     
       
       
       
@@ -462,6 +462,12 @@ foo <- function(data) {
   #' plot_grinder and table_grinder
   message("Foo Invokes")
   
+  # NOTE: This could be moved to 
+  # baz
+  
+  
+  
+  
   data <- map(
     seq_along(data),
     .f = function(i) {
@@ -497,10 +503,13 @@ foo <- function(data) {
         value.var = "outcome"
       )
       
-      
+     
       
       tryCatch(
         expr = {
+          
+          
+          
           
           data[,
                `:=`(
@@ -550,6 +559,9 @@ foo <- function(data) {
       )
       
       
+      
+      
+      
       data[
         year <= 0,
         `:=`(
@@ -578,13 +590,20 @@ foo <- function(data) {
 }
 
 
-baz <- function(data, effect) {
+baz <- function(data, effect, do_match = FALSE) {
   
   #' Function Information
   #' 
   #' @param data, list. This is the data
   #' in wide format processed by foo().
   #' @param effect, numeric vector of effects.
+  
+  
+  do_match <- fcase(
+    isTRUE(do_match), TRUE,
+    default = FALSE
+  )
+  
   
   counter <- 0
   
@@ -603,15 +622,52 @@ baz <- function(data, effect) {
       }
       
       
+      data <- copy(data[[i]])
+      
+     
+      
+      
+      
       # It has to be a copy
       # otherwise it overwrites data
       # in memory!!!
-      data <- copy(data[[i]])
+      
       
       
       if (is.null(data)) {
         
         return(NULL)
+        
+      }
+      
+      
+      # If user choses matching 
+      # option then effect should be recalculated
+      if (do_match) {
+        
+        # Replace Population with
+        # control values
+        data[
+          ,
+          control := population
+          ,
+        ]
+        
+        data[
+          ,
+          difference := sum(-control, intervention)
+          ,
+          by = 1:nrow(data)
+        ]
+        
+        data[
+          year <= 0,
+          `:=`(
+            cintervention = NA,
+            cdifference   = NA,
+            difference    = NA
+          )
+        ]
         
       }
       

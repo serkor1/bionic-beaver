@@ -74,6 +74,18 @@ model1UI_sidebar <- function(id, output){
       title = "Klik for at vælge Omkostning pr. patient.",
       placement = "right",
       content = "Klik for at vælge Omkostning pr. patient."
+    ),
+    
+    
+    materialSwitch(
+      inputId = ns("do_match"),
+      label = "Befolkningen?",
+      value = FALSE,
+      status = "primary"
+    ) %>% popover(
+      title = "Klik for at vælge befolkningen som sammenlignnignsgruppe",
+      placement = "right",
+      content = "Klik for at vælge befolkningen som sammenlignnignsgruppe"
     )
 
     
