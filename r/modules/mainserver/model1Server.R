@@ -286,13 +286,15 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     
     plot_data <- reactive(
       data() %>% 
-        baz(effect = intervention_effect())
+        baz(
+          effect = intervention_effect(),
+          do_match = input$do_match
+          )
       )
     
     
       
-      
-      
+  
     
       
     
@@ -301,12 +303,7 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
    
     # Create a container for the chosen
     # colors so the changes are applied globally.
-    chosen_colors <- reactiveValues(
-      control_color = input$col_control,
-      color_background = input$col_background,
-      color_intervention = input$col_intervention
-      
-    )
+    
     
     
     
@@ -327,17 +324,25 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
         output[[paste0("plot", i)]] <- renderPlotly(
           {
             
-            # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
-            #   
-            #   shinyFeedback::feedbackDanger(
-            #     inputId = "pt_demographic",
-            #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
-            #     text = "Sammenligningen er problematisk!",
-            #     icon = NULL
-            #   )
-            #   
-            # }
             
+           
+            
+            if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+
+              shinyFeedback::feedbackDanger(
+                inputId = "pt_demographic",
+                !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
+                text = "Sammenligningen er problematisk!",
+                icon = NULL
+              )
+
+            }
+            chosen_colors <- reactiveValues(
+              control_color = input$col_control,
+              color_background = input$col_background,
+              color_intervention = input$col_intervention
+              
+            )
             
             
             plot_data()[[i]]  %>%
@@ -502,15 +507,30 @@ main_choiceserver <- function(id, data) {
     
     output$chosen_control <- renderText({
       
-      if (isTruthy(input$pt_control)) {
+      if (isTruthy(input$do_match)) {
         
-        input$pt_control %>% str_replace("_", ": ")
+        if (input$do_match) {
+          
+          "Den generelle befolkning"
+          
+        }
         
       } else {
         
-        "Intet Valgt"
+        if (isTruthy(input$pt_control)) {
+          
+          input$pt_control %>% str_replace("_", ": ")
+          
+        } else {
+          
+          "Intet Valgt"
+          
+        }
         
       }
+      
+      
+      
       
 
       
@@ -644,7 +664,7 @@ main_tableserver <- function(id, data, intervention_effect){
       # 
     
       table_data <- reactive(
-        data() %>% baz(effect = intervention_effect())
+        data() %>% baz(effect = intervention_effect(), do_match = input$do_match)
         )
       
       map(
