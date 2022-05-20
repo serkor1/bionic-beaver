@@ -82,100 +82,44 @@ main_effectserver <- function(id, data) {
       ) %>% as.numeric()
     )
     
-    status <- "success"
-
-    if (isTruthy(intervention_effect())) {
-
-      # Calculate Mean Effect;
-      mean_effect <- mean(
-        intervention_effect()
-      )
-
-
-
-
-      if (mean_effect < 20) {
-
-        status <- "success"
-
-        closeAlert(
-          id = "myalert"
+    
+    effect_data <- reactive(
+      {
+        data() %>% baz(
+          effect = intervention_effect()
         )
-
-      }
-
-      if (data.table::between(mean_effect,lower = 20,upper = 50)) {
-
-        status <- "warning"
-
-        closeAlert(
-          id = "myalert"
-        )
-
-      }
-
-      if (data.table::between(mean_effect,lower = 50,upper = 100)) {
-
-        status <- "danger"
-
-        message("Here")
-
-
-        createAlert(
-          id = "myalert",
-          options = list(
-            title = "Alert",
-            closable = TRUE,
-            width = 12,
-            elevations = 10,
-            status = "danger",
-            content = paste("Din valgte effekt er", mean_effect, "%.")
-          )
-        )
-
-
-
-
-      }
-
-    }
-
-
-    map(
-      1:4,
-      .f = function(i) {
-
-        # tmpData <- data()[[i]] %>% foo()
-        # 
-        # tmpData <- tmpData[
-        #   ,
-        #   lapply(
-        #     .SD,
-        #     mean
-        #   )
-        #   ,
-        #   .SDcols = c("Control", "Intervention", "difference")
-        # ]
-
-
-        # Update Effect slider
-        # updateProgressBar(
-        #   session = session,
-        #   id = paste0("e_effect",i),
-        #   value = mean(intervention_effect()),
-        #   status = "danger"
-        # )
-
-        # updateProgressBar(
-        #   session = session,
-        #   id      = paste0("r_effect",i),
-        #   value   = abs(
-        #     (tmpData$Intervention-abs(tmpData$difference))/tmpData$Intervention * 100
-        #   )
-        # )
-
       }
     )
+    
+    
+    observe(
+      {
+        map(
+          1:4,
+          .f = function(i) {
+            
+            
+            updateProgressBar(
+              session = session,
+              id = paste0("e_effect",i),
+              value = mean(intervention_effect()),
+              status = "danger"
+            )
+            
+            updateProgressBar(
+              session = session,
+              id = paste0("r_effect",i),
+              value = mean(effect_data()[[i]]$cdifference, na.rm = TRUE),
+              status = "danger"
+            )
+            
+          }
+        )
+        
+      }
+    )
+    
+    
     
     
     
@@ -288,13 +232,11 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
       data() %>% 
         baz(
           effect = intervention_effect(),
-          do_match = input$do_match
+          do_match = as.logical(input$do_match)
           )
       )
     
     
-      
-  
     
       
     
@@ -304,29 +246,32 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     # Create a container for the chosen
     # colors so the changes are applied globally.
     
+  
+    library(parallel)
+    
     
     
     
     map(
       1:length(data()),
       .f = function(i) {
-        
+
         # TODO: Isolate These
         # so they dont keep running!
         message(
           paste("Grinding plots. Currently at", i, "of", length(data()), "iterations.")
         )
-        
-        
-        
 
-        
+
+
+
+
         output[[paste0("plot", i)]] <- renderPlotly(
           {
-            
-            
-           
-            
+
+
+
+
             if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
 
               shinyFeedback::feedbackDanger(
@@ -341,10 +286,10 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
               control_color = input$col_control,
               color_background = input$col_background,
               color_intervention = input$col_intervention
-              
+
             )
-            
-            
+
+
             plot_data()[[i]]  %>%
               do_plot(
                 difference = input$do_difference,
@@ -353,16 +298,16 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
                 color_background    = chosen_colors$color_background,
                 color_control      = chosen_colors$control_color
               )
-            
-            
+
+
           }
         )
-        
-        
-        
-        
 
-        
+
+
+
+
+
       }
     )
     
@@ -378,6 +323,7 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
   
   
 }
+
 
 
 
@@ -418,71 +364,6 @@ main_dataserver <- function(id) {
 
 
 
-# information box; #####
-main_infobox <- function(id, data) {
-  moduleServer(id, function(input, output, session) {
-    
-    
-    
-    # Server Information; #####
-    #' @param data a reactive list of data.
-    #'
-    #' @return Rendered Text Outputs
-    
-    intervention_effect <- reactive(
-      c(
-        input$effect_1,
-        input$effect_2,
-        input$effect_3,
-        input$effect_4,
-        input$effect_5
-      ) %>% as.numeric()
-    )
-    
-    
-    
-    # Server Logic; #####
-    map(
-      1:length(data()),
-      .f = function(i) {
-        
-        # Extract Data by Index
-        # as this is consequtive
-        data <- data()[[i]] %>%
-          info_grinder(
-            effect = intervention_effect()
-          )
-        
-        
-        
-        output[[paste0("infobox",i)]] <- renderUI({
-          
-          
-          vive_infobox(effect = intervention_effect(), data = data)
-          
-          
-        })
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-      }
-    ) 
-    
-    
-    
-    
-    
-  }
-  )
-}
-
 
 
 # choice logic; #####
@@ -513,21 +394,23 @@ main_choiceserver <- function(id, data) {
           
           "Den generelle befolkning"
           
-        }
-        
-      } else {
-        
-        if (isTruthy(input$pt_control)) {
-          
-          input$pt_control %>% str_replace("_", ": ")
-          
         } else {
           
-          "Intet Valgt"
+          if (isTruthy(input$pt_control)) {
+            
+            input$pt_control %>% str_replace("_", ": ")
+            
+          } else {
+            
+            "Intet Valgt"
+            
+          }
           
         }
         
       }
+      
+      
       
       
       
@@ -664,7 +547,7 @@ main_tableserver <- function(id, data, intervention_effect){
       # 
     
       table_data <- reactive(
-        data() %>% baz(effect = intervention_effect(), do_match = input$do_match)
+        data() %>% baz(effect = intervention_effect(), do_match = as.logical(input$do_match))
         )
       
       map(
