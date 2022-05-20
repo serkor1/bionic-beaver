@@ -13,18 +13,22 @@ bs4DashPage(
       text_light = "#272c30"
     ),
     bs4dash_layout(
-      main_bg = "#353c42",sidebar_width = "350px"
+      main_bg = "#353c42",
+      sidebar_width = "350px"
     ),
     bs4dash_sidebar_light(
       bg = "#272c30",
       color = "#bec5cb",
       hover_color = "#FFF",
-      submenu_bg = "#272c30",
+      submenu_bg = "#73808c",
       submenu_color = "#FFF",
       submenu_hover_color = "#FFF"
     ),
     bs4dash_status(
-      primary = "#5E81AC", danger = "#BF616A", light = "#272c30"
+      primary = "#5E81AC",
+      danger = "#BF616A",
+      dark = "#343a40",
+      light = "#73808c",
     ),
     bs4dash_color(
       gray_900 = "#FFF", white = "#272c30"
@@ -80,68 +84,65 @@ bs4DashPage(
     minified = FALSE,
     width = "350px",
     
-    
-    
-    
     sidebarMenu(
       id = "tab",
-      
-      fluidRow(
-        column(
-          width = 12,
-          descriptionBlock(
-            number = NULL,
-            numberColor = "primary",
-            text = NULL,
-            header = actionLink(
-              inputId = "front_page",
-              label = "Forsiden",
-              icon = icon("home",verify_fa = FALSE)
-            ),
-            rightBorder = FALSE,
-            marginBottom = FALSE
-          )
+    
+    fluidRow(
+      column(
+        width = 12,
+        descriptionBlock(
+          number = NULL,
+          numberColor = "primary",
+          text = NULL,
+          header = actionLink(
+            inputId = "front_page",
+            label = "Forsiden",
+            icon = icon("home",verify_fa = FALSE)
+          ),
+          rightBorder = FALSE,
+          marginBottom = FALSE
+        )
+      )
+    ),
+    
+    
+    
+    sidebarHeader(h5(("Vælg Model"))),
+    
+    fluidRow(
+      column(
+        width = 6,
+        descriptionBlock(
+          number = NULL,
+          numberColor = "primary",
+          text = NULL,
+          header = actionLink(
+            inputId = "model_1",
+            label = "Målgruppe",
+            icon = icon("project-diagram",
+                        verify_fa = FALSE)
+          ),
+          rightBorder = FALSE,
+          marginBottom = FALSE
         )
       ),
       
-      
-      
-      sidebarHeader(h5(("Vælg Model"))),
-      
-      fluidRow(
-        column(
-          width = 6,
-          descriptionBlock(
-            number = NULL,
-            numberColor = "primary",
-            text = NULL,
-            header = actionLink(
-              inputId = "model_1",
-              label = "Målgruppe",
-              icon = icon("project-diagram",
-                          verify_fa = FALSE)
-            ),
-            rightBorder = FALSE,
-            marginBottom = FALSE
-          )
-        ),
-        
-        column(
-          width = 6,
-          descriptionBlock(
-            number = NULL,
-            numberColor = "primary",
-            text = NULL,
-            header = actionLink(
-              inputId = "model_2",
-              label = "Forældre",
-              icon = icon("users", verify_fa = FALSE)
-            ),
-            rightBorder = FALSE,
-            marginBottom = FALSE
-          )
+      column(
+        width = 6,
+        descriptionBlock(
+          number = NULL,
+          numberColor = "primary",
+          text = NULL,
+          header = actionLink(
+            inputId = "model_2",
+            label = "Forældre",
+            icon = icon("users", verify_fa = FALSE)
+          ),
+          rightBorder = FALSE,
+          marginBottom = FALSE
         )
-      ),
+      )
+    ),
       
       uiOutput("sidebar_ui")
       
@@ -151,8 +152,8 @@ bs4DashPage(
       
       
     )
-    
-  ),
+  )
+  ,
   
   # body; ####
   body = bs4DashBody(

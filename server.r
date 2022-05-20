@@ -140,6 +140,9 @@ server <- function(input, output, session) {
       data = data()
       )
     })
+    
+    
+    
 
     main_warnings(
       id = "model1"
