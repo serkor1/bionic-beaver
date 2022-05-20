@@ -42,3 +42,12 @@ vignettes/*.pdf
 /playground
 /raw
 /rsconnect
+
+
+/www/documentation/*.Rmd
+
+
+/www/documentation/*.md
+
+
+/www/documentation/*.css
