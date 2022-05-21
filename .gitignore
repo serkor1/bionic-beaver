@@ -51,3 +51,6 @@ vignettes/*.pdf
 
 
 /www/documentation/*.css
+/www/documentation/*.Rproj
+/www/documentation/*.yml
+
