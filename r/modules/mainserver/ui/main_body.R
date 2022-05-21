@@ -25,122 +25,158 @@
     startOpen = FALSE,
     id = "id_placeholder",
     
-    conditionalPanel(
-      condition = "input.change_view == 'see_plot'",
-      {
+    
+    
+    tabsetPanel(
+      id = "tabcard",
+      tabPanel(
+        title = "Parametre",
+        tmp_opts(id, output)
+        
+      ),
+      tabPanel(
+        title = "Effektforventninger", 
         column(
           width = 12,
-          h5("Grafindstillinger"),
-          materialSwitch(
-            inputId = ns("show_baseline"),
-            value = TRUE,
-            status = "info",
-            label = "Vis Befolkningsværdi"
-          ) %>% popover(
-            placement = "bottom",
-            title = "Skal den generelle befolkning vises?",
-            content = "Skal den generelle befolkning vises?"
-          ),
-          
-          pickerInput(
-            inputId = ns("col_intervention"),
-            label = "Intevention",
-            selected = "steelblue",
-            choices = colors(),
-            options = list(
-              `live-search` = TRUE,
-              `size` = 5)
-          ),
-          
-          pickerInput(
-            inputId = ns("col_control"),
-            label = "Control",
-            selected = "orange",
-            choices = colors(),
-            options = list(
-              `live-search` = TRUE,
-              `size` = 5)
-          ),
-          
-          pickerInput(
-            inputId = ns("col_background"),
-            label = "Population",
-            selected = "white",
-            choices = colors(),
-            options = list(
-              `live-search` = TRUE,
-              `size` = 5)
-          ),
-          
-          actionButton(
-            inputId = ns("col_reset"),
-            label = "Nulstil Farver"
+          map(
+            1:5,
+            .f = function(i) {
+              
+              sliderInput(
+                inputId = ns(paste0("effect_", i)),
+                label = paste("Tid", i),
+                min = 0,
+                max = 100,
+                value = round(runif(1, min = 0, max = 100))
+              )
+            }
           )
-          
-          
         )
-      }
+        
+        
+      ),
+tabPanel(
+  title = "Visuelle Indstillinger", 
+  conditionalPanel(
+    condition = "input.change_view == 'see_plot'",
+    {
+      column(
+        width = 12,
+        h5("Grafindstillinger"),
+        materialSwitch(
+          inputId = ns("show_baseline"),
+          value = TRUE,
+          status = "info",
+          label = "Vis Befolkningsværdi"
+        ) %>% popover(
+          placement = "bottom",
+          title = "Skal den generelle befolkning vises?",
+          content = "Skal den generelle befolkning vises?"
+        ),
+        
+        pickerInput(
+          inputId = ns("col_intervention"),
+          label = "Intevention",
+          selected = "steelblue",
+          choices = colors(),
+          options = list(
+            `live-search` = TRUE,
+            `size` = 5)
+        ),
+        
+        pickerInput(
+          inputId = ns("col_control"),
+          label = "Control",
+          selected = "orange",
+          choices = colors(),
+          options = list(
+            `live-search` = TRUE,
+            `size` = 5)
+        ),
+        
+        pickerInput(
+          inputId = ns("col_background"),
+          label = "Population",
+          selected = "white",
+          choices = colors(),
+          options = list(
+            `live-search` = TRUE,
+            `size` = 5)
+        ),
+        
+        actionButton(
+          inputId = ns("col_reset"),
+          label = "Nulstil Farver"
+        )
+        
+        
+      )
+    }
+  ),
+  
+  conditionalPanel(
+    condition = "input.change_view == 'see_table'",
+    
+    {
+      
+      column(
+        width = 12,
+        h5("Tabelindstillinger"),
+        materialSwitch(
+          inputId = ns("show_basseline"),
+          value = TRUE,
+          status = "info",
+          label = "Vis Noget andet"
+        ) %>% popover(
+          placement = "bottom",
+          title = "Skal den generelle befolkning vises?",
+          content = "Skal den generelle befolkning vises?"
+        ),
+        
+        pickerInput(
+          inputId = ns("col_intersvention"),
+          label = "Intevention",
+          selected = "steelblue",
+          choices = colors(),
+          options = list(
+            `live-search` = TRUE,
+            `size` = 5)
+        ),
+        
+        pickerInput(
+          inputId = ns("col_consrol"),
+          label = "Control",
+          selected = "orange",
+          choices = colors(),
+          options = list(
+            `live-search` = TRUE,
+            `size` = 5)
+        ),
+        
+        pickerInput(
+          inputId = ns("col_bacdkground"),
+          label = "Population",
+          selected = "white",
+          choices = colors(),
+          options = list(
+            `live-search` = TRUE,
+            `size` = 5)
+        ),
+        
+        actionButton(
+          inputId = ns("col_resset"),
+          label = "Nulstil Farver"
+        )
+        
+        
+      )
+      
+    }
+  )
+)
     ),
     
-    conditionalPanel(
-      condition = "input.change_view == 'see_table'",
-      
-      {
-        
-        column(
-          width = 12,
-          h5("Tabelindstillinger"),
-          materialSwitch(
-            inputId = ns("show_basseline"),
-            value = TRUE,
-            status = "info",
-            label = "Vis Noget andet"
-          ) %>% popover(
-            placement = "bottom",
-            title = "Skal den generelle befolkning vises?",
-            content = "Skal den generelle befolkning vises?"
-          ),
-          
-          pickerInput(
-            inputId = ns("col_intersvention"),
-            label = "Intevention",
-            selected = "steelblue",
-            choices = colors(),
-            options = list(
-              `live-search` = TRUE,
-              `size` = 5)
-          ),
-          
-          pickerInput(
-            inputId = ns("col_consrol"),
-            label = "Control",
-            selected = "orange",
-            choices = colors(),
-            options = list(
-              `live-search` = TRUE,
-              `size` = 5)
-          ),
-          
-          pickerInput(
-            inputId = ns("col_bacdkground"),
-            label = "Population",
-            selected = "white",
-            choices = colors(),
-            options = list(
-              `live-search` = TRUE,
-              `size` = 5)
-          ),
-          
-          actionButton(
-            inputId = ns("col_resset"),
-            label = "Nulstil Farver"
-          )
-          
-          
-        )
-        
-      }
-    )
+
     
     
 

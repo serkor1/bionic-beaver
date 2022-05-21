@@ -1,94 +1,41 @@
 server <- function(input, output, session) {
   
-  message("Frontpage Rendered")
-  
-  
-  front_ui <- frontUI(
-    id = "front"
-  )
-  
-  mainDownload_server(
-    "front"
-  )
-  output$gen_body <- renderUI(
-    {
-      front_ui$body
-    }
-  )
-  
-  
-  output$sidebar_ui <- renderUI(
-    NULL
-    
-  )
-  
-  output$gen_header <- renderUI(
-    {
-      NULL
-    }
-  )
-  
-  # Frontpage; #####
-  observeEvent(
-    input$front_page,
-    ignoreInit = FALSE,
-    ignoreNULL = FALSE,
-    {
-      message("Frontpage Rendered")
-      
-      
-      front_ui <- frontUI(
-        id = "front"
-      )
-      
-      mainDownload_server(
-        "front"
-      )
-      output$gen_body <- renderUI(
-        {
-          front_ui$body
-        }
-      )
-      
-      
-      output$sidebar_ui <- renderUI(
-        NULL
-        
-      )
-      
-      output$gen_header <- renderUI(
-        {
-          NULL
-        }
-      )
-      
-      
-      
-      
-      
-    }
-    
-    
-    
-  )
-  
-  
-  
-  
-  
-  # Model 1; ####
+  # UI - Rendering; #####
+  # 
+  # It is based on input$tab
   
   observeEvent(
-    input$model_1,
+    input$tab,
     {
       
+      # Frontpage
+      if (input$tab == "front_page") {
         
-        message("Model 1 Chosen")
+        front_ui <- frontUI(
+          id = "front"
+        )
+        
+        mainDownload_server(
+          "front"
+        )
+        output$gen_body <- renderUI(
+          {
+            front_ui$body
+          }
+        )
+        
+
+        
+      }
+      
+      if (input$tab == "model_1") {
+        
+        
         
         
         model1_ui <- model1UI(
           id = "model1"
-        )
+        ) 
         
         
         
@@ -115,63 +62,73 @@ server <- function(input, output, session) {
             model1_ui$performance
           }
         )
+        
+      }
       
+      if (input$tab == "model_2") {
+        
+        message("in model 2")
+        
+      }
       
     }
   )
   
-  
-  
-  
+
   # Generate Data for Model 1
-  data <- isolate(
-    {
-      reactive(
-        main_dataserver(id = "model1")
-      )
-    }
-  )
+  
   
   observe({
-    
-    effect <- reactive({
-      main_effectserver(
-      id = "model1",
-      data = data()
+    if (input$tab == "model_1") {
+      
+      data <- isolate(
+        {
+          reactive(
+            main_dataserver(id = "model1")
+          )
+        }
       )
-    })
-    
-    
-    
-
-    main_warnings(
-      id = "model1"
-    )
-
-
-
-    # Generate Chosen Parameters
-    main_choiceserver(
-      id = "model1",
-      data = data()
-    )
-
-    # Generate Plots
-    main_plotserver(
-      id = "model1",
-      data = data(),
-      intervention_effect = effect(),
-      light_mode = reactive(input$customSwitch1)
-    )
-    
-    main_tableserver(
-      id = "model1",
-      data = data(),
-      intervention_effect = effect()
-    )
-    
-    
-    
+      
+      
+      
+      
+      effect <- reactive({
+        main_effectserver(
+          id = "model1",
+          data = data()
+        )
+      })
+      
+      
+      
+      
+      main_warnings(
+        id = "model1"
+      )
+      
+      
+      
+      # Generate Chosen Parameters
+      main_choiceserver(
+        id = "model1",
+        data = data()
+      )
+      
+      # Generate Plots
+      main_plotserver(
+        id = "model1",
+        data = data(),
+        intervention_effect = effect(),
+        light_mode = reactive(input$customSwitch1)
+      )
+      
+      main_tableserver(
+        id = "model1",
+        data = data(),
+        intervention_effect = effect()
+      )
+      
+    }
   }
   
   )
