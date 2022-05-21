@@ -340,6 +340,7 @@ model1UI_performance <- function(id, output, id_value) {
           progressBar(
             id = ns(paste0("e_", id_value)),
             value = 0,
+            total = 100,
             display_pct = TRUE,
             title = NULL
           ),
@@ -354,8 +355,8 @@ model1UI_performance <- function(id, output, id_value) {
           disabled = TRUE,
           progressBar(
             value = 0,
-            total = 100000,
-            display_pct =FALSE,
+            total = 100,
+            display_pct =TRUE,
             id = ns(paste0("r_", id_value))
           )
         )
@@ -379,7 +380,7 @@ model1UI_performance <- function(id, output, id_value) {
           progressBar(
             id = ns(paste0("re_", id_value)),
             value = 0,
-            display_pct = TRUE,
+            display_pct = FALSE,
             title = NULL
           ),
           title = "Reale Effekter",

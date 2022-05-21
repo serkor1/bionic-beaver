@@ -590,7 +590,7 @@ foo <- function(data) {
 }
 
 
-baz <- function(data, effect, do_match = FALSE) {
+baz <- function(data, intervention_effect, do_match = FALSE) {
   
   #' Function Information
   #' 
@@ -677,7 +677,7 @@ baz <- function(data, effect, do_match = FALSE) {
       data[
         year > 0
         ,
-        effect := (effect/100)
+        effect := (intervention_effect/100)
         ,
         by = .(allocator)
       ]
