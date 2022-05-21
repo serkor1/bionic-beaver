@@ -1,0 +1,11 @@
+# Data 
+
+Dette afsnit beskrive brugen af data til modellen. Alt databehandling er foregået på Danmarks Statistiks servere. 
+
+
+## Databaser
+
+Der er taget udgangspunkt i følgende databaser
+
+1. lprdiag
+2. som

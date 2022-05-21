@@ -1,0 +1,40 @@
+# Modellen
+
+Modellen er udviklet i `R`, og bruger følgende biblioteker
+
+```r
+library(shiny)
+library(bs4Dash)
+library(shinyjs)
+library(shinyWidgets)
+library(data.table)
+library(waiter)
+library(plotly)
+library(waiter)
+library(DT)
+library(fresh)
+```
+
+## Output
+
+Modellen har tre `outcomes` beregnet i reale og monetære værdier.
+
+1. `Kontakter` til den primære sektor
+2. `Sengedage` i den sekundære sektor
+3. `Antal uger` på en specifik indkomst
+
+Disse `outcomes` er grupperet efter valgte sygdomsgrupper og sociodemografiske karakterisikta.
+
+
+> Bemærk: Grundet diskretioneringsregler jf. GDPR, er alle gruppering med under 10 observertioner maskeret. Det kan derfor
+> hænde at en sammenligning ikke er mulig. Modellen vil gøre jer opmærksom på dette.
+
+
+## Input
+
+Det primære `input` er forventede effekter over tid, relativt til den valgte sammenligningsgruppe. Beregningen er foretaget efter følgende formel,
+
+$$(\mu_{1,t} - \mu_{2,t}) \times \alpha_t$$
+Hvor $\mu_{i,t}$ er gruppe $i$'s gennemsnitsværdi er tid $t$ og $\alpha_t$ er effekten i tid $t$.
+
+

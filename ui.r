@@ -81,70 +81,40 @@ bs4DashPage(
   # sidebar; ####
   sidebar = bs4DashSidebar(
     fixed = TRUE,
-    minified = FALSE,
-    width = "350px",
+    minified = TRUE,
+    collapsed = TRUE,
     
     sidebarMenu(
       id = "tab",
-    
-    fluidRow(
-      column(
-        width = 12,
-        descriptionBlock(
-          number = NULL,
-          numberColor = "primary",
-          text = NULL,
-          header = actionLink(
-            inputId = "front_page",
-            label = "Forsiden",
-            icon = icon("home",verify_fa = FALSE)
-          ),
-          rightBorder = FALSE,
-          marginBottom = FALSE
-        )
-      )
-    ),
-    
-    
-    
-    sidebarHeader(h5(("Vælg Model"))),
-    
-    fluidRow(
-      column(
-        width = 6,
-        descriptionBlock(
-          number = NULL,
-          numberColor = "primary",
-          text = NULL,
-          header = actionLink(
-            inputId = "model_1",
-            label = "Målgruppe",
-            icon = icon("project-diagram",
-                        verify_fa = FALSE)
-          ),
-          rightBorder = FALSE,
-          marginBottom = FALSE
-        )
+      compact = FALSE,
+      flat = TRUE,
+      childIndent = TRUE,
+      
+      menuItem(
+        text = "Forsiden",
+        icon = icon('home', verify_fa = FALSE),
+        startExpanded = TRUE,
+        tabName = "front_page",
+        selected = TRUE
       ),
       
-      column(
-        width = 6,
-        descriptionBlock(
-          number = NULL,
-          numberColor = "primary",
-          text = NULL,
-          header = actionLink(
-            inputId = "model_2",
-            label = "Forældre",
-            icon = icon("users", verify_fa = FALSE)
-          ),
-          rightBorder = FALSE,
-          marginBottom = FALSE
-        )
-      )
-    ),
       
-      uiOutput("sidebar_ui")
+      menuItem(
+        text = "Vælg Model",
+        startExpanded = FALSE,
+        icon = icon("cog", verify_fa = FALSE),
+        
+        menuSubItem(
+          text = "Målgruppemodel",
+          tabName = "model_1"
+        ),
+        menuSubItem(
+          text = "Forældremodellen",
+          tabName = "model_2"
+        )
+        
+      )
+      
       
       
       
