@@ -83,10 +83,16 @@ main_effectserver <- function(id, data) {
     )
     
     
+    
+    
+    
+    
     effect_data <- reactive(
       {
+        
         data() %>% baz(
-          effect = intervention_effect()
+          intervention_effect = intervention_effect(),
+          do_match = as.logical(input$do_match)
         )
       }
     )
@@ -99,6 +105,7 @@ main_effectserver <- function(id, data) {
           .f = function(i) {
             
             
+            
             updateProgressBar(
               session = session,
               id = paste0("e_effect",i),
@@ -106,12 +113,25 @@ main_effectserver <- function(id, data) {
               status = "danger"
             )
             
-            updateProgressBar(
-              session = session,
-              id = paste0("r_effect",i),
-              value = mean(effect_data()[[i]]$cdifference, na.rm = TRUE),
-              status = "danger"
-            )
+            if (isTruthy(effect_data()[[i]])) {
+              updateProgressBar(
+                session = session,
+                id = paste0("re_effect",i),
+                value = mean(effect_data()[[i]]$difference, na.rm = TRUE),
+                status = "danger",
+                total = 100
+              )
+              
+              updateProgressBar(
+                session = session,
+                id = paste0("r_effect",i),
+                value = (1-mean(effect_data()[[i]]$cintervention, na.rm = TRUE)/mean(effect_data()[[i]]$intervention, na.rm = TRUE)) * 100,
+                status = "danger"
+              )
+              
+            }
+            
+            
             
           }
         )
@@ -231,7 +251,7 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     plot_data <- reactive(
       data() %>% 
         baz(
-          effect = intervention_effect(),
+          intervention_effect = intervention_effect(),
           do_match = as.logical(input$do_match)
           )
       )
@@ -547,7 +567,7 @@ main_tableserver <- function(id, data, intervention_effect){
       # 
     
       table_data <- reactive(
-        data() %>% baz(effect = intervention_effect(), do_match = as.logical(input$do_match))
+        data() %>% baz(intervention_effect = intervention_effect(), do_match = as.logical(input$do_match))
         )
       
       map(
