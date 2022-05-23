@@ -1,4 +1,4 @@
-![](https://tokei.rs/b1/github/serkor1/bionic-beaver/)
+![](https://tokei.rs/b1/github/serkor1/bionic-beaver)
 
 ## Den Sundhedsøkonomiske Investeringsmodel
 
