@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Data | Den Sundhedsøkonomiske Investeringsmodel</title>
-  <meta name="description" content="3 Data | Den Sundhedsøkonomiske Investeringsmodel" />
+  <title>4 Modellen | Den Sundhedsøkonomiske Investeringsmodel</title>
+  <meta name="description" content="4 Modellen | Den Sundhedsøkonomiske Investeringsmodel" />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Data | Den Sundhedsøkonomiske Investeringsmodel" />
+  <meta property="og:title" content="4 Modellen | Den Sundhedsøkonomiske Investeringsmodel" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Data | Den Sundhedsøkonomiske Investeringsmodel" />
+  <meta name="twitter:title" content="4 Modellen | Den Sundhedsøkonomiske Investeringsmodel" />
   
   
   
@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="modellen.html"/>
+<link rel="prev" href="data.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -138,22 +138,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduktion</a></li>
 <li class="chapter" data-level="2" data-path="modellen.html"><a href="modellen.html"><i class="fa fa-check"></i><b>2</b> Modellen</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="modellen.html"><a href="modellen.html#målgruppemodellen"><i class="fa fa-check"></i><b>2.1</b> Målgruppemodellen</a>
+<li class="chapter" data-level="2.1" data-path="modellen.html"><a href="modellen.html#output"><i class="fa fa-check"></i><b>2.1</b> Output</a></li>
+<li class="chapter" data-level="2.2" data-path="modellen.html"><a href="modellen.html#input"><i class="fa fa-check"></i><b>2.2</b> Input</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="modellen.html"><a href="modellen.html#output"><i class="fa fa-check"></i><b>2.1.1</b> Output</a></li>
-<li class="chapter" data-level="2.1.2" data-path="modellen.html"><a href="modellen.html#input"><i class="fa fa-check"></i><b>2.1.2</b> Input</a></li>
+<li class="chapter" data-level="2.2.1" data-path="modellen.html"><a href="modellen.html#valg-af-grupper"><i class="fa fa-check"></i><b>2.2.1</b> Valg af grupper</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="modellen.html"><a href="modellen.html#børnemodellen"><i class="fa fa-check"></i><b>2.2</b> Børnemodellen</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>3</b> Data</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data.html"><a href="data.html#målgruppemodellen-1"><i class="fa fa-check"></i><b>3.1</b> Målgruppemodellen</a>
-<ul>
-<li class="chapter" data-level="3.1.1" data-path="data.html"><a href="data.html#primær-sektoren"><i class="fa fa-check"></i><b>3.1.1</b> Primær Sektoren</a></li>
-<li class="chapter" data-level="3.1.2" data-path="data.html"><a href="data.html#den-sekundære-sektor"><i class="fa fa-check"></i><b>3.1.2</b> Den sekundære sektor</a></li>
-<li class="chapter" data-level="3.1.3" data-path="data.html"><a href="data.html#overførselsindkomster"><i class="fa fa-check"></i><b>3.1.3</b> Overførselsindkomster</a></li>
+<li class="chapter" data-level="3.1" data-path="data.html"><a href="data.html#databaser"><i class="fa fa-check"></i><b>3.1</b> Databaser</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#børnemodellen-1"><i class="fa fa-check"></i><b>3.2</b> Børnemodellen</a></li>
+<li class="chapter" data-level="4" data-path="modellen-1.html"><a href="modellen-1.html"><i class="fa fa-check"></i><b>4</b> Modellen</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="modellen-1.html"><a href="modellen-1.html#output-1"><i class="fa fa-check"></i><b>4.1</b> Output</a></li>
+<li class="chapter" data-level="4.2" data-path="modellen-1.html"><a href="modellen-1.html#input-1"><i class="fa fa-check"></i><b>4.2</b> Input</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -175,64 +173,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">3</span> Data<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Modellens <code>data</code> er baseret på mikrodata, og bearbejdes med <code>data.table</code> biblioteket på <code>server</code>-siden. Dette afsnit beskriver dette data.</p>
+<div id="modellen-1" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> Modellen<a href="modellen-1.html#modellen-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Modellen er udviklet i <code>R</code>, og bruger følgende biblioteker</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="modellen-1.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb2-2"><a href="modellen-1.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bs4Dash)</span>
+<span id="cb2-3"><a href="modellen-1.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shinyjs)</span>
+<span id="cb2-4"><a href="modellen-1.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shinyWidgets)</span>
+<span id="cb2-5"><a href="modellen-1.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb2-6"><a href="modellen-1.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(waiter)</span>
+<span id="cb2-7"><a href="modellen-1.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb2-8"><a href="modellen-1.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(waiter)</span>
+<span id="cb2-9"><a href="modellen-1.html#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb2-10"><a href="modellen-1.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fresh)</span></code></pre></div>
+<div id="output-1" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Output<a href="modellen-1.html#output-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Modellen har tre <code>outcomes</code> beregnet i reale og monetære værdier.</p>
+<ol style="list-style-type: decimal">
+<li><code>Kontakter</code> til den primære sektor</li>
+<li><code>Sengedage</code> i den sekundære sektor</li>
+<li><code>Antal uger</code> på en specifik indkomst</li>
+</ol>
+<p>Disse <code>outcomes</code> er grupperet efter valgte sygdomsgrupper og sociodemografiske karakterisikta.</p>
 <blockquote>
-<p>Databehandlingen af mikrodata er foregået på Danmarks Statistiks servere og kan ikke tilgås udenfor disse servere. Seperat dokumentation for denne process kan findes her (Indsæt Link).</p>
+<p>Bemærk: Grundet diskretioneringsregler jf. GDPR, er alle gruppering med under 10 observertioner maskeret. Det kan derfor
+hænde at en sammenligning ikke er mulig. Modellen vil gøre jer opmærksom på dette.</p>
 </blockquote>
-<div id="målgruppemodellen-1" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Målgruppemodellen<a href="data.html#målgruppemodellen-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Fælles for alt <code>data</code> i denne model er sygdomme (<code>disease</code>), sociodemografiske karakteristika, type og tid (<code>year</code>). <code>head(data)</code> og <code>tail(data)</code> for <code>data</code> giver,</p>
-<pre><code>##    year  disease type    alder    køn              uddannelse arbejdsmarked
-## 1:   -2 matching   NA 18-49 år Kvinde Videregående Uddannelse         Aktiv
-## 2:   -2 matching   NA 18-49 år Kvinde Videregående Uddannelse         Aktiv
-## 3:   -2 matching   NA 18-49 år Kvinde Videregående Uddannelse         Aktiv
-## 4:   -2 matching   NA 18-49 år Kvinde Videregående Uddannelse         Aktiv
-## 5:   -2 matching   NA 18-49 år Kvinde Videregående Uddannelse         Aktiv
-## 6:   -2 matching   NA 18-49 år Kvinde                 Faglært         Aktiv</code></pre>
-<pre><code>##    year                   disease type    alder    køn              uddannelse
-## 1:    5           Cancer_Prostata    0 18-49 år   Mand                 Faglært
-## 2:    5           Cancer_Prostata    0 18-49 år   Mand                 Faglært
-## 3:    5           Cancer_Prostata    0 18-49 år   Mand                 Faglært
-## 4:    5           Cancer_Prostata    0 18-49 år   Mand                 Faglært
-## 5:    5 Psykiske Lidelser_Moderat    1   65+ år   Mand                Ufaglært
-## 6:    5        Andre Lidelser_KOL    1 18-49 år Kvinde Videregående Uddannelse
-##    arbejdsmarked
-## 1:       Udenfor
-## 2:       Udenfor
-## 3:       Udenfor
-## 4:       Udenfor
-## 5:         Aktiv
-## 6:       Inaktiv</code></pre>
-<p>Alle øvrige <code>variabler</code> er <code>outcome</code> sepcifikke. Dette er gældende for <code>allocator</code>, <code>cost</code> og <code>qty</code>. <code>allocator</code> virker som en fordelingsnøgle, og angiver hvor gruppen af patienter har været tilknyttet.</p>
-<div id="primær-sektoren" class="section level3 hasAnchor" number="3.1.1">
-<h3><span class="header-section-number">3.1.1</span> Primær Sektoren<a href="data.html#primær-sektoren" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<pre><code>##                       allocator     cost         qty
-## 1:  Primær Sektor_Almen Praksis 4013.995 10.11109822
-## 2: Primær Sektor_Anden Speciale 1425.181  6.07491807
-## 3:    Primær Sektor_Fysioterapi 3127.725  0.80228110
-## 4:      Primær Sektor_Psykiater 2182.067  0.07437495
-## 5:       Primær Sektor_Psykolog 4378.962  0.10734280
-## 6:  Primær Sektor_Almen Praksis 3865.154  9.46612839</code></pre>
-<pre><code>##                       allocator     cost qty
-## 1: Primær Sektor_Anden Speciale 5104.504  NA
-## 2:    Primær Sektor_Fysioterapi 3560.182  NA
-## 3:      Primær Sektor_Psykiater 5843.657  NA
-## 4:       Primær Sektor_Psykolog 5581.852  NA
-## 5:                              6572.475  NA
-## 6:                              4879.910  NA</code></pre>
-<p>Rækkerne er angiver hvor meget gruppens besøg har kostet, som aflæst fra <code>cost</code>, og hvor mange besøg gruppen har haft, som aflæst fra <code>qty</code>. Det er altså ikke nødvendigt at tage produktet af disse to variabler.</p>
 </div>
-<div id="den-sekundære-sektor" class="section level3 hasAnchor" number="3.1.2">
-<h3><span class="header-section-number">3.1.2</span> Den sekundære sektor<a href="data.html#den-sekundære-sektor" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-</div>
-<div id="overførselsindkomster" class="section level3 hasAnchor" number="3.1.3">
-<h3><span class="header-section-number">3.1.3</span> Overførselsindkomster<a href="data.html#overførselsindkomster" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-</div>
-</div>
-<div id="børnemodellen-1" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Børnemodellen<a href="data.html#børnemodellen-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="input-1" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Input<a href="modellen-1.html#input-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Det primære <code>input</code> er forventede effekter over tid, relativt til den valgte sammenligningsgruppe. Beregningen er foretaget efter følgende formel,</p>
+<p><span class="math display">\[(\mu_{1,t} - \mu_{2,t}) \times \alpha_t\]</span>
+Hvor <span class="math inline">\(\mu_{i,t}\)</span> er gruppe <span class="math inline">\(i\)</span>’s gennemsnitsværdi er tid <span class="math inline">\(t\)</span> og <span class="math inline">\(\alpha_t\)</span> er effekten i tid <span class="math inline">\(t\)</span>.</p>
 
 </div>
 </div>
@@ -241,7 +213,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="modellen.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
