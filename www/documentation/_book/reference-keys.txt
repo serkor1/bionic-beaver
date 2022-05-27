@@ -1,7 +1,13 @@
-dokumen
 introduktion
-data
-databaser
 modellen
+målgruppemodellen
 output
 input
+valg-af-grupper
+børnemodellen
+data
+målgruppemodellen-1
+primær-sektoren
+den-sekundære-sektor
+overførselsindkomster
+børnemodellen-1
