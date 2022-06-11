@@ -80,53 +80,76 @@ server <- function(input, output, session) {
   
   observe({
     if (input$tab == "model_1") {
+      isolate(
+        data <- main_dataserver(id = "model1")
+      )
       
-      data <- isolate(
+          
+        
+      
+      
+      
+      
+
+      effect <- reactive( main_effectserver(
+          id = "model1",
+          data = data
+        )
+      )
+      
+      
+      
+      observe(
         {
-          reactive(
-            main_dataserver(id = "model1")
+          
+          message(
+            paste(
+              "See:",
+              mean(
+                effect()$effect(),
+                na.rm = TRUE)
+            )
+            
           )
         }
       )
       
       
       
+      # 
+      # 
+      # test <- temp(
+      #   id = "model1",
+      #   data = data()
+      # )
       
-      effect <- reactive({
-        main_effectserver(
-          id = "model1",
-          data = data()
-        )
-      })
-      
-      
-      
-      
-      main_warnings(
-        id = "model1"
-      )
-      
-      
-      
-      # Generate Chosen Parameters
-      main_choiceserver(
-        id = "model1",
-        data = data()
-      )
-      
-      # Generate Plots
+      # main_warnings(
+      #   id = "model1"
+      # )
+      # 
+      # 
+      # 
+      # # Generate Chosen Parameters
+      # main_choiceserver(
+      #   id = "model1",
+      #   data = data()
+      # )
+      # 
+      # # Generate Plots
       main_plotserver(
         id = "model1",
-        data = data(),
-        intervention_effect = effect(),
+        # data = data(),
+        # intervention_effect = effect(),
+        data = effect()$data(),
+        intervention_effect = effect()$effect(),
         light_mode = reactive(input$customSwitch1)
       )
-      
-      main_tableserver(
-        id = "model1",
-        data = data(),
-        intervention_effect = effect()
-      )
+      # 
+      # main_tableserver(
+      #   id = "model1",
+      #   data = data(),
+      #   intervention_effect = effect()
+      # )
       
     }
   }

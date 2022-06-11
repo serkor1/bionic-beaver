@@ -83,13 +83,20 @@ main_effectserver <- function(id, data) {
     )
     
     
-    effect_data <- reactive(
-      {
-        data() %>% baz(
-          effect = intervention_effect()
-        )
-      }
-    )
+    
+    
+    
+      effect_data <- ((
+        {
+          message("In Calculator")
+          
+          data() %>% baz(
+            effect = intervention_effect()
+          )
+        }
+      ))
+    
+    
     
     
     observe(
@@ -106,12 +113,12 @@ main_effectserver <- function(id, data) {
               status = "danger"
             )
             
-            updateProgressBar(
-              session = session,
-              id = paste0("r_effect",i),
-              value = mean(effect_data()[[i]]$cdifference, na.rm = TRUE),
-              status = "danger"
-            )
+            # updateProgressBar(
+            #   session = session,
+            #   id = paste0("r_effect",i),
+            #   value = mean(effect_data()[[i]]$cdifference, na.rm = TRUE),
+            #   status = "danger"
+            # )
             
           }
         )
@@ -128,7 +135,11 @@ main_effectserver <- function(id, data) {
     
     
     return(
-      intervention_effect
+      list(
+        effect = intervention_effect,
+        data   = effect_data
+      )
+      
     )
     
     
@@ -228,13 +239,13 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     # message(class(data()))
     
     
-    plot_data <- reactive(
-      data() %>% 
-        baz(
-          effect = intervention_effect(),
-          do_match = as.logical(input$do_match)
-          )
-      )
+    # plot_data <- reactive(
+    #   data() %>% 
+    #     baz(
+    #       effect = intervention_effect(),
+    #       do_match = as.logical(input$do_match)
+    #       )
+    #   )
     
     
     
@@ -253,13 +264,13 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     
     
     map(
-      1:length(data()),
+      1:length(data),
       .f = function(i) {
 
         # TODO: Isolate These
         # so they dont keep running!
         message(
-          paste("Grinding plots. Currently at", i, "of", length(data()), "iterations.")
+          paste("Grinding plots. Currently at", i, "of", length(data), "iterations.")
         )
 
 
@@ -268,6 +279,8 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
 
         output[[paste0("plot", i)]] <- renderPlotly(
           {
+            
+            
 
 
 
@@ -276,7 +289,7 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
 
               shinyFeedback::feedbackDanger(
                 inputId = "pt_demographic",
-                !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
+                !(isTruthy(data[[i]]$control) & isTruthy(data[[i]]$intervention)),
                 text = "Sammenligningen er problematisk!",
                 icon = NULL
               )
@@ -290,7 +303,7 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
             )
 
 
-            plot_data()[[i]]  %>%
+            data[[i]]  %>%
               do_plot(
                 difference = input$do_difference,
                 show_baseline = input$show_baseline,
@@ -336,6 +349,8 @@ main_dataserver <- function(id) {
     data <- reactive(
       {
         
+        message("In data")
+        
         data_list %>% grinder(
           intervention     = paste(input$pt_target),
           control          = paste(input$pt_control),
@@ -349,7 +364,9 @@ main_dataserver <- function(id) {
     )
     
     
-    message("data server done")
+    
+    
+    
     
     
     return(
@@ -364,6 +381,45 @@ main_dataserver <- function(id) {
 
 
 
+# This works
+
+temp <- function(id, data) {
+  moduleServer(id, function(input, output, session) {
+    
+    intervention_effect <- reactive(
+      c(
+        input$effect_1,
+        input$effect_2,
+        input$effect_3,
+        input$effect_4,
+        input$effect_5
+      ) %>% as.numeric()
+    )
+    
+    test <- reactive(
+      {
+        
+        message("In Temp")
+        
+        data() %>% baz(effect = intervention_effect())
+        
+      }
+    )
+    
+    observe(
+      message(
+        paste(
+          "Class:",
+          class(test())
+        )
+      )
+    )
+    
+    
+    
+  }
+  )
+}
 
 
 # choice logic; #####
