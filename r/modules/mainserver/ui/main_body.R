@@ -18,7 +18,7 @@
   #' then the conainer includes a table and therefore
   #' the sidebar  should be different.
   
-
+  
   tmpsidebar <- bs4CardSidebar(
     width = 25,icon = span("Indstillinger", icon("cog")),
     background = "#bfc9d1",
@@ -28,7 +28,7 @@
     
     
     tabsetPanel(
-      id = "tabcard",
+      id = "tabcard",type = "pills",
       tabPanel(
         title = "Parametre",
         tmp_opts(id, output)
@@ -55,131 +55,131 @@
         
         
       ),
-tabPanel(
-  title = "Visuelle Indstillinger", 
-  conditionalPanel(
-    condition = "input.change_view == 'see_plot'",
-    {
-      column(
-        width = 12,
-        h5("Grafindstillinger"),
-        materialSwitch(
-          inputId = ns("show_baseline"),
-          value = TRUE,
-          status = "info",
-          label = "Vis Befolkningsværdi"
-        ) %>% popover(
-          placement = "bottom",
-          title = "Skal den generelle befolkning vises?",
-          content = "Skal den generelle befolkning vises?"
+      tabPanel(
+        title = "Visuelle Indstillinger", 
+        conditionalPanel(
+          condition = "input.change_view == 'see_plot'",
+          {
+            column(
+              width = 12,
+              h5("Grafindstillinger"),
+              materialSwitch(
+                inputId = ns("show_baseline"),
+                value = TRUE,
+                status = "info",
+                label = "Vis Befolkningsværdi"
+              ) %>% popover(
+                placement = "bottom",
+                title = "Skal den generelle befolkning vises?",
+                content = "Skal den generelle befolkning vises?"
+              ),
+              
+              pickerInput(
+                inputId = ns("col_intervention"),
+                label = "Intevention",
+                selected = "steelblue",
+                choices = colors(),
+                options = list(
+                  `live-search` = TRUE,
+                  `size` = 5)
+              ),
+              
+              pickerInput(
+                inputId = ns("col_control"),
+                label = "Control",
+                selected = "orange",
+                choices = colors(),
+                options = list(
+                  `live-search` = TRUE,
+                  `size` = 5)
+              ),
+              
+              pickerInput(
+                inputId = ns("col_background"),
+                label = "Population",
+                selected = "white",
+                choices = colors(),
+                options = list(
+                  `live-search` = TRUE,
+                  `size` = 5)
+              ),
+              
+              actionButton(
+                inputId = ns("col_reset"),
+                label = "Nulstil Farver"
+              )
+              
+              
+            )
+          }
         ),
         
-        pickerInput(
-          inputId = ns("col_intervention"),
-          label = "Intevention",
-          selected = "steelblue",
-          choices = colors(),
-          options = list(
-            `live-search` = TRUE,
-            `size` = 5)
-        ),
-        
-        pickerInput(
-          inputId = ns("col_control"),
-          label = "Control",
-          selected = "orange",
-          choices = colors(),
-          options = list(
-            `live-search` = TRUE,
-            `size` = 5)
-        ),
-        
-        pickerInput(
-          inputId = ns("col_background"),
-          label = "Population",
-          selected = "white",
-          choices = colors(),
-          options = list(
-            `live-search` = TRUE,
-            `size` = 5)
-        ),
-        
-        actionButton(
-          inputId = ns("col_reset"),
-          label = "Nulstil Farver"
+        conditionalPanel(
+          condition = "input.change_view == 'see_table'",
+          
+          {
+            
+            column(
+              width = 12,
+              h5("Tabelindstillinger"),
+              materialSwitch(
+                inputId = ns("show_basseline"),
+                value = TRUE,
+                status = "info",
+                label = "Vis Noget andet"
+              ) %>% popover(
+                placement = "bottom",
+                title = "Skal den generelle befolkning vises?",
+                content = "Skal den generelle befolkning vises?"
+              ),
+              
+              pickerInput(
+                inputId = ns("col_intersvention"),
+                label = "Intevention",
+                selected = "steelblue",
+                choices = colors(),
+                options = list(
+                  `live-search` = TRUE,
+                  `size` = 5)
+              ),
+              
+              pickerInput(
+                inputId = ns("col_consrol"),
+                label = "Control",
+                selected = "orange",
+                choices = colors(),
+                options = list(
+                  `live-search` = TRUE,
+                  `size` = 5)
+              ),
+              
+              pickerInput(
+                inputId = ns("col_bacdkground"),
+                label = "Population",
+                selected = "white",
+                choices = colors(),
+                options = list(
+                  `live-search` = TRUE,
+                  `size` = 5)
+              ),
+              
+              actionButton(
+                inputId = ns("col_resset"),
+                label = "Nulstil Farver"
+              )
+              
+              
+            )
+            
+          }
         )
-        
-        
       )
-    }
-  ),
-  
-  conditionalPanel(
-    condition = "input.change_view == 'see_table'",
-    
-    {
-      
-      column(
-        width = 12,
-        h5("Tabelindstillinger"),
-        materialSwitch(
-          inputId = ns("show_basseline"),
-          value = TRUE,
-          status = "info",
-          label = "Vis Noget andet"
-        ) %>% popover(
-          placement = "bottom",
-          title = "Skal den generelle befolkning vises?",
-          content = "Skal den generelle befolkning vises?"
-        ),
-        
-        pickerInput(
-          inputId = ns("col_intersvention"),
-          label = "Intevention",
-          selected = "steelblue",
-          choices = colors(),
-          options = list(
-            `live-search` = TRUE,
-            `size` = 5)
-        ),
-        
-        pickerInput(
-          inputId = ns("col_consrol"),
-          label = "Control",
-          selected = "orange",
-          choices = colors(),
-          options = list(
-            `live-search` = TRUE,
-            `size` = 5)
-        ),
-        
-        pickerInput(
-          inputId = ns("col_bacdkground"),
-          label = "Population",
-          selected = "white",
-          choices = colors(),
-          options = list(
-            `live-search` = TRUE,
-            `size` = 5)
-        ),
-        
-        actionButton(
-          inputId = ns("col_resset"),
-          label = "Nulstil Farver"
-        )
-        
-        
-      )
-      
-    }
-  )
-)
     ),
     
-
     
     
-
+    
+    
     
     
     
@@ -188,7 +188,7 @@ tabPanel(
   
   
   
-
+  
   
   # bs4card;
   
@@ -302,7 +302,7 @@ model1UI_choices <- function(id, output) {
         gradient = TRUE,
         icon = icon("id-card")
       )
-  )
+    )
     
   )
   
@@ -429,167 +429,167 @@ model1UI_output <- function(id, output) {
   
   
   # Generate Tabsets;
-  tabset_names <- data_list %>% names()
-
+  tabset_names <- data_list[[1]] %>% names()
+  
   fluidRow(
     column(
       width = 12,
       
       
-    
-    conditionalPanel(
-      condition = "input.change_view == 'see_plot'",
-      {
-        column(
-          width = 12,
-          do.call(
-            tabsetPanel,
-            c(
-              type = "pills",
-              
-              map(
-                seq_along(tabset_names),
-                .f = function(i) {
-                  
-                  
-                  
-                  
-                  icon_name <- fcase(
-                    tabset_names[i] %chin% c("primary_care"), "stethoscope",
-                    tabset_names[i] %chin% c("psychiatric_care"), "couch",
-                    tabset_names[i] %chin% c("somatic_care"), "hospital",
-                    tabset_names[i] %chin% c("transfers"), "briefcase"
+      
+      conditionalPanel(
+        condition = "input.change_view == 'see_plot'",
+        {
+          column(
+            width = 12,
+            do.call(
+              tabsetPanel,
+              c(
+                type = "pills",
+                
+                map(
+                  seq_along(tabset_names),
+                  .f = function(i) {
                     
-                  )
-                  
-                  
-                  
-                  
-                  
-                  tabPanel(
-                    title = paste(
-                      fcase(
-                        tabset_names[i] %chin% c("primary_care"), "Almen praksis",
-                        tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
-                        tabset_names[i] %chin% c("somatic_care"), "Somatik",
-                        tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
-                        
-                      )
+                    
+                    
+                    
+                    icon_name <- fcase(
+                      tabset_names[i] %chin% c("primary_care"), "stethoscope",
+                      tabset_names[i] %chin% c("psychiatric_care"), "couch",
+                      tabset_names[i] %chin% c("somatic_care"), "hospital",
+                      tabset_names[i] %chin% c("transfers"), "briefcase"
                       
-                      
-                    ),
-                    
-                    
-                    icon = icon(icon_name),
-                    value = ns(paste0("tab",i)),
-                    br(),
-                    
-                    
-                    # Add Conditional Panel
-                    # to view graph or tables
-                    
-                    
-                    plotlyOutput(
-                      outputId = ns(paste0("plot",i))
-                    ),
-                    
-                    hr(),
-                    
-                    model1UI_performance(
-                      id_value = paste0("effect",i),
-                      id,
-                      output
                     )
                     
                     
                     
                     
                     
-                    
-                  )
-                  
-                  
-                  
-                }
-                
-              )
-            )
-          )
-        )
-      }
-    ),
-    
-    conditionalPanel(
-      condition = "input.change_view == 'see_table'",
-      {
-        column(
-          width = 12,
-          do.call(
-            tabsetPanel,
-            c(
-              type = "pills",
-              
-              map(
-                seq_along(tabset_names),
-                .f = function(i) {
-                  
-                  
-                  
-                  
-                  icon_name <- fcase(
-                    tabset_names[i] %chin% c("primary_care"), "stethoscope",
-                    tabset_names[i] %chin% c("psychiatric_care"), "couch",
-                    tabset_names[i] %chin% c("somatic_care"), "hospital",
-                    tabset_names[i] %chin% c("transfers"), "briefcase"
-                    
-                  )
-                  
-                  
-                  
-                  
-                  
-                  tabPanel(
-                    title = paste(
-                      fcase(
-                        tabset_names[i] %chin% c("primary_care"), "Almen praksis",
-                        tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
-                        tabset_names[i] %chin% c("somatic_care"), "Somatik",
-                        tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+                    tabPanel(
+                      title = paste(
+                        fcase(
+                          tabset_names[i] %chin% c("primary_care"), "Almen praksis",
+                          tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
+                          tabset_names[i] %chin% c("somatic_care"), "Somatik",
+                          tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+                          
+                        )
                         
+                        
+                      ),
+                      
+                      
+                      icon = icon(icon_name),
+                      value = ns(paste0("tab",i)),
+                      br(),
+                      
+                      
+                      # Add Conditional Panel
+                      # to view graph or tables
+                      
+                      
+                      plotlyOutput(
+                        outputId = ns(paste0("plot",i))
+                      ),
+                      
+                      hr(),
+                      
+                      model1UI_performance(
+                        id_value = paste0("effect",i),
+                        id,
+                        output
                       )
                       
                       
-                    ),
-                    
-                    
-                    icon = icon(icon_name),
-                    value = ns(paste0("tabs",i)),
-                    br(),
-                    DT::dataTableOutput(
-                      outputId = ns(paste0("table",i))
-                    ),
-                    hr(),
-                    
-                    model1UI_performance(
-                      id_value = paste0("effect",i),
-                      id,
-                      output
+                      
+                      
+                      
+                      
                     )
                     
                     
-                  )
+                    
+                  }
                   
-                  
-                  
-                }
-                
+                )
               )
             )
           )
-        )
-      }
+        }
+      ),
+      
+      conditionalPanel(
+        condition = "input.change_view == 'see_table'",
+        {
+          column(
+            width = 12,
+            do.call(
+              tabsetPanel,
+              c(
+                type = "pills",
+                
+                map(
+                  seq_along(tabset_names),
+                  .f = function(i) {
+                    
+                    
+                    
+                    
+                    icon_name <- fcase(
+                      tabset_names[i] %chin% c("primary_care"), "stethoscope",
+                      tabset_names[i] %chin% c("psychiatric_care"), "couch",
+                      tabset_names[i] %chin% c("somatic_care"), "hospital",
+                      tabset_names[i] %chin% c("transfers"), "briefcase"
+                      
+                    )
+                    
+                    
+                    
+                    
+                    
+                    tabPanel(
+                      title = paste(
+                        fcase(
+                          tabset_names[i] %chin% c("primary_care"), "Almen praksis",
+                          tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
+                          tabset_names[i] %chin% c("somatic_care"), "Somatik",
+                          tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+                          
+                        )
+                        
+                        
+                      ),
+                      
+                      
+                      icon = icon(icon_name),
+                      value = ns(paste0("tabs",i)),
+                      br(),
+                      DT::dataTableOutput(
+                        outputId = ns(paste0("table",i))
+                      ),
+                      hr(),
+                      
+                      model1UI_performance(
+                        id_value = paste0("effect",i),
+                        id,
+                        output
+                      )
+                      
+                      
+                    )
+                    
+                    
+                    
+                  }
+                  
+                )
+              )
+            )
+          )
+        }
+      )
     )
-  )
   )
   
 }
@@ -607,7 +607,7 @@ model1UI_body <- function(id,output) {
   
   
   # Generate Tabsets;
-  tabset_names <- data_list %>% names()
+  tabset_names <- data_list[[1]] %>% names()
   
   
   tagList(

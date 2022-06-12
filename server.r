@@ -69,6 +69,37 @@ server <- function(input, output, session) {
         
         message("in model 2")
         
+        
+        model2_ui <- model2UI(
+          id = "model2"
+        )
+        
+        
+        output$sidebar_ui <- renderUI(
+          model2_ui$sidebar
+          
+        )
+        
+        
+        output$gen_body <- renderUI(
+          {
+            model2_ui$body
+          }
+        )
+        
+        output$gen_header <- renderUI(
+          {
+            model2_ui$header
+          }
+        )
+        
+        output$performance <- renderUI(
+          {
+            model2_ui$performance
+          }
+        )
+        
+        
       }
       
     }
@@ -84,7 +115,7 @@ server <- function(input, output, session) {
       data <- isolate(
         {
           reactive(
-            main_dataserver(id = "model1")
+            main_dataserver(id = "model1",data_list = data_list[[1]])
           )
         }
       )

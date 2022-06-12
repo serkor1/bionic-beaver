@@ -18,7 +18,7 @@ library(fresh)
 # Shiny BS
 
 # Developper Mode;
-developper_mode = FALSE
+developper_mode = TRUE
 
 
 
@@ -38,10 +38,29 @@ list.files(
 
 # Preload data;
 system.time(
-  data_list <- preload_data(
+  data_list <-  preload_data(
     developper_mode = developper_mode
+  ) %>% map(
+    .f = function(get_list) {
+
+      # Each iteration is over the lists
+      # so we need another map
+
+      map(
+        get_list,
+        .f = function(data) {
+
+          data %>%
+            .convert_long()
+
+        }
+      )
+
+    }
   )
+
 )
+
 
 
 # version;
@@ -49,28 +68,40 @@ version <- c("v0.2.1")
 
 
 
+
 # Preloading Options; #####
 
-# All options are created
-# and are on the form [class]_[subclass]
-options <- get_options()
-
-diseases <- options$diseases
+load_parameters <- gen_option(
+  data_list = data_list
+)
 
 
+chars      <- load_parameters$chars
+assignment <- load_parameters$assignment
+outcome    <- load_parameters$outcome
 
-outcomes <- options$allocator
 
-# demographics are constructed as
-# variable_value
-demographics <-  options$demographics %>% 
-  map(
-    .f = function(element) {
-      str_remove(
-        element,
-        pattern = "[:alpha:]+_"
-      )
-      
-      }
-    
-    )
+
+# # All options are created
+# # and are on the form [class]_[subclass]
+# options <- get_options()
+# 
+# diseases <- options$diseases
+# 
+# 
+# 
+# outcomes <- options$allocator
+# 
+# # demographics are constructed as
+# # variable_value
+# demographics <-  options$demographics %>% 
+#   map(
+#     .f = function(element) {
+#       str_remove(
+#         element,
+#         pattern = "[:alpha:]+_"
+#       )
+#       
+#       }
+#     
+#     )

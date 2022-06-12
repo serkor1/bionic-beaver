@@ -91,7 +91,7 @@ main_effectserver <- function(id, data) {
       {
         
         data() %>% baz(
-          intervention_effect = intervention_effect(),
+          effect = intervention_effect(),
           do_match = as.logical(input$do_match)
         )
       }
@@ -251,7 +251,7 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     plot_data <- reactive(
       data() %>% 
         baz(
-          intervention_effect = intervention_effect(),
+          effect = intervention_effect(),
           do_match = as.logical(input$do_match)
           )
       )
@@ -348,7 +348,7 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
 
 
 # main data logic; ####
-main_dataserver <- function(id) {
+main_dataserver <- function(id, data_list) {
   moduleServer(id, function(input, output, session) {
     
     
@@ -359,10 +359,9 @@ main_dataserver <- function(id) {
         data_list %>% grinder(
           intervention     = paste(input$pt_target),
           control          = paste(input$pt_control),
-          allocator_vector = paste(input$pt_outcome),
-          group_value      = paste(input$pt_demographic),
-          type             = input$do_incident,
-          cost             = input$do_cost
+          allocators       = paste(input$pt_outcome),
+          chars            = paste(input$pt_demographic),
+          alternate = TRUE
         ) %>% foo()
         
       }
@@ -567,7 +566,7 @@ main_tableserver <- function(id, data, intervention_effect){
       # 
     
       table_data <- reactive(
-        data() %>% baz(intervention_effect = intervention_effect(), do_match = as.logical(input$do_match))
+        data() %>% baz(effect =  intervention_effect(), do_match = as.logical(input$do_match))
         )
       
       map(
