@@ -3,165 +3,299 @@
 # analysis
 
 
-# main grinder; ####
-grinder <- function(data_list, intervention, control, allocator_vector = NULL, group_value = NULL, type = TRUE, cost = FALSE) {
-  #' @param data_list input data in its raw
-  #' format.
-  #' @param intervention character. The disease
-  #' chosen as the intervention
-  #' @param control character. the disease
-  #' chosen as the control
+# main grinder; #####
+grinder <- function(
+    data_list,
+    intervention = NULL,
+    control = NULL,
+    allocators = NULL,
+    chars = NULL,
+    alternate = FALSE
+) {
+  
+  
+  #' Function Information
   #' 
-  #' @param allocator_vector character vector. The chosen outcome
-  #' has to max 3.Same as the Outcome
+  #' @param data_list a list of data.tables regardless of the model
+  #' chosen
   #' 
-  #' @returns a list of data.tables in wide format.
+  #' @param intervention a character vector of length 1.
+  #' @param control a character vector of length 1.
+  #' @param allocator a character vector of lenth N.
+  #' @param chars a character vector of length N.
+  #' @param alternate a logical value, indicating wether alternate
+  #' versions of the data are to be calculated.
   
   
-  # Extract Grouping variables; ####
-  group_variable <- .extract_grouping(
-    group_value
+  
+  
+  
+  alternates <- fcase(
+    isFALSE(alternate), "qty",
+    default = "cost"
   )
   
   
-  # Collapse Allocator; ####
-  allocator_vector <- allocator_vector  %>% paste(
-      collapse = "|"
-    )
+  # TODO: Generate SD Cols which
+  # corresponds to those columns that are not outcomes
   
-  # HAd remove strings
-  
-  type_char <- fcase(
-    isTRUE(type), 1,
-    default = 0
-  )
-  
-  cost <- fcase(
-    isTRUE(cost), TRUE,
-    default = FALSE
-  )
-  
-  
-  
-  
+  # TODO: Needs to be robust against
+  # existing models such that it only operates on existing
+  # data to avoid errors.
   
   data_list %>% map(
     .f = function(data) {
       
-      get_char <- which(sapply(data, is.character))
+      # 1) Filter data according to chosen
+      # parameters.
+      #
+      # TODO: This is disease, but should be called something
+      # that is globally applicable. allocation is probably a 
+      # good idea
+      # We always want the matching group
+      # as a comparision
+      
+      
+      data <- tryCatch(
+        
+        # Treat Data as model_1
+        expr = {
+          data[
+            assignment %chin% c(intervention, control, "matching") &
+              outcome_type %chin% alternates &
+              type == 1 &
+              allocator %chin% c(allocators)
+          ]
+        },
+        
+        error = function(cond) {
+          
+          data[
+            assignment %chin% c(intervention, control, "matching") &
+              outcome_type %chin% c(allocators)
+          ]
+          
+          
+        }
+      )
       
       
       
-      # NOTE: All matching obs have type as NA.
-      # if we do not replace these it will vanish
+      
+      
+      
+      
+      # 2) classify accordingly
       data[
-        disease %chin% "matching",
-        type := type_char
+        ,
+        assignment_factor := fcase(
+          assignment %chin% "matching", "population",
+          assignment %chin% intervention, "intervention",
+          assignment %chin% control, "control"
+        )
+        ,
       ]
       
       
-      
-      # Step 1)
-      # Filter the data to include 
-      # only the desired diseases
-      data <- data[
-        type == type_char
-      ]
-      
-      if (cost) {
-        
-        data[,`:=`(outcome = cost, qty = NULL),]
-        
-      } else {
-        
-        data[,`:=`(outcome = qty, cost = NULL),]
-        
-      }
-      
-      # Steo 2)
-      # Classify the data according to
-      # intevention and control based on the
-      # chosen intervention and control values
-      
-      data <- data[,
-                   allocation := fcase(
-                     disease %chin% "matching", "population",
-                     disease %chin% intervention, "intervention",
-                     disease %chin% control, "control"
-                   )
-                   ,][!is.na(allocation)]
-      
-     
+      # 3) Find all columns that are used as
+      # grouping
+      idx <- which(
+        sapply(
+          colnames(data),
+          function(name) {
+            
+            str_detect(
+              name,
+              pattern = paste(c("year", "assignment", "allocator"), collapse = "|")
+            )
+            
+          }
+        )
+      )
       
       
-     
-      
-      
-      
-      
-      
-      
-      # Step 3)
-      # Filter Data based on the chosen parameters
-      data <- data[
-        data[
-          ,
-          apply(
-            .SD, 
-            1,
-            function(x) {
-              
-              # The sum is always equal to the number of
-              # possible combinations
-              sum(x %chin% group_value) == length(group_variable)
-              
-              
-            }
+      # 3) aggregate data;
+      # by group
+      data[
+        ,
+        .(
+          outcome = mean(
+            outcome, na.rm = TRUE
           )
-          ,
-          .SDcols = get_char
-        ]
+        )
+        ,
+        by = c(colnames(data)[idx])
       ]
       
       
-      
-      
-      
-      
-      
-      # Step 4) 
-      # Aggregate Results by year and group
-      # accordingly
-      # TODO: Is it per patient or total
-      # this is important.
-      # TODO: Normalize Outcomes variables
-      # to do a more smooth transition.
-      # This might be a good idea generate these
-      # outcome via paramters
-      
-      data <- data[
-        str_detect(
-          string = allocator,
-          pattern = allocator_vector
-        )
-        ,
-        list(
-          outcome = mean(outcome, na.rm = TRUE)
-
-        )
-        ,
-        by = c(
-          "year", "allocation", "disease", "allocator", group_variable
-        )
-      ]
-      
-      
-      
-      return(data)
       
     }
   )
+  
+  
 }
+
+
+# main grinder; ####
+#' grinder <- function(data_list, intervention, control, allocator_vector = NULL, group_value = NULL, type = TRUE, cost = FALSE) {
+#'   #' @param data_list input data in its raw
+#'   #' format.
+#'   #' @param intervention character. The disease
+#'   #' chosen as the intervention
+#'   #' @param control character. the disease
+#'   #' chosen as the control
+#'   #' 
+#'   #' @param allocator_vector character vector. The chosen outcome
+#'   #' has to max 3.Same as the Outcome
+#'   #' 
+#'   #' @returns a list of data.tables in wide format.
+#'   
+#'   
+#'   # Extract Grouping variables; ####
+#'   # group_variable <- .extract_grouping(
+#'   #   group_value
+#'   # )
+#'   group_variable = NULL
+#'   
+#'   
+#'   # Collapse Allocator; ####
+#'   allocator_vector <- allocator_vector  %>% paste(
+#'       collapse = "|"
+#'     )
+#'   
+#'   # HAd remove strings
+#'   
+#'   type_char <- fcase(
+#'     isTRUE(type), 1,
+#'     default = 0
+#'   )
+#'   
+#'   cost <- fcase(
+#'     isTRUE(cost), TRUE,
+#'     default = FALSE
+#'   )
+#'   
+#'   
+#'   
+#'   
+#'   
+#'   data_list %>% map(
+#'     .f = function(data) {
+#'       
+#'       get_char <- which(sapply(data, is.character))
+#'       
+#'       
+#'       
+#'       # NOTE: All matching obs have type as NA.
+#'       # if we do not replace these it will vanish
+#'       data[
+#'         disease %chin% "matching",
+#'         type := type_char
+#'       ]
+#'       
+#'       
+#'       
+#'       # Step 1)
+#'       # Filter the data to include 
+#'       # only the desired diseases
+#'       data <- data[
+#'         type == type_char
+#'       ]
+#'       
+#'       if (cost) {
+#'         
+#'         data[,`:=`(outcome = cost, qty = NULL),]
+#'         
+#'       } else {
+#'         
+#'         data[,`:=`(outcome = qty, cost = NULL),]
+#'         
+#'       }
+#'       
+#'       # Steo 2)
+#'       # Classify the data according to
+#'       # intevention and control based on the
+#'       # chosen intervention and control values
+#'       
+#'       data <- data[,
+#'                    allocation := fcase(
+#'                      disease %chin% "matching", "population",
+#'                      disease %chin% intervention, "intervention",
+#'                      disease %chin% control, "control"
+#'                    )
+#'                    ,][!is.na(allocation)]
+#'       
+#'      
+#'       
+#'       
+#'      
+#'       
+#'       
+#'       
+#'       
+#'       
+#'       
+#'       # Step 3)
+#'       # Filter Data based on the chosen parameters
+#'       data <- data[
+#'         data[
+#'           ,
+#'           apply(
+#'             .SD, 
+#'             1,
+#'             function(x) {
+#'               
+#'               # The sum is always equal to the number of
+#'               # possible combinations
+#'               sum(x %chin% group_value) == length(group_variable)
+#'               
+#'               
+#'             }
+#'           )
+#'           ,
+#'           .SDcols = get_char
+#'         ]
+#'       ]
+#'       
+#'       
+#'       
+#'       
+#'       
+#'       
+#'       
+#'       # Step 4) 
+#'       # Aggregate Results by year and group
+#'       # accordingly
+#'       # TODO: Is it per patient or total
+#'       # this is important.
+#'       # TODO: Normalize Outcomes variables
+#'       # to do a more smooth transition.
+#'       # This might be a good idea generate these
+#'       # outcome via paramters
+#'       
+#'       data <- data[
+#'         str_detect(
+#'           string = allocator,
+#'           pattern = allocator_vector
+#'         )
+#'         ,
+#'         list(
+#'           outcome = mean(outcome, na.rm = TRUE)
+#' 
+#'         )
+#'         ,
+#'         by = c(
+#'           "year", "allocation", "disease", "allocator", group_variable
+#'         )
+#'       ]
+#'       
+#'       
+#'       
+#'       return(data)
+#'       
+#'     }
+#'   )
+#' }
 
 
 
@@ -494,12 +628,12 @@ foo <- function(data) {
           )
         )
         ,
-        by = .(year, allocation, allocator)
+        by = .(year, assignment_factor, allocator)
       ]
       
       
       data <- data %>% dcast(
-        year + allocator ~ allocation,
+        year + allocator ~ assignment_factor,
         value.var = "outcome"
       )
       
@@ -590,7 +724,7 @@ foo <- function(data) {
 }
 
 
-baz <- function(data, intervention_effect, do_match = FALSE) {
+baz <- function(data, effect, do_match = FALSE) {
   
   #' Function Information
   #' 
@@ -677,7 +811,7 @@ baz <- function(data, intervention_effect, do_match = FALSE) {
       data[
         year > 0
         ,
-        effect := (intervention_effect/100)
+        effect := (effect/100)
         ,
         by = .(allocator)
       ]

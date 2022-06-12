@@ -284,7 +284,9 @@ generate_data <- function() {
   
   unique_class <- unique(options[[1]]$class)
   
-  disease   <- options[[3]]$x
+  # TODO: It does not include matchin
+  # for some reason. Needs a fix.
+  disease   <- c(options[[3]]$x, "matching")
   descriptives <- options[[2]][,list(class, subclass),] %>% split(.$class)
   
   
@@ -296,7 +298,7 @@ generate_data <- function() {
   
   
   
-  unique_class %>% map(
+  model_1 <- unique_class %>% map(
     .f = function(unique_class) {
       
       iterator <<- iterator + 1
@@ -308,7 +310,7 @@ generate_data <- function() {
         CJ(
           year = -2:5,
           type = 0:1,
-          disease = disease,
+          assignment = disease,
           allocator = allocator,
           køn = descriptives$køn$subclass,
           alder = descriptives$alder$subclass,
@@ -342,9 +344,54 @@ generate_data <- function() {
   ) %>% set_names(name_vector)
   
   
+  # Model 2 Data;
+  
+  model_2 <- data.table(
+    CJ(
+      assignment = c(
+        "0-2 år",
+        "3-6 år",
+        "7-11 år",
+        "12-17 år"
+      ),
+      ftype = c(
+        "Enlig Mand",
+        "Enlig Kvinde",
+        "Samboende"
+      ),
+      feduc = c(
+        "Faglært",
+        "Ufaglært",
+        "Videregående Uddannelse"
+      )
+      
+    )
+  )
+  
+  
+  model_2[
+    ,
+    indk := runif(
+      .N,
+      min = 10000,
+      max = 100000
+    )
+    ,
+  ]
+  
+  
+  
+  return(
+    list(
+      model_1,
+      list(model_2)
+      
+    )
+  )
   
   
 }
+
 
 
 

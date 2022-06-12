@@ -125,7 +125,7 @@ tmp_opts <- function(id, output) {
       id = ns("pt_target"),
       title = "Gruppe",
       header = "Vælg Gruppe",
-      choices = diseases,
+      choices = assignment[[1]],
       multiple = FALSE
     ),
     
@@ -153,7 +153,7 @@ tmp_opts <- function(id, output) {
           id = ns("pt_control"),
           title = "Sammenligningsgruppe",
           header = "Vælg Sammenligningsgruppe",
-          choices = diseases,
+          choices = assignment[[1]],
           multiple = FALSE
         ) 
       }
@@ -168,7 +168,7 @@ tmp_opts <- function(id, output) {
       id = ns("pt_outcome"),
       title = "Outcomes",
       header = "Vælg Outcomes",
-      choices = outcomes,
+      choices = outcome[[1]],
       multiple = TRUE,
       selectAllText = "Vælg Alle",
       deselectAllText = "Nulstil"
@@ -180,7 +180,7 @@ tmp_opts <- function(id, output) {
       id = ns("pt_demographic"),
       title = "Demografi",
       header = "Vælg Demografiske",
-      choices = demographics,
+      choices = chars[[1]],
       multiple = TRUE,
       selectAllText = "Vælg Alle",
       deselectAllText = "Nulstil"
