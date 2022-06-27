@@ -87,57 +87,59 @@ main_effectserver <- function(id, data) {
     
     
     
-    effect_data <- reactive(
-      {
-        
-        data() %>% baz(
-          effect = intervention_effect(),
-          do_match = as.logical(input$do_match)
-        )
-      }
-    )
-    
-    
-    observe(
-      {
-        map(
-          1:4,
-          .f = function(i) {
-            
-            
-            
-            updateProgressBar(
-              session = session,
-              id = paste0("e_effect",i),
-              value = mean(intervention_effect()),
-              status = "danger"
-            )
-            
-            if (isTruthy(effect_data()[[i]])) {
-              updateProgressBar(
-                session = session,
-                id = paste0("re_effect",i),
-                value = mean(effect_data()[[i]]$difference, na.rm = TRUE),
-                status = "danger",
-                total = 100
-              )
-              
-              updateProgressBar(
-                session = session,
-                id = paste0("r_effect",i),
-                value = (1-mean(effect_data()[[i]]$cintervention, na.rm = TRUE)/mean(effect_data()[[i]]$intervention, na.rm = TRUE)) * 100,
-                status = "danger"
-              )
-              
-            }
-            
-            
-            
-          }
-        )
-        
-      }
-    )
+    # effect_data <- reactive(
+    #   {
+    #     
+    #     data() 
+    #     
+    #     # %>% baz(
+    #     #   effect = intervention_effect(),
+    #     #   do_match = as.logical(input$do_match)
+    #     # )
+    #   }
+    # )
+    # 
+    # 
+    # observe(
+    #   {
+    #     map(
+    #       1:4,
+    #       .f = function(i) {
+    #         
+    #         
+    #         
+    #         updateProgressBar(
+    #           session = session,
+    #           id = paste0("e_effect",i),
+    #           value = mean(intervention_effect()),
+    #           status = "danger"
+    #         )
+    #         
+    #         if (isTruthy(effect_data()[[i]])) {
+    #           updateProgressBar(
+    #             session = session,
+    #             id = paste0("re_effect",i),
+    #             value = mean(effect_data()[[i]]$difference, na.rm = TRUE),
+    #             status = "danger",
+    #             total = 100
+    #           )
+    #           
+    #           updateProgressBar(
+    #             session = session,
+    #             id = paste0("r_effect",i),
+    #             value = (1-mean(effect_data()[[i]]$cintervention, na.rm = TRUE)/mean(effect_data()[[i]]$intervention, na.rm = TRUE)) * 100,
+    #             status = "danger"
+    #           )
+    #           
+    #         }
+    #         
+    #         
+    #         
+    #       }
+    #     )
+    #     
+    #   }
+    # )
     
     
     
@@ -172,53 +174,53 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     #' is the intervention effects that the user choses.
     
     
-    observeEvent(
-      input$col_reset,ignoreInit = TRUE,ignoreNULL = TRUE,
-      {
-        
-        updatePickerInput(
-          inputId = "col_background",selected = "white",
-          session = session
-        )
-        
-        updatePickerInput(
-          inputId = "col_intervention",selected = "steelblue",
-          session = session
-        )
-        
-        
-        updatePickerInput(
-          inputId = "col_control",selected = "orange",
-          session = session
-        )
-        
-        # Notify the user that 
-        # that the colors are reset.
-        createAlert(
-          id = "myalert",
-          options = list(
-            title = "Alert",
-            closable = TRUE,
-            width = 12,
-            elevations = 10,
-            status = "info",
-            content = "Farverne er nulstillet!"
-          )
-        )
-        
-        # Autoclose the 
-        # the Alert after 3 seconds.
-        delay(
-          3000,
-          closeAlert(
-            id = "myalert"
-          )
-        )
-        
-        
-        
-      }
-    )
+    # observeEvent(
+    #   input$col_reset,ignoreInit = TRUE,ignoreNULL = TRUE,
+    #   {
+    #     
+    #     updatePickerInput(
+    #       inputId = "col_background",selected = "white",
+    #       session = session
+    #     )
+    #     
+    #     updatePickerInput(
+    #       inputId = "col_intervention",selected = "steelblue",
+    #       session = session
+    #     )
+    #     
+    #     
+    #     updatePickerInput(
+    #       inputId = "col_control",selected = "orange",
+    #       session = session
+    #     )
+    #     
+    #     # Notify the user that 
+    #     # that the colors are reset.
+    #     createAlert(
+    #       id = "myalert",
+    #       options = list(
+    #         title = "Alert",
+    #         closable = TRUE,
+    #         width = 12,
+    #         elevations = 10,
+    #         status = "info",
+    #         content = "Farverne er nulstillet!"
+    #       )
+    #     )
+    #     
+    #     # Autoclose the 
+    #     # the Alert after 3 seconds.
+    #     delay(
+    #       3000,
+    #       closeAlert(
+    #         id = "myalert"
+    #       )
+    #     )
+    #     
+    #     
+    #     
+    #   }
+    # )
     
     
     
@@ -248,26 +250,57 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     # message(class(data()))
     
     
+    
+    
+    
+    # TODO: Maybe BAZ should be moved inside
+    # the effect layer
     plot_data <- reactive(
-      data() %>% 
+      data %>%
         baz(
-          effect = intervention_effect(),
+          effect = intervention_effect,
           do_match = as.logical(input$do_match)
           )
       )
     
     
+    # Generate Plots
+    plot_list <- {
+
+      message("Generating Plots")
+
+        plot_data() %>%
+          baselayer() %>%
+          baseplot()
+
+      }
     
-      
+    
+    final_plot <- plot_list %>% 
+      effectlayer()
+    
+    # Adding Effect Layer; 
+    # final_plot <- isolate(
+    #   {
+    #     reactive(
+    #       {
+    #         message("Adding Effect Layer")
+    #         plot_list %>%
+    #           effectlayer()
+    #       }
+    # 
+    #     )
+    #   }
+    # )
+    
+    
+    
     
     
     
    
     # Create a container for the chosen
     # colors so the changes are applied globally.
-    
-  
-    library(parallel)
     
     
     
@@ -276,48 +309,46 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
       1:length(data()),
       .f = function(i) {
 
-        # TODO: Isolate These
-        # so they dont keep running!
-        message(
-          paste("Grinding plots. Currently at", i, "of", length(data()), "iterations.")
-        )
-
-
-
-
-
         output[[paste0("plot", i)]] <- renderPlotly(
           {
+            
+            
+              final_plot[[i]] %>%
+                subplot()
 
-
-
-
-            if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
-
-              shinyFeedback::feedbackDanger(
-                inputId = "pt_demographic",
-                !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
-                text = "Sammenligningen er problematisk!",
-                icon = NULL
-              )
-
-            }
-            chosen_colors <- reactiveValues(
-              control_color = input$col_control,
-              color_background = input$col_background,
-              color_intervention = input$col_intervention
-
-            )
-
-
-            plot_data()[[i]]  %>%
-              do_plot(
-                difference = input$do_difference,
-                show_baseline = input$show_baseline,
-                color_intervention = chosen_colors$color_intervention,
-                color_background    = chosen_colors$color_background,
-                color_control      = chosen_colors$control_color
-              )
+            # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+            # 
+            #   shinyFeedback::feedbackDanger(
+            #     inputId = "pt_demographic",
+            #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
+            #     text = "Sammenligningen er problematisk!",
+            #     icon = NULL
+            #   )
+            # 
+            # }
+            # chosen_colors <- reactiveValues(
+            #   control_color = input$col_control,
+            #   color_background = input$col_background,
+            #   color_intervention = input$col_intervention
+            # 
+            # )
+            # 
+            # 
+            # plot_data()[[i]]  %>%
+            #   do_plot(
+            #     difference = input$do_difference,
+            #     show_baseline = input$show_baseline,
+            #     color_intervention = chosen_colors$color_intervention,
+            #     color_background    = chosen_colors$color_background,
+            #     color_control      = chosen_colors$control_color
+            #   )
+            # plotly::plot_ly(
+            #   mtcars,
+            #   x = ~mpg,
+            #   y = ~hp,
+            #   type = "scatter",
+            #   mode = "markers"
+            # )
 
 
           }
@@ -352,6 +383,7 @@ main_dataserver <- function(id, data_list) {
   moduleServer(id, function(input, output, session) {
     
     
+    message("Executing Dataserver!")
     
     data <- reactive(
       {
@@ -361,14 +393,13 @@ main_dataserver <- function(id, data_list) {
           control          = paste(input$pt_control),
           allocators       = paste(input$pt_outcome),
           chars            = paste(input$pt_demographic),
-          alternate = TRUE
+          alternate = FALSE
         ) %>% foo()
         
       }
     )
     
     
-    message("data server done")
     
     
     return(

@@ -28,7 +28,7 @@ grinder <- function(
   
   
   
-  
+  get_char <- chars
   
   alternates <- fcase(
     isFALSE(alternate), "qty",
@@ -55,29 +55,61 @@ grinder <- function(
       # We always want the matching group
       # as a comparision
       
-      
       data <- tryCatch(
-        
-        # Treat Data as model_1
         expr = {
           data[
-            assignment %chin% c(intervention, control, "matching") &
-              outcome_type %chin% alternates &
-              type == 1 &
-              allocator %chin% c(allocators)
+            outcome_type %chin% alternates & type == 1
           ]
         },
-        
         error = function(cond) {
           
-          data[
-            assignment %chin% c(intervention, control, "matching") &
-              outcome_type %chin% c(allocators)
-          ]
           
+          data
           
         }
       )
+      
+      
+      # Robust Check for Characteristics
+      check_chars <- str_detect(
+        paste(get_char,collapse = ""),pattern = '[:alpha:]'
+      ) 
+      
+      
+      
+      
+      if (check_chars) {
+        
+        data <- data[
+          chars %chin% get_char
+        ]
+        
+      }
+      
+      
+      data <- data[
+        assignment %chin% c(intervention, control, "matching") &
+          allocator %chin% c(allocators) 
+      ]
+      # data <- tryCatch(
+      #   
+      #   # Treat Data as model_1
+      #   expr = {
+      #     
+      #   },
+      #   
+      #   error = function(cond) {
+      #     
+      #     message(paste(cond))
+      #     
+      #     data[
+      #       assignment %chin% c(intervention, control, "matching") &
+      #         allocator %chin% c(allocators)
+      #     ]
+      #     
+      #     
+      #   }
+      # )
       
       
       
@@ -106,7 +138,7 @@ grinder <- function(
             
             str_detect(
               name,
-              pattern = paste(c("year", "assignment", "allocator"), collapse = "|")
+              pattern = paste(c("x","year", "assignment", "allocator", "allocator"), collapse = "|")
             )
             
           }
@@ -299,302 +331,17 @@ grinder <- function(
 
 
 
-# plot_grinder; ####
-plot_grinder <- function(data, group_value = NULL) {
-  
-  # Function Information; #####
-  #' @param data data in wide format. Possibly extracted
-  #' from the grinder
-  #' 
-  #' @param group_vale a character vector of actual
-  #' group values. Ie. Male, Female etc.
-  #' 
-  #' @param group_variable a character vector of column
-  #' names containing those variables. Programmatically 
-  #' generated.
-  #' 
-  #' This function needs to to aggregate
-  #' by year and and outcome only. 
-  #' It will ouput the plotable data
-  #' such that the plot in question, will show
-  #' how much a female/male on Such and such uses, 
-  #' for example, primary care.
-  
-  
-  if (nrow(data) != 0) {
-    
-    # Store Class of the data;
-    get_class <- class(data)[3]
-    
-
-    data <- data[
-      ,
-      list(
-        outcome = mean(
-          outcome, na.rm = TRUE
-        )
-      )
-      ,
-      by = .(year, allocation, allocator)
-    ]
-    
-    
-    data <- data %>% dcast(
-      year + allocator ~ allocation,
-      value.var = "outcome"
-    )
-    
-    
-    # Outcome is the difference between
-    # Treatment and Control.
-    
-    tryCatch(
-      expr = {
-        
-        data[,
-             difference := sum(Intervention, -Control)
-             ,
-             by = 1:nrow(data)
-        ]
-        
-      },
-      
-      error = function(cond){
-        
-        # Test for missing column name and add
-        existing_columns <- colnames(data) %>%
-          str_extract(pattern = "Control|Intervention") %>% na.omit()
-        
-        # Needs the colums
-        needed_colums <- c("Control", "Intervention")
-        
-        # Extract missing COlums
-        missing_column <- needed_colums[!(needed_colums %chin% existing_columns)]
-        
-        data[
-          ,
-          (missing_column) := NA
-          ,
-        ]
-        
-        
-        data[,
-             `:=`(
-               difference = 0
-             )
-             
-             ,
-             by = 1:nrow(data)
-        ]
-        
-    
-      }
-    )
-    
-    
-    
-    # Reclass the data
-    class(data) <- c(class(data), get_class) 
-    
-  } else {
-    
-    data = NULL
-    
-  }
-  
-  
-  return(
-    data  
-  )
-  
-  
-}
 
 
 
-
-# table grinder; #####
-
-table_grinder <- function(data, group_value = NULL, do_aggregate = TRUE, intervention_cost = 1000, intervention_effect = 0.5) {
-  
-  #' @param data a data.table in long format. Should include only
-  #' one care type.
-  #' 
-  #' @param do_aggregate Logical. If TRUEit will calculate the costs
-  #' by group across all years
-  #' 
-  #' @param group_value Charcter Vector. These are the actual values
-  #' that are to be calculated
-  #' 
-  #' @return data.table in wideformat.
-  
-  
-  # Step 1) 
-  # Locate Group variables
-  
-  group_variable <- .extract_grouping(
-    group_value
-  )
-  
-  
-  # Step 2) 
-  # dcast to long and filter
-  data <- dcast(
-    data,
-    paste0(
-      paste(c("year",group_variable), collapse = "+"), "~ allocation"
-    ),
-    value.var = "outcome"
-  )
-  
-  if (!is.null(group_value)) {
-    
-    data <- data[eval(
-      parse(
-        text = paste(
-          group_variable,
-          sep = "%chin%",
-          quote(group_value),
-          collapse = "&"
-        )
-      )
-    )]
-  } 
-  
-  
-  
-  
-  
-  # step 3)
-  # reorder columns
-  # so Intervention is followed by Control
-  setcolorder(
-    data,
-    neworder = c(
-      setdiff(
-        colnames(data), c("intervention", "control")
-      ),
-      c("intervention","control")
-    )
-  )
-  
-  # step 3)
-  # Calculate differences
-  data[,difference := intervention - control,]
-  
-  
-  # Step 4)
-  # Conditional aggregation
-  if (do_aggregate) {
-    
-    # Calculate Differences by grop
-    # on an aggregate level
-    data <- data[,
-                 list(
-                   intervention = sum(intervention),
-                   control      = sum(control),
-                   difference   = sum(difference)
-                 ),
-                 by = c(group_variable)]
-    
-    # Calculate totals
-    totals <- data[,
-                   list(
-                     intervention = sum(intervention),
-                     control      = sum(control),
-                     difference   = sum(difference)
-                   )
-    ]
-    
-    # Bind the totals
-    data <- rbind(
-      data,
-      totals,
-      fill = TRUE
-    )
-    
-    
-    # Calculate effects
-    effect <- totals[,
-                     
-                     list(
-                       intervention = sum(intervention) * (1 - intervention_effect),
-                       control      = sum(control)
-                     )
-                     
-                     ,][
-                       ,
-                       difference := intervention - control
-                       ,
-                     ]
-    
-    
-    data <- rbind(
-      data,
-      effect,
-      fill = TRUE
-    )
-    
-    # Calculate the difference between
-    # the diference after the intervention effect
-    difference <- data.table(difference = totals$difference - effect$difference)
-    
-    data <- rbind(
-      data,
-      difference,
-      fill = TRUE
-    )
-  } else {
-    
-    
-    # Calculate Differences by grop
-    # on an aggregate level
-    data <- data[,
-                 list(
-                   intervention = sum(intervention),
-                   control      = sum(control),
-                   difference   = sum(difference)
-                 ),
-                 by = c("year",group_variable)]
-    
-    
-    # At this stage you can add effects and costs
-    # TODO: Do this at a later stage
-    
-    
-    # Reformat to Long
-    data <- melt(
-      data,
-      id.vars = c("year",group_variable),
-      variable.name = "group"
-    )
-    
-    # Reformat to Wide
-    data <- dcast(
-      data,
-      ... ~ year + group
-    )
-  }
-  
-  
-  return(
-    data
-  )
-  
-}
-
-
-
-
-
-
+# foo; #####
 foo <- function(data) {
   
   #' This function converts the data to wide
   #' 
   #' TODO: This should replace info_grinder and
   #' plot_grinder and table_grinder
-  message("Foo Invokes")
+  
   
   # NOTE: This could be moved to 
   # baz
@@ -620,6 +367,15 @@ foo <- function(data) {
       
       
       
+      group_cols <- .find_cols(
+        cols = colnames(data),
+        pattern = c("x", "year", "assignment", "allocator", "allocator"),
+        negate = FALSE
+      )
+      
+      
+      
+      
       data <- data[
         ,
         list(
@@ -628,65 +384,24 @@ foo <- function(data) {
           )
         )
         ,
-        by = .(year, assignment_factor, allocator)
+        by = c(group_cols)
       ]
       
       
-      data <- data %>% dcast(
-        year + allocator ~ assignment_factor,
-        value.var = "outcome"
-      )
-      
-     
-      
-      tryCatch(
-        expr = {
-          
-          
-          
-          
-          data[,
-               `:=`(
-                 cintervention = 0,
-                 difference = sum(-control, intervention),
-                 cdifference = 0
-               )
-               
-               ,
-               by = 1:nrow(data)
-          ]
-          
+      data <- tryCatch(
+        {
+          data %>% dcast(
+            year + allocator ~ assignment_factor,
+            value.var = "outcome"
+          )
         },
-        
-        error = function(cond){
+        error = function(cond) {
           
-          # Test for missing column name and add
-          existing_columns <- colnames(data) %>%
-            str_extract(pattern = "control|intervention") %>% na.omit()
+          data %>% dcast(
+            allocator ~ assignment_factor,
+            value.var = "outcome"
+          )
           
-          # Needs the colums
-          needed_colums <- c("control", "intervention")
-          
-          # Extract missing COlums
-          missing_column <- needed_colums[!(needed_colums %chin% existing_columns)]
-          
-          data[
-            ,
-            (missing_column) := NA
-            ,
-          ]
-          
-          
-          data[,
-               `:=`(
-                 cintervention = 0,
-                 difference = 0,
-                 cdifference = 0
-               )
-               
-               ,
-               by = 1:nrow(data)
-          ]
           
           
         }
@@ -694,23 +409,121 @@ foo <- function(data) {
       
       
       
+     
+
+
+
+      tryCatch(
+        expr = {
+
+
+
+
+          data[,
+               `:=`(
+                 cintervention = 0,
+                 difference = sum(-control, intervention),
+                 cdifference = 0
+               )
+
+               ,
+               by = 1:nrow(data)
+          ]
+
+        },
+
+        error = function(cond){
+
+          # Test for missing column name and add
+          existing_columns <- colnames(data) %>%
+            str_extract(pattern = "control|intervention") %>% na.omit()
+
+          # Needs the colums
+          needed_colums <- c("control", "intervention")
+
+          # Extract missing COlums
+          missing_column <- needed_colums[!(needed_colums %chin% existing_columns)]
+
+          data[
+            ,
+            (missing_column) := NA
+            ,
+          ]
+
+
+          data[,
+               `:=`(
+                 cintervention = 0,
+                 difference = 0,
+                 cdifference = 0
+               )
+
+               ,
+               by = 1:nrow(data)
+          ]
+
+
+        }
+      )
+
+
+
+
+      tryCatch(
+        {
+          
+          data[
+            year <= 0,
+            `:=`(
+              cintervention = NA,
+              cdifference   = NA,
+              difference    = NA
+            )
+          ]
+          
+        },
+        
+        error = function(cond) {
+          
+          NULL
+          
+        }
+      )
       
       
-      data[
-        year <= 0,
-        `:=`(
-          cintervention = NA,
-          cdifference   = NA,
-          difference    = NA
+      # Rename Columns such
+      # that it can be fed into
+      # the plot functions without 
+      # troubles
+      setnames(
+        data,
+        old = c("year"),
+        new = c("x"),
+        skip_absent = TRUE
+      )
+      
+      
+      # This needs to be in foo
+      if (store_class == "children") {
+        
+        
+        setnames(
+          data,
+          old = c("allocator"),
+          new = c("x"),
+          skip_absent = TRUE
         )
-      ]
+        
+        
+      }
       
-      
+
+
       # Reclass the data
       class(data) <- c(class(data), store_class)
-      
+
       setDT(data)
-      
+
       return(data)
       
       
@@ -718,12 +531,13 @@ foo <- function(data) {
   )
   
   
+  
   return(data)
   
 
 }
 
-
+# baz; ####
 baz <- function(data, effect, do_match = FALSE) {
   
   #' Function Information
@@ -755,18 +569,12 @@ baz <- function(data, effect, do_match = FALSE) {
         
       }
       
-      
-      data <- copy(data[[i]])
-      
-     
-      
-      
+
       
       # It has to be a copy
       # otherwise it overwrites data
       # in memory!!!
-      
-      
+      data <- copy(data[[i]])
       
       if (is.null(data)) {
         
@@ -775,8 +583,6 @@ baz <- function(data, effect, do_match = FALSE) {
       }
       
       
-      # If user choses matching 
-      # option then effect should be recalculated
       if (do_match) {
         
         # Replace Population with
@@ -795,7 +601,7 @@ baz <- function(data, effect, do_match = FALSE) {
         ]
         
         data[
-          year <= 0,
+          x <= 0,
           `:=`(
             cintervention = NA,
             cdifference   = NA,
@@ -809,7 +615,7 @@ baz <- function(data, effect, do_match = FALSE) {
       store_class <- class(data)[3]
       
       data[
-        year > 0
+        x > 0
         ,
         effect := (effect/100)
         ,
@@ -823,16 +629,79 @@ baz <- function(data, effect, do_match = FALSE) {
           # Was abs - but not used.
           cintervention = max(intervention - ((difference * effect)),0)
         ),
-        by = .(allocator, year)
+        by = .(allocator, x)
       ]
 
       data[
-        year == 0,
+        x == 0,
         `:=`(
           cintervention = intervention
         )
 
       ]
+      
+      class(data) <- c(class(data), store_class)
+      
+      
+      return(data)
+      
+    }
+  )
+  
+
+  
+}
+
+
+
+
+
+
+
+
+
+
+baz1 <- function(data, effect) {
+  
+  
+  #' function information
+  #' 
+  #' @param data list of data from 
+  #' the second model
+  #' 
+  #' @param effect an effect value
+  #' that will calculate effects
+  #' 
+  #' @returns the same data with added effects
+  
+  map(
+    seq_along(data),
+    .f = function(i) {
+      
+      # Extract Data
+      data <- copy(data[[i]])
+      
+      
+      # Extract the Class; 
+      store_class <- class(data)[3]
+      
+      # Skip NULLS
+      if (is.null(data)) {
+        
+        return(NULL)
+        
+      }
+      
+      # Calculate effects
+      data[
+        ,
+        `:=`(
+          cdifference = difference * effect/100,
+          cintervention = max(intervention - ((difference * (effect/100))),0)
+        )
+        ,
+      ]
+      
       
       class(data) <- c(class(data), store_class)
       
@@ -843,16 +712,33 @@ baz <- function(data, effect, do_match = FALSE) {
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

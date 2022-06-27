@@ -7,6 +7,180 @@
 # unique to this specific UI and are therefore hidden
 # and not appart of utils
 
+tmpsidebar <- function(id, input,output) {
+  
+  ns <- NS(id)
+  
+  bs4CardSidebar(
+  width = 25,icon = span("Indstillinger", icon("cog")),
+  background = "#bfc9d1",
+  startOpen = FALSE,
+  id = "id_placeholder",
+  
+  
+  
+  tabsetPanel(
+    id = "tabcard",type = "pills",
+    tabPanel(
+      title = "Parametre",
+      tmp_opts(id, output)
+      
+    ),
+    tabPanel(
+      title = "Effektforventninger", 
+      column(
+        width = 12,
+        map(
+          1:5,
+          .f = function(i) {
+            
+            sliderInput(
+              inputId = ns(paste0("effect_", i)),
+              label = paste("Tid", i),
+              min = 0,
+              max = 100,
+              value = round(runif(1, min = 0, max = 100))
+            )
+          }
+        )
+      )
+      
+      
+    ),
+    tabPanel(
+      title = "Visuelle Indstillinger", 
+      conditionalPanel(
+        condition = "input.change_view == 'see_plot'",
+        {
+          column(
+            width = 12,
+            h5("Grafindstillinger"),
+            materialSwitch(
+              inputId = ns("show_baseline"),
+              value = TRUE,
+              status = "info",
+              label = "Vis Befolkningsværdi"
+            ) %>% popover(
+              placement = "bottom",
+              title = "Skal den generelle befolkning vises?",
+              content = "Skal den generelle befolkning vises?"
+            ),
+            
+            pickerInput(
+              inputId = ns("col_intervention"),
+              label = "Intevention",
+              selected = "steelblue",
+              choices = colors(),
+              options = list(
+                `live-search` = TRUE,
+                `size` = 5)
+            ),
+            
+            pickerInput(
+              inputId = ns("col_control"),
+              label = "Control",
+              selected = "orange",
+              choices = colors(),
+              options = list(
+                `live-search` = TRUE,
+                `size` = 5)
+            ),
+            
+            pickerInput(
+              inputId = ns("col_background"),
+              label = "Population",
+              selected = "white",
+              choices = colors(),
+              options = list(
+                `live-search` = TRUE,
+                `size` = 5)
+            ),
+            
+            actionButton(
+              inputId = ns("col_reset"),
+              label = "Nulstil Farver"
+            )
+            
+            
+          )
+        }
+      ),
+      
+      conditionalPanel(
+        condition = "input.change_view == 'see_table'",
+        
+        {
+          
+          column(
+            width = 12,
+            h5("Tabelindstillinger"),
+            materialSwitch(
+              inputId = ns("show_basseline"),
+              value = TRUE,
+              status = "info",
+              label = "Vis Noget andet"
+            ) %>% popover(
+              placement = "bottom",
+              title = "Skal den generelle befolkning vises?",
+              content = "Skal den generelle befolkning vises?"
+            ),
+            
+            pickerInput(
+              inputId = ns("col_intersvention"),
+              label = "Intevention",
+              selected = "steelblue",
+              choices = colors(),
+              options = list(
+                `live-search` = TRUE,
+                `size` = 5)
+            ),
+            
+            pickerInput(
+              inputId = ns("col_consrol"),
+              label = "Control",
+              selected = "orange",
+              choices = colors(),
+              options = list(
+                `live-search` = TRUE,
+                `size` = 5)
+            ),
+            
+            pickerInput(
+              inputId = ns("col_bacdkground"),
+              label = "Population",
+              selected = "white",
+              choices = colors(),
+              options = list(
+                `live-search` = TRUE,
+                `size` = 5)
+            ),
+            
+            actionButton(
+              inputId = ns("col_resset"),
+              label = "Nulstil Farver"
+            )
+            
+            
+          )
+          
+        }
+      )
+    )
+  )
+  
+  
+  
+  
+  
+  
+  
+  
+  
+)
+}
+
+
+
 .box_resultmain <- function(id,output, ...) {
   
   ns <- NS(id)
@@ -227,7 +401,7 @@
 # This UI element collects all choices
 # in the information boxes for the
 # user to see what is chosen
-model1UI_choices <- function(id, output) {
+model1UI_choices <- function(id, output,input) {
   
   ns <- NS(id)
   
@@ -316,7 +490,7 @@ model1UI_choices <- function(id, output) {
 # This UI element collects the key-performance
 # indicators of the final results.
 
-model1UI_performance <- function(id, output, id_value) {
+model1UI_performance <- function(id, output, input, id_value) {
   
   
   #' function information;
@@ -417,7 +591,7 @@ model1UI_performance <- function(id, output, id_value) {
 # This box is where all the main results
 # go.
 
-model1UI_output <- function(id, output) {
+model1UI_output <- function(id, output, input) {
   
   #' function information
   #' 
@@ -436,159 +610,11 @@ model1UI_output <- function(id, output) {
       width = 12,
       
       
-      
-      conditionalPanel(
-        condition = "input.change_view == 'see_plot'",
-        {
-          column(
-            width = 12,
-            do.call(
-              tabsetPanel,
-              c(
-                type = "pills",
-                
-                map(
-                  seq_along(tabset_names),
-                  .f = function(i) {
-                    
-                    
-                    
-                    
-                    icon_name <- fcase(
-                      tabset_names[i] %chin% c("primary_care"), "stethoscope",
-                      tabset_names[i] %chin% c("psychiatric_care"), "couch",
-                      tabset_names[i] %chin% c("somatic_care"), "hospital",
-                      tabset_names[i] %chin% c("transfers"), "briefcase"
-                      
-                    )
-                    
-                    
-                    
-                    
-                    
-                    tabPanel(
-                      title = paste(
-                        fcase(
-                          tabset_names[i] %chin% c("primary_care"), "Almen praksis",
-                          tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
-                          tabset_names[i] %chin% c("somatic_care"), "Somatik",
-                          tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
-                          
-                        )
-                        
-                        
-                      ),
-                      
-                      
-                      icon = icon(icon_name),
-                      value = ns(paste0("tab",i)),
-                      br(),
-                      
-                      
-                      # Add Conditional Panel
-                      # to view graph or tables
-                      
-                      
-                      plotlyOutput(
-                        outputId = ns(paste0("plot",i))
-                      ),
-                      
-                      hr(),
-                      
-                      model1UI_performance(
-                        id_value = paste0("effect",i),
-                        id,
-                        output
-                      )
-                      
-                      
-                      
-                      
-                      
-                      
-                    )
-                    
-                    
-                    
-                  }
-                  
-                )
-              )
-            )
-          )
-        }
-      ),
-      
-      conditionalPanel(
-        condition = "input.change_view == 'see_table'",
-        {
-          column(
-            width = 12,
-            do.call(
-              tabsetPanel,
-              c(
-                type = "pills",
-                
-                map(
-                  seq_along(tabset_names),
-                  .f = function(i) {
-                    
-                    
-                    
-                    
-                    icon_name <- fcase(
-                      tabset_names[i] %chin% c("primary_care"), "stethoscope",
-                      tabset_names[i] %chin% c("psychiatric_care"), "couch",
-                      tabset_names[i] %chin% c("somatic_care"), "hospital",
-                      tabset_names[i] %chin% c("transfers"), "briefcase"
-                      
-                    )
-                    
-                    
-                    
-                    
-                    
-                    tabPanel(
-                      title = paste(
-                        fcase(
-                          tabset_names[i] %chin% c("primary_care"), "Almen praksis",
-                          tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
-                          tabset_names[i] %chin% c("somatic_care"), "Somatik",
-                          tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
-                          
-                        )
-                        
-                        
-                      ),
-                      
-                      
-                      icon = icon(icon_name),
-                      value = ns(paste0("tabs",i)),
-                      br(),
-                      DT::dataTableOutput(
-                        outputId = ns(paste0("table",i))
-                      ),
-                      hr(),
-                      
-                      model1UI_performance(
-                        id_value = paste0("effect",i),
-                        id,
-                        output
-                      )
-                      
-                      
-                    )
-                    
-                    
-                    
-                  }
-                  
-                )
-              )
-            )
-          )
-        }
-      )
+      temp_box(
+        input = input,
+        output = output,
+        id = id
+        )
     )
   )
   
@@ -601,7 +627,7 @@ model1UI_output <- function(id, output) {
 # and collects them
 
 
-model1UI_body <- function(id,output) {
+model1UI_body <- function(id,output,input) {
   
   ns <- NS(id)
   
@@ -615,17 +641,23 @@ model1UI_body <- function(id,output) {
     
     div(id = ns("myalert"), style = "position: absolute; bottom: 0; right: 0;"),
     # Infobox
-    model1UI_choices(id,output),
+    model1UI_choices(id,output,input),
     
     
     
-    .box_resultmain(
-      id = id,
-      output = output,
-      model1UI_output(id,output)
-      
-      
-    )
+    # .box_resultmain(
+    #   id = id,
+    #   output = output
+    # 
+    # 
+    # 
+    # ),
+    
+    model1UI_output(
+      id,
+      output,
+      input
+      )
     
     
     
@@ -641,3 +673,19 @@ model1UI_body <- function(id,output) {
   
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

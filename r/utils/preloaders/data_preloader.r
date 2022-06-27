@@ -21,6 +21,9 @@
   #' 
   #' @return data.table in long format
   
+  # extract class; ####
+  get_class <- class(data)[3]
+  
   # helper function; ####
   # define a function that locates the relevant
   # colums to be converted
@@ -65,6 +68,7 @@
   idx <- find_idx(
     colnames(data),
     pattern = c(
+      "x",
       "year",
       "\\btype",
       "assignment",
@@ -115,12 +119,87 @@
   )
   
   
+  #3) If the column names does not include
+  # 'allocator' then outcome_type should be
+  # allocator
+  if (sum(colnames(data) %chin% c("allocator")) == 0) {
+    
+    setnames(
+      data,
+      old = "outcome_type",
+      new = "allocator"
+    )
+    
+  }
+  
+  
+  class(data) <- c(class(data), get_class)
   
   # return statement
   
   return(
-    data
+    setDT(data)
   )
+  
+  
+}
+
+
+
+# preload data; ####
+
+preload_data <- function(developper_mode = FALSE) {
+  
+  
+  
+  if (developper_mode) {
+    
+    message("Preloaded Data (Developper Mode)")
+    
+    generate_data()
+    
+  } else {
+    
+    message("Preloaded Data (Live Mode)")
+    
+    get_names <- list.files(
+      path = "input/data/"
+    ) %>% str_remove(".csv")
+    
+    get_path <- list.files(
+      path = "input/data/",
+      full.names = TRUE
+    ) 
+    
+    seq_along(get_path) %>% map(
+      .f = function(i) {
+        
+        data <- fread(
+          get_path[i],
+          encoding = 'UTF-8',
+          nThread = 4,na.strings = ""
+        )
+        
+        class(data) <- c(
+          class(data),
+          get_names[i]
+        )
+        
+        data
+        
+      }
+    ) %>% set_names(
+      get_names
+    )
+    
+    
+  }
+  
+  
+  
+  
+  
+  
   
   
 }

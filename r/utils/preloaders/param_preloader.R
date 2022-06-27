@@ -7,64 +7,138 @@
 
 
 
-get_char <- function(data_list) {
-  
+
+
+.get_outcomes <- function(data_list, variable = "allocator") {
   
   #' function information
   #' 
   #' @param data_list the entire
   #' list of data. This is of length 2, as
   #' there are two data models
-  
-  
-  # TODO: These needs to be listed
-  # such that they are pretty.
-  list(
-    
-    data_list[[1]][[1]]$chars %>% unique(),
-    data_list[[2]][[1]]$chars %>% unique()
-    
-    
-  )
-  
-  
-  
-}
-
-
-
-get_outcomes <- function(data_list) {
-  
-  #' function information
   #' 
-  #' @param data_list the entire
-  #' list of data. This is of length 2, as
-  #' there are two data models
+  #' @returns a named list of choice parameters
+  #' for the model.
   
+  # 1) Store the variable name
+  # as.name otherwsise it cant be evaluated.
+  variable <- as.name(
+    variable
+    )
+  
+  
+  # 1) Iterate through the list
+  # which has two elements, nesting
+  # multiple datasets
   map(
     data_list,
     function(get_list) {
       
       
-      get_list %>% map(
+      # Create a data.table
+      # based on the choices in each element
+      # of the list
+      choices <- get_list %>% map(
         function(data) {
           
-          outcome = unique(
-            tryCatch(
-              data[,.(outcome = allocator),],
-              error = function(cond) {
-                
-                data[,.(outcome = outcome_type),]
-                
-              }
-            )
+          
+          
+        # Extract Unique Choices
+        # from the data based on the variable
+        # name.
+         get_choice <-  unique(
+           data[,.(tmp = eval(variable)),]
           )
-          
-          
+         
+         
+         
+         # Split in class subclass
+         # for the named list
+         get_choice <- unique(get_choice[
+           ,
+           c("class", "subclass") := tstrsplit(tmp, "_", fixed = TRUE)
+           ,
+         ][,.(class, subclass),])
+         
+         
+         
+         
+         
+
+         
+         
+
           
           
         }
-      ) %>% rbindlist()
+      ) %>% rbindlist()  
+      
+      # While the choices are unique by default
+      # there are repeated measures in each set
+      # this is true for characteristics across
+      # the first model
+      choices <- unique(
+        choices
+        )
+      
+      
+      # The actual value of choice
+      # is based on wether the class
+      # subclass is repeated.
+      actual_choice <- fifelse(
+        
+        choices$class %chin% choices$subclass
+        ,
+        yes = paste0(choices$class),
+        no = paste0(
+          choices$class,
+          "_",
+          choices$subclass
+        )
+      )
+      
+      # The named list internally
+      # groups the choices if the
+      # actual values includes _ then
+      # it should be grouped. Otherwise
+      # not.
+      name_for_list <- 
+        fifelse(
+          
+          str_detect(actual_choice,pattern = "_")
+          ,
+          yes = paste0(choices$class),
+          no = fifelse(
+            str_detect(actual_choice,pattern = "år"),
+            yes = "Aldersgruppe",
+            no  = paste0(choices$class)
+          )
+        )
+      
+      # Generate a named list of choices
+      # for the model
+      split(
+        
+        
+        setNames(
+          
+          
+          actual_choice
+          
+          
+          ,
+          
+          # The shown value on the list
+          # that appears to the user.
+          choices$subclass
+        ),
+        
+        
+        name_for_list
+        
+    
+        
+      )
       
       
     }
@@ -75,197 +149,18 @@ get_outcomes <- function(data_list) {
 
 
 
-get_assignment <- function(data_list) {
-  
-  #' function information
-  #' 
-  #' @param data_list the entire
-  #' list of data. This is of length 2, as
-  #' there are two data models
-  
-  map(
-    data_list,
-    function(get_list) {
-      
-      
-      get_list %>% map(
-        function(data) {
-          
-          unique(
-            data[,.(assignment),]
-          )
-          
-          
-          
-          
-        }
-      ) %>% rbindlist() %>% unique()
-      
-      
-    }
-  )
-  
-  
-  
-}
 
 
-
-gen_option <- function(data_list) {
+# A hidden wrapper of the oucomes
+# visible to the user.
+.gen_option <- function(data_list) {
   
   list(
-    chars      = get_char(data_list),
-    assignment = get_assignment(data_list),
-    outcome    = get_outcomes(data_list)
+    chars      = .get_outcomes(data_list,variable = "chars"),
+    assignment = .get_outcomes(data_list, variable = "assignment"),
+    outcome    = .get_outcomes(data_list, variable = "allocator")
   )
   
   
 }
 
-
-
-# Outdate; ####
-# # NOTE: This Works!!!!
-# 
-# gen_option <- function(data) {
-#   
-#   
-#   
-#   # Split Disease
-#   data <- unique(data[
-#     ,
-#     c("class", "subclass") := tstrsplit(disease, "_", fixed = TRUE)
-#     ,
-#   ], by = c("disease", "class", "subclass"))
-#   
-#   
-#   get_option <- unique(data$class) %>% map(
-#     .f = function(unique_class) {
-#       
-#       
-#       # Extract the Data
-#       data <- data[class %chin% unique_class][]
-#       
-#       list(
-#         setNames(data$disease,as.vector(data$subclass))
-#       ) %>% set_names(unique_class)
-#       
-#       
-#       
-#       
-#     }
-#   ) %>% flatten()
-#   
-#   
-#   return(
-#     get_option
-#   )
-#   
-# }
-# 
-# 
-# 
-# gen_demographics <- function() {
-#   
-#   # Extract Demographics;
-#   data <- data_list[[1]][,-c("year", "disease", "allocator", "outcome", "type", "class", "subclass")]
-#   
-#   
-#   
-#   
-#   1:ncol(data) %>% map(
-#     
-#     .f = function(col) {
-#       
-#       unique(data[[col]])
-#       
-#       
-#     }
-#     
-#   ) %>% set_names(colnames(data))
-# }
-# 
-# 
-# 
-# 
-# 
-# get_options <- function() {
-#   
-#   path <- list.files(
-#     path = "input/parameters/",
-#     full.names = TRUE
-#   )
-#   
-#   get_names <- list.files(
-#     path = "input/parameters/",
-#     full.names = FALSE
-#   ) %>% str_extract(pattern = "[:alpha:]+")
-#   
-#   options <-  path %>% map(
-#     .f = function(path) {
-#       
-#       data <- fread(
-#         path,
-#         encoding = "UTF-8",
-#         sep = ";"
-#         )
-#       
-#       data <- data[
-#         ,
-#         
-#         c("class", "subclass") := tstrsplit(x, "_", fixed = TRUE)
-#         
-#         ,
-#         ]
-#       
-#       
-#       
-#       unique(data$class) %>% map(
-#         .f = function(unique_class) {
-#           
-#           data <- data[class %chin% unique_class][]
-#           
-#           list(
-#             setNames(
-#               # The Actual Values
-#               #data$class,
-#               paste0(data$class, "_", data$subclass),
-#               
-#               # The Shown Value
-#               as.vector(data$subclass)
-#               )
-#           ) %>% set_names(unique_class)
-#           
-#         }
-#       ) %>% flatten() 
-#       
-#       
-#       
-#       #%>% set_names(data$class)
-#       
-#       
-#       
-#       
-#       
-#     }
-#   ) %>% set_names(get_names)
-#   
-#   
-#   return(
-#     list(
-#       diseases = options$diseases,
-#       demographics = options$demographics,
-#       allocator    = options$allocator
-#     )
-#   )
-#   
-# }
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 

@@ -101,7 +101,7 @@ bs4DashPage(
       
       menuItem(
         text = "Vælg Model",
-        startExpanded = FALSE,
+        startExpanded = TRUE,
         icon = icon("cog", verify_fa = FALSE),
         
         menuSubItem(
@@ -111,6 +111,28 @@ bs4DashPage(
         menuSubItem(
           text = "Forældremodellen",
           tabName = "model_2"
+        )
+        
+      ),
+      
+      menuItem(
+        text = "Data",
+        startExpanded = TRUE,
+        icon = icon("cog", verify_fa = FALSE),
+        
+        menuSubItem(
+          text = "Model Dokumentation",
+          tabName = "documentation"
+        ),
+        
+        menuSubItem(
+          text = "VIVEs Dokumentation",
+          tabName = "report"
+        ),
+        
+        menuSubItem(
+          text = "Download Data",
+          tabName = "prepare_data"
         )
         
       )
@@ -131,6 +153,38 @@ bs4DashPage(
     #   includeCSS("www/theme.css")
     # ),
     includeCSS("www/theme.css"),
+    
+    
+    #temp_box(),
+    # tabBox(
+    #   id = "tabcard",
+    #   title = "A card with tabs",
+    #   selected = "Tab 2",
+    #   status = "primary",
+    #   solidHeader = FALSE,
+    #   type = "tabs",
+    #   tabPanel(
+    #     title = "Tab 1",
+    #     "Content 1"
+    #   ),
+    #   tabPanel(
+    #     title = "Tab 2",
+    #     "Content 2"
+    #   ),
+    #   tabPanel(
+    #     title = "Tab 3",
+    #     "Content 3"
+    #   )
+    #   ),
+    
+    
+    # tags$style("
+    #           body {
+    # -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
+    # zoom: 0.8; /* Other non-webkit browsers */
+    # zoom: 80%; /* Webkit browsers */"
+    # }
+    # ),
     # CSS Code;
     # TODO: Migrate to External file
     # tags$head(tags$style('#test .card-header{ display: none}')),
