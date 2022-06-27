@@ -186,61 +186,7 @@ convert_text <- function() {
 }
 
 
-preload_data <- function(developper_mode = FALSE) {
-  
-  
-  
-  if (developper_mode) {
-    
-    message("Preloaded Data (Developper Mode)")
-    
-    generate_data()
-    
-  } else {
-    
-    message("Preloaded Data (Live Mode)")
-    
-    get_names <- list.files(
-      path = "input/data/"
-    ) %>% str_remove(".csv")
-    
-    get_path <- list.files(
-      path = "input/data/",
-      full.names = TRUE
-    ) 
-    
-    seq_along(get_path) %>% map(
-      .f = function(i) {
-        
-        data <- fread(
-          get_path[i],
-          encoding = 'UTF-8',
-          nThread = 4,na.strings = ""
-          )
-        
-        class(data) <- c(
-          class(data),
-          get_names[i]
-        )
-        
-        data
-        
-      }
-    ) %>% set_names(
-      get_names
-    )
-    
-    
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-}
+
 
 
 
@@ -379,6 +325,7 @@ generate_data <- function() {
     ,
   ]
   
+  class(model_2) <- c(class(model_2), "children")
   
   
   return(

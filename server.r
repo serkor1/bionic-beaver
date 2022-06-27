@@ -1,5 +1,7 @@
 server <- function(input, output, session) {
   
+  
+  
   # UI - Rendering; #####
   # 
   # It is based on input$tab
@@ -108,61 +110,138 @@ server <- function(input, output, session) {
 
   # Generate Data for Model 1
   
+  data <- main_dataserver(
+    id = "model1",
+    data_list = data_list[[1]]
+  )
+  
+  effect <- main_effectserver(
+    id = "model1",
+    data = data() # Was isolated
+  )
+  
+  
+  
+  data2 <- second_dataserver(
+    id = "model2",
+    data_list = data_list[[2]]
+  )
+  
   
   observe({
-    if (input$tab == "model_1") {
-      
-      data <- isolate(
-        {
-          reactive(
-            main_dataserver(id = "model1",data_list = data_list[[1]])
-          )
-        }
-      )
-      
-      
-      
-      
-      effect <- reactive({
-        main_effectserver(
-          id = "model1",
-          data = data()
-        )
-      })
-      
-      
-      
-      
-      main_warnings(
-        id = "model1"
-      )
-      
-      
-      
-      # Generate Chosen Parameters
-      main_choiceserver(
-        id = "model1",
-        data = data()
-      )
-      
-      # Generate Plots
-      main_plotserver(
-        id = "model1",
-        data = data(),
-        intervention_effect = effect(),
-        light_mode = reactive(input$customSwitch1)
-      )
-      
-      main_tableserver(
-        id = "model1",
-        data = data(),
-        intervention_effect = effect()
-      )
-      
-    }
-  }
+    
+    main_plotserver(
+      id = "model1",
+      data = data(),
+      intervention_effect = effect(),
+      light_mode = reactive(input$customSwitch1)
+    )
+    
+    
+    second_plotserver(
+      id   = 'model2',
+      data = data2() 
+    )
+    
+  })
   
-  )
+  
+  
+  # 
+  # observe({
+  #   if (input$tab == "model_1") {
+  #     
+  #     message("In Model 1 Observer")
+  #     
+  #     # data <- (
+  #     #   {
+  #     #     reactive(
+  #     #       main_dataserver(
+  #     #         id = "model1",
+  #     #         data_list = data_list[[1]]
+  #     #         )
+  #     #     )
+  #     #   }
+  #     # )
+  #     
+  #     
+  #     data <- main_dataserver(
+  #         id = "model1",
+  #         data_list = data_list[[1]]
+  #       )
+  #     
+  # 
+  # 
+  #     
+  #     
+  #     # effect <- isolate(reactive({
+  #     #   main_effectserver(
+  #     #     id = "model1",
+  #     #     data = data
+  #     #   )
+  #     # }))
+  #     
+  #     effect <- main_effectserver(
+  #         id = "model1",
+  #         data = isolate(data())
+  #       )
+  #     
+  # 
+  # 
+  # 
+  # 
+  #     # main_warnings(
+  #     #   id = "model1"
+  #     # )
+  # 
+  # 
+  # 
+  #     # Generate Chosen Parameters
+  #     # main_choiceserver(
+  #     #   id = "model1",
+  #     #   data = data
+  #     # )
+  #     
+  #     # Generate Plots
+  #     main_plotserver(
+  #       id = "model1",
+  #       data = data(),
+  #       intervention_effect = effect,
+  #       light_mode = reactive(input$customSwitch1)
+  #     )
+  #     
+  #     # main_tableserver(
+  #     #   id = "model1",
+  #     #   data = data(),
+  #     #   intervention_effect = effect()
+  #     # )
+  #     
+  #   } else {
+  #     
+  #     
+  #     # data <- isolate(
+  #     #   {
+  #     #     reactive(
+  #     #       main_dataserver(
+  #     #         id = "model2",
+  #     #         data_list = data_list[[2]]
+  #     #         )
+  #     #     )
+  #     #   }
+  #     # )
+  #     # 
+  #     # second_plotserver(
+  #     #   id = "model2",
+  #     #   data = data()
+  #     # )
+  #     
+  #     
+  #     
+  #     
+  #   }
+  # }
+  # 
+  # )
   
   
   

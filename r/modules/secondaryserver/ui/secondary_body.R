@@ -27,7 +27,59 @@
       id = "tabcards",
       type = "pills",
       tabPanel(
-        title = "Tab1",icon = icon("cog")
+        title = "Parametre",icon = icon("cog"),
+        
+        column(
+          width = 12,
+          
+          fluidRow(
+            
+            vive_picker(
+              id = ns("pt_target"),
+              title = "Gruppe",
+              header = "Vælg Gruppe",
+              choices = assignment[[2]]
+            ),
+            
+            vive_picker(
+              id = ns("pt_control"),
+              title = "Sammenligningsgruppe",
+              header = "Vælg Sammenligningsgruppe",
+              choices = assignment[[2]],
+              multiple = FALSE
+            ),
+            
+            vive_picker(
+              id = ns("pt_outcome"),
+              title = "Outcomes",
+              header = "Vælg Outcomes",
+              choices = outcome[[2]],
+              multiple = TRUE,
+              selectAllText = "Vælg Alle",
+              deselectAllText = "Nulstil"
+            ),
+            
+            
+            
+            vive_picker(
+              id = ns("pt_demographic"),
+              title = "Demografi",
+              header = "Vælg Demografiske",
+              choices = chars[[2]],
+              multiple = TRUE,
+              selectAllText = "Vælg Alle",
+              deselectAllText = "Nulstil"
+            ),
+            
+          )
+          
+        )
+        
+        
+        
+        
+        
+        
       ),
       tabPanel(
         title = "Tab2"
@@ -88,7 +140,21 @@ model2UI_body <- function(id, output) {
       
     ),
     fluidRow(
-      .box_main(id, output)
+      .box_main(
+        id,
+        output,
+        
+        
+        plotlyOutput(
+          {
+            
+            outputId = ns("plot")
+            
+          }
+        )
+        
+        
+        )
     )
     
     

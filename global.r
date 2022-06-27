@@ -64,14 +64,13 @@ system.time(
 
 
 # version;
-version <- c("v0.2.1")
-
+version <- c("v0.3.1")
 
 
 
 # Preloading Options; #####
 
-load_parameters <- gen_option(
+load_parameters <- .gen_option(
   data_list = data_list
 )
 
@@ -80,28 +79,3 @@ chars      <- load_parameters$chars
 assignment <- load_parameters$assignment
 outcome    <- load_parameters$outcome
 
-
-
-# # All options are created
-# # and are on the form [class]_[subclass]
-# options <- get_options()
-# 
-# diseases <- options$diseases
-# 
-# 
-# 
-# outcomes <- options$allocator
-# 
-# # demographics are constructed as
-# # variable_value
-# demographics <-  options$demographics %>% 
-#   map(
-#     .f = function(element) {
-#       str_remove(
-#         element,
-#         pattern = "[:alpha:]+_"
-#       )
-#       
-#       }
-#     
-#     )
