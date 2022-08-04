@@ -1,0 +1,308 @@
+# script: Grinder
+# objective: Create a wrapper function for all related grinder
+# functions.
+# date: 2022-07-29
+# author: Serkan Korkmaz
+
+
+.grind_model1 <- function(
+    data_list,
+    intervention = NULL,
+    control = NULL,
+    allocators = NULL,
+    chars = NULL,
+    do_incidence = TRUE
+) {
+  
+  
+  #' function information;
+  #' 
+  #' 
+  #' @param data_list a list of data.tables
+  #' from model1.
+  
+  char_logical <- isTRUE(
+    str_detect(
+      string = paste(chars, collapse = "|"),
+      pattern = "[:alpha:]"
+    )
+  )
+
+  do_char <- fcase(
+    char_logical, TRUE,
+    default = FALSE
+  )
+  
+  
+  do_incidence <- fcase(
+    isTRUE(do_incidence), 1,
+    default = 0
+  )
+  
+  
+  
+  
+  # function logic; ####
+  data_list <- map(
+    data_list,
+    .f = function(data) {
+      
+      # filter according to incidence
+      data <- data[
+        type == do_incidence
+      ]
+      
+      
+      # filter according to characteristics
+      if (do_char) {
+        
+        
+        extract_id <- .extract_id(
+          lookup = lookup[[1]],
+          chars = chars
+        )
+        
+        
+        data <- data[
+          id %in% extract_id
+        ]
+        
+      }
+      
+      
+      # classify data
+      data <- data[
+        assignment %chin% c(intervention, control, "matching") &
+          allocator %chin% c(allocators) 
+      ]
+      
+      
+      # 2) classify accordingly
+      data[
+        ,
+        assignment_factor := fcase(
+          assignment %chin% "matching", "population",
+          assignment %chin% intervention, "intervention",
+          assignment %chin% control, "control"
+        )
+        ,
+      ]
+      
+      
+      setnames(
+        data,
+        old = c("year"),
+        new = c("x"),
+        skip_absent = TRUE
+      )
+      
+      
+      
+    }
+  )
+  
+}
+
+
+
+.grind_model2 <- function(
+    data_list,
+    intervention = NULL,
+    control = NULL,
+    allocators = NULL,
+    chars = NULL
+) {
+  
+  
+  #' function information
+  #'
+  #'
+  #'
+  #'
+  
+  
+  # global options
+  char_logical <- isTRUE(
+    str_detect(
+      string = paste(chars, collapse = "|"),
+      pattern = "[:alpha:]"
+    )
+  )
+  
+  do_char <- fcase(
+    char_logical, TRUE,
+    default = FALSE
+  )
+  
+  
+  data_list <- map(
+    data_list,
+    .f = function(data) {
+      
+      if (nrow(data) == 0) {
+        
+        return(
+          NULL
+        )
+        
+      }
+      
+      if (do_char) {
+        
+        extract_id <- .extract_id(
+          lookup = lookup[[2]],
+          chars = chars
+        )
+        
+        
+        data <- data[
+          id %in% extract_id
+        ]
+        
+      }
+      
+      
+      data <- data[
+        assignment %chin% c(intervention, control) &
+          allocator %chin% c(allocators) 
+      ]
+      
+      
+      # 2) classify accordingly
+      data[
+        ,
+        assignment_factor := fcase(
+          assignment %chin% intervention, "intervention",
+          assignment %chin% control, "control"
+        )
+        ,
+      ]
+      
+      
+      
+      
+      
+    }
+  )
+  
+  
+  
+  
+  
+}
+
+
+
+grind <- function(
+    data_list,
+    intervention = NULL,
+    control = NULL,
+    allocators = NULL,
+    chars = NULL,
+    alternate = FALSE,
+    export = FALSE,
+    do_incidence = NULL
+) {
+  
+  #' Function Information
+  #' 
+  #' @param data_list a list of data.tables regardless of the model
+  #' chosen
+  #' 
+  #' @param intervention a character vector of length 1.
+  #' @param control a character vector of length 1.
+  #' @param allocator a character vector of lenth N.
+  #' @param chars a character vector of length N.
+  #' @param alternate a logical value, indicating wether alternate
+  #' versions of the data are to be calculated.
+  #' @param export logical. Should the data be prepared for exporting.
+  
+  
+  
+  # global function options; #####
+  
+  master_class <- class(data_list)
+  get_char <- chars
+  has_char <- str_detect(
+    paste(get_char, collapse = ""),
+    pattern = '[:alpha:]'
+  )
+  alternates <- fcase(
+    isFALSE(alternate), "qty",
+    default = "cost"
+  )
+  
+  
+  # global data manipulation; ####
+  
+  if (inherits(data_list, 'model1')) {
+    
+    data_list <- .grind_model1(
+      data_list,
+      intervention = intervention,
+      control = control,
+      allocators = allocators,
+      chars = chars,
+      do_incidence = do_incidence
+    )
+    
+    
+  }
+  
+  if (inherits(data_list, 'model2')) {
+    
+    data_list <- .grind_model2(
+      data_list,
+      intervention = intervention,
+      control = control,
+      allocators = allocators,
+      chars = chars
+    )
+    
+  }
+
+  
+  
+  data_list <- structure(
+    data_list,
+    class = master_class
+  )
+  
+  
+  
+  
+  return(
+    data_list
+  )
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

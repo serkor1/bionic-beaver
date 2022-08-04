@@ -6,6 +6,36 @@
 
 
 
+.load_model1cost <- function() {
+  
+  # load data
+  data <- rbindlist(
+    map(
+      list.files(
+        "input/parameters/model1/",
+        full.names = TRUE
+      ),
+      fread
+    )
+  )
+  
+  
+  data[
+    ,
+    .(
+      allocator = paste0(
+        class,
+        "_",
+        subclass
+      ),
+      price = price
+    )
+    
+    ,
+  ]
+  
+  
+}
 
 
 

@@ -115,7 +115,7 @@ bs4DashPage(
         
       ),
       
-      menuItem(
+      bs4SidebarMenuItem(
         text = "Data",
         startExpanded = TRUE,
         icon = icon("cog", verify_fa = FALSE),
@@ -130,12 +130,16 @@ bs4DashPage(
           tabName = "report"
         ),
         
+        
         menuSubItem(
           text = "Download Data",
-          tabName = "prepare_data"
+          tabName = "export_data"
+          
         )
         
       )
+      
+      
       
       
       

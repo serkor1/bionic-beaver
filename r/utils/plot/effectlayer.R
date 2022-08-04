@@ -5,7 +5,10 @@
 # date: 2022-06-16
 
 
-.effectlayer_model1 <- function(plot){
+.effectlayer_model1 <- function(
+    plot,
+    color_intervention = 'steelblue'
+    ){
   
   #' function information
   #' 
@@ -21,7 +24,17 @@
           
           plot %>% add_trace(
             x = ~x,
-            y = ~cintervention
+            y = ~cintervention,
+            type   = "scatter",
+            mode   = "lines+markers",
+            line = list(
+              color = color_intervention,
+              dash = "dot"
+            ),
+            marker = list(
+              color = color_intervention
+            ),
+            name = 'Kontrafaktisk Værdi'
           ) 
           
           
@@ -33,7 +46,7 @@
   
   # return; ####
   return(
-    plot
+    structure(plot, class = 'model1')
   )
   
 }
@@ -61,7 +74,9 @@
   )
   
   # return; #####
-  return(plot)
+  return(
+    structure(plot, class = 'model2')
+  )
   
   
 }

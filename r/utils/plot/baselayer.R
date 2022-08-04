@@ -11,29 +11,45 @@
   #' 
   #' @param data_list
   
+  
+  
   # function logic; ####
   # Generate Empty Plot
   plot <- map(
     data_list,
+    
+   
+    
     .f = function(data) {
       
+     
       tryCatch(
         {
+          iterator <- 0
+          
+          
           data %>% 
             split(.$allocator) %>% 
             map(
               .f = function(unique_data) {
                 
+                iterator <<- iterator + 1 
+                
+                
                 plot_ly(
                   data   = unique_data,
                   type   = "scatter",
-                  mode   = "lines+markers"
+                  mode   = "lines+markers",
+                  showlegend = fifelse(
+                    iterator == 1, TRUE, FALSE
+                  )
                 )
                 
               }
             )
         },
         error = function(cond) {
+          
           
           NULL
           
@@ -45,6 +61,8 @@
       
     }
   )
+  
+  
   
   
   # return statement; ####
@@ -63,16 +81,31 @@
   #' 
   #' @param data_list 
   
+  
+  
+  
+  
+  iterator <- 0
   # function logic; ####
   # Generate Empty Plot
   plot <- map(
     data_list,
+    
+    
+    
     .f = function(data) {
+      
+      
+      iterator <<- iterator + 1 
+      
       
       plot_ly(
         data   = data,
         type   = "bar",
-        orientation = 'h'
+        orientation = 'h',
+        showlegend = fifelse(
+          iterator == 1, TRUE, FALSE
+        )
       )
       
     }
@@ -112,7 +145,6 @@ baselayer <- function(data_list) {
   
   if (is_children) {
     
-    message("Is Children Model")
     
     
     plot <- .baselayer_model2(
@@ -122,7 +154,6 @@ baselayer <- function(data_list) {
     
     
   } else {
-    message("Is NOT Children Model")
     
     plot <- .baselayer_model1(
       data_list

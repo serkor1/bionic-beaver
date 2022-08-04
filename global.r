@@ -1,9 +1,9 @@
 # Clear Workspace and Setup; ####
 rm(list = ls()); gc()
 
-
 # packages;
-library(tidyverse)
+
+library(stringr)
 library(shiny)
 library(bs4Dash)
 library(shinyjs)
@@ -14,11 +14,39 @@ library(plotly)
 library(waiter)
 library(DT)
 library(fresh)
-
-# Shiny BS
+library(purrr)
+library(rhandsontable)
+library(readODS)
 
 # Developper Mode;
 developper_mode = TRUE
+
+
+
+# Setup script; ####
+# 
+# If the parameters have not been loaded
+# execute the scripts
+check_parameter <- list.files(
+  path = "input/parameters/",
+  recursive = TRUE
+) %>% length()
+
+if (check_parameter == 0) {
+  
+  message("Running Price-parameter scripts!")
+  
+  map(
+    list.files(
+    path = "r/setup/",
+    full.names = TRUE
+  ),
+  source,
+  encoding = 'UTF-8'
+  )
+  
+}
+
 
 
 
@@ -34,31 +62,11 @@ list.files(
 )
 
 
-
-
-# Preload data;
+# preload data; 
 system.time(
-  data_list <-  preload_data(
+  data_list <- preload_data(
     developper_mode = developper_mode
-  ) %>% map(
-    .f = function(get_list) {
-
-      # Each iteration is over the lists
-      # so we need another map
-
-      map(
-        get_list,
-        .f = function(data) {
-
-          data %>%
-            .convert_long()
-
-        }
-      )
-
-    }
   )
-
 )
 
 
@@ -78,4 +86,6 @@ load_parameters <- .gen_option(
 chars      <- load_parameters$chars
 assignment <- load_parameters$assignment
 outcome    <- load_parameters$outcome
+lookup     <- .gen_lookup(data_list)
+
 

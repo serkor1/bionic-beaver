@@ -4,8 +4,17 @@
 # date: 2022-06-16
 
 .baseplot_model1 <- function(
-  plot = NULL
+  plot = NULL,
+  intervention_color = 'steelblue',
+  control_color = 'orange'
   ) {
+  
+  # TODO:
+  # 1) Add Baseline Option
+  # 2) Add Plot Names of Y axis
+  # 3) Move Legend and print only one.
+
+  
   
   #' function information
   #' 
@@ -18,15 +27,39 @@
     plot,
     .f = function(plot) {
       
+      # Add counter here.
+      
       plot %>% map(
         .f = function(plot) {
           
-          plot %>% add_trace(
+          
+          
+          plot %>% 
+            # Add intervention group
+            # trace.
+            add_trace(
             x = ~x,
-            y = ~intervention
-          ) %>% add_trace(
+            y = ~intervention,
+            line = list(
+              color = intervention_color
+            ),
+            marker = list(
+              color = intervention_color
+            ),
+            name = 'Valgt Gruppe'
+          ) %>% 
+            # Add control gorup
+            # trace.
+            add_trace(
             x = ~x,
-            y = ~control
+            y = ~control,
+            line = list(
+              color = control_color
+            ),
+            marker = list(
+              color = control_color
+            ),
+            name = 'Sammenligningsgruppe'
           )
           
         }
@@ -55,6 +88,12 @@
   #' 
   #' @returns a nested list of plots
   #' based on the types
+  
+  
+  # TODO:
+  # 1) Add Baseline Option
+  # 2) Add Plot Names of Y axis
+  # 3) Move Legend and print only one.
   
   plot <- map(
     plot,
@@ -92,7 +131,6 @@ baseplot <- function(plot) {
   # function logic; ####
   if (inherits(plot, "model1")){
     
-    message("In base 1")
     
     plot <- .baseplot_model1(plot = plot)
     

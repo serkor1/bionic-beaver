@@ -226,33 +226,33 @@
   ]
   
   
-  # 2) Collect outcomes
-  # from the new data
-
-  idx <- find_idx(
-    colnames(data),
-    pattern = base::setdiff(
-      colnames(data),
-
-      # Change these variables if they are named
-      # differently in your data. This is, however, not
-      # recomennded as the remaining scripts depends
-      # on these variables.
-      # DO IT AT OWN RISK.
-      c('chars', 'year', 'type', 'assignment', 'allocator', 'id', 'price', 'disease')
-    ),
-    negate = TRUE
-  )
-
-
-
-
-  data <- data %>% melt(
-    id.vars = idx,
-    variable.name = "outcome_type",
-    value.name    = "outcome",
-    variable.factor = FALSE
-  )
+  # # # 2) Collect outcomes
+  # # # from the new data
+  # 
+  # idx <- find_idx(
+  #   colnames(data),
+  #   pattern = base::setdiff(
+  #     colnames(data),
+  # 
+  #     # Change these variables if they are named
+  #     # differently in your data. This is, however, not
+  #     # recomennded as the remaining scripts depends
+  #     # on these variables.
+  #     # DO IT AT OWN RISK.
+  #     c('chars', 'year', 'type', 'assignment', 'allocator', 'id', 'price')
+  #   ),
+  #   negate = TRUE
+  # )
+  # 
+  # 
+  # 
+  # 
+  # data <- data %>% melt(
+  #   id.vars = idx,
+  #   variable.name = "outcome_type",
+  #   value.name    = "outcome",
+  #   variable.factor = FALSE
+  # )
 
 
 

@@ -1,13 +1,26 @@
 server <- function(input, output, session) {
   
   
+  front_ui <- frontUI(
+    id = "front"
+  )
   
+  mainDownload_server(
+    "front"
+  )
+  output$gen_body <- renderUI(
+    {
+      front_ui$body
+    }
+  )
   # UI - Rendering; #####
   # 
   # It is based on input$tab
   
   observeEvent(
     input$tab,
+    ignoreInit = TRUE,
+    ignoreNULL = TRUE,
     {
       
       # Frontpage
@@ -41,11 +54,6 @@ server <- function(input, output, session) {
         
         
         
-        output$sidebar_ui <- renderUI(
-          model1_ui$sidebar
-          
-        )
-        
         
         output$gen_body <- renderUI(
           {
@@ -53,17 +61,6 @@ server <- function(input, output, session) {
           }
         )
         
-        output$gen_header <- renderUI(
-          {
-            model1_ui$header
-          }
-        )
-        
-        output$performance <- renderUI(
-          {
-            model1_ui$performance
-          }
-        )
         
       }
       
@@ -102,12 +99,41 @@ server <- function(input, output, session) {
         )
         
         
+        
+        
+        
+      }
+      
+      
+      if (input$tab == 'export_data') {
+        
+        message('Exporter Modules')
+        
+        # # Generate UI
+        export_ui <- exportUI(
+          id = 'exporter'
+        )
+        
+        
+        showModal(
+          ui = export_ui$body
+        )
+        
+        # output$gen_body <- renderUI(
+        #   {
+        #     export_ui$body
+        #   }
+        # )
+        
+        
       }
       
     }
   )
   
-
+  
+  
+  
   # Generate Data for Model 1
   
   data <- main_dataserver(
@@ -121,14 +147,28 @@ server <- function(input, output, session) {
   )
   
   
+  # data2 <- second_dataserver(
+  #   id = "model2",
+  #   data_list = data_list[[2]]
+  # )
   
-  data2 <- second_dataserver(
-    id = "model2",
-    data_list = data_list[[2]]
-  )
   
   
   observe({
+    
+    .data_downloader(
+      'exporter'
+    )
+    
+    main_warnings(
+      'model1'
+    )
+    
+    main_choiceserver(
+      id = 'model1',
+      data = mtcars
+    )
+    
     
     main_plotserver(
       id = "model1",
@@ -136,12 +176,12 @@ server <- function(input, output, session) {
       intervention_effect = effect(),
       light_mode = reactive(input$customSwitch1)
     )
-    
-    
-    second_plotserver(
-      id   = 'model2',
-      data = data2() 
-    )
+
+
+    # second_plotserver(
+    #   id   = 'model2',
+    #   data = data2()
+    # )
     
   })
   

@@ -187,54 +187,7 @@ convert_text <- function() {
 
 
 
-
-
-
 generate_data <- function() {
-  
-  
-  
-  path <- list.files(
-    path = "input/parameters",
-    full.names = TRUE
-  )
-  
-  get_names <- list.files(
-    path = "input/parameters",
-    full.names = FALSE
-  ) %>% str_extract(pattern = "[:alpha:]+")
-  
-  
-  
-  options <-  path %>% map(
-    .f = function(path) {
-      
-      data <- fread(
-        path,
-        encoding = "UTF-8",
-        sep = ";"
-      )
-      
-      data <- data[
-        ,
-        
-        c("class", "subclass") := tstrsplit(x, "_", fixed = TRUE)
-        
-        ,
-      ]
-      
-    }
-  )
-  
-  
-  
-  unique_class <- unique(options[[1]]$class)
-  
-  # TODO: It does not include matchin
-  # for some reason. Needs a fix.
-  disease   <- c(options[[3]]$x, "matching")
-  descriptives <- options[[2]][,list(class, subclass),] %>% split(.$class)
-  
   
   
   # Name Vector
@@ -242,40 +195,110 @@ generate_data <- function() {
   iterator <- 0
   
   
+  allocators <- list(
+    primary_sector = c(
+      'Primær Sektor_Almen Praksis', 
+      'Primær Sektor_Anden Speciale', 
+      'Primær Sektor_Fysioterapi', 
+      'Primær Sektor_Psykiater', 
+      'Primær Sektor_Psykolog'
+      ),
+    psychiatric_care = c(
+      'Psykiatrien_Ambulant',
+      'Psykiatrien_Indlæggelse',
+      'Psykiatrien_Skadestue'
+    ),
+    somatic_care = c(
+      'Somatikken_Ambulant',
+      'Somatikken_Indlæggelse',
+      'Somatikken_Skadestue'
+    ),
+    transfers = c(
+      'Overførsel_Førtidspension',
+      'Overførsel_Fleksjob',
+      'Overførsel_Midlertidig Overførselsindkomst',
+      'Overførsel_Selvforsørgende'
+    )
+  )
   
   
-  model_1 <- unique_class %>% map(
+  
+  
+  
+  
+  model_1 <- allocators %>% map(
     .f = function(unique_class) {
       
       iterator <<- iterator + 1
       
-      allocator <- options[[1]][class %chin% unique_class]$x
       
       
       data <- data.table(
         CJ(
           year = -2:5,
           type = 0:1,
-          assignment = disease,
-          allocator = allocator,
-          køn = descriptives$køn$subclass,
-          alder = descriptives$alder$subclass,
-          arbejdsmarked = descriptives$arbejdsmarked$subclass,
-          uddannelse = descriptives$uddannelse$subclass
+          assignment = c(
+            "matching",
+            "Andre Lidelser_Hjertekar",
+            "Andre Lidelser_KOL",
+            "DiabetesI_Uden Komplikationer",
+            "Cancer_Prostata",
+            "Andre Lidelser_Ryg- og Nakkesmerter",
+            "Psykiske Lidelser_Mild",
+            "Andre Lidelser_Kronisk Leversygdom",
+            "Cancer_Bryst",
+            "Psykiske Lidelser_Svær",
+            "Andre Lidelser_Leddegigt",
+            "Diabetes II_Uden Komplikationer",
+            "Diabetes II_Med Komplikationer",
+            "Cancer_Lunge",
+            "Psykiske Lidelser_Moderat",
+            "Diabetes I_Med Komplikationer",
+            "Cancer_Tarm"
+            ),
+          allocator = unique_class,
+          køn = c('Mand','Kvinde'),
+          alder = c('18-49 år', '50-64 år', '65+ år'),
+          arbejdsmarked = c(
+            'Aktiv',
+            'Inaktiv',
+            'Udenfor'
+          ),
+          uddannelse = c(
+            'Faglært',
+            'Ufaglært',
+            'Videregående Uddannelse'
+          )
           
           
         )
       )
       
-      
+      # add random prices
       data[
         ,
-        `:=`(
-          qty = runif(.N, min =10, max = 100),
-          cost = runif(.N, min =1000, max = 10000)
-        )
+        price := runif(1, min = 100, max = 10000)
+        ,
+        by = .(allocator)
+      ][
+        ,
+        qty := runif(.N, min =10, max = 100)
+        ,
+      ][
+        ,
+        cost := price * qty
         ,
       ]
+      
+      
+      # data[
+      #   ,
+      #   `:=`(
+      #     qty = runif(.N, min =10, max = 100),
+      #     cost = runif(.N, min =1000, max = 10000)
+      #   )
+      #   ,
+      # ]
       
       
       # Change Class
@@ -338,7 +361,6 @@ generate_data <- function() {
   
   
 }
-
 
 
 
