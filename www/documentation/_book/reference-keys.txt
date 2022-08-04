@@ -1,0 +1,15 @@
+dokumentation
+introduktion
+data
+databaser
+applikationen
+model-1
+output
+input
+parametre
+fortolkning
+for-udviklere
+indlæsning-af-eget-data
+preload_data
+navnekonventioner
+videreudvikling-af-modellen
