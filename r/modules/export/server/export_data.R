@@ -17,66 +17,110 @@
                {
                  
                  
+                 # Observer for Logging: ######
+                  observe({
+                    
+                    req(input$download_model)
+                    
+                    message(
+                      paste(
+                        "Exporter Module:", input$download_model
+                      )
+                      
+                    )
+                    
+                  })
+                  
                  
-                 req(input$pt_target_e)
-                 req(input$pt_control_e)
-                 req(input$pt_outcome_e)
+                  
+                  {
+                    
+                    
+                    # Observer: updatePicker + logging; ####
+                    observe({
+                      
+                      req(input$pt_sector_e)
+                      
+                      message("Updated Picker")
+                      
+                      updatePickerInput(
+                        inputId = 'pt_outcome_e',
+                        session = session,
+                        choices = outcome[[1]][paste(input$pt_sector_e)],
+                        
+                      )
+                    })
+                    
+                    
+                  }
+                  
+                  
 
-                 # Generate Data
-                 #
-                 # placeholder
-                 data <- reactive(
-                   {
+                  
+                  # Generate Data
+                  #
+                  # placeholder
+                  data <- reactive(
+                    {
+                      
+                      req(input$pt_target_e)
+                      req(input$pt_control_e)
+                      req(input$pt_outcome_e)
+                      
+                      data_list[[1]] %>% grind(
+                        intervention     = paste(input$pt_target_e),
+                        control          = paste(input$pt_control_e),
+                        allocators       = paste(input$pt_outcome_e),
+                        chars            = paste(input$pt_demographic_e),
+                        do_incidence = input$do_incident_e,
+                        alternate = FALSE
+                      ) %>% spread(export = TRUE)
+                      
+                    }
+                  )
+                  
+                  
+                  
+                  output$export_download <- downloadHandler(
+                    
+                    filename = function() {
+                      # WARNING: paste0 breaks the
+                      # download process.
+                      paste(
+                        "data",
+                        "ods",
+                        sep="."
+                      )
+                      
+                    },
+                    
+                    content = function(fname) {
+                      
+                      
+                      data() %>% 
+                        prep_export() %>% write_export(fname = fname)
+                      
+                      
+                      
+                      
+                      
+                      
+                    }
+                    
+                    # ,
+                    # 
+                    # contentType = "application/zip"
+                    
+                  )
+                  
+                
+                 
 
-                     data_list[[1]] %>% grind(
-                       intervention     = paste(input$pt_target_e),
-                       control          = paste(input$pt_control_e),
-                       allocators       = paste(input$pt_outcome_e),
-                       chars            = paste(input$pt_demographic_e),
-                       do_incidence = input$do_incident_e,
-                       alternate = FALSE
-                     ) %>% spread(export = TRUE)
-
-                   }
-                 )
                  
                  
                  
-                 output$export_download <- downloadHandler(
-
-                   filename = function() {
-                     # WARNING: paste0 breaks the
-                     # download process.
-                     paste(
-                       "output",
-                       "zip",
-                       sep="."
-                       )
-                     
-                   },
-
-                   content = function(fname) {
-                     
-
-                     data()[[1]] %>%
-                       foo() %>%
-                       baz()
-
-                       zip(
-                         zipfile = fname,
-                         files = "output"
-                       )
-                     
-                     
-                     
-
-                   },
-
-                   contentType = "application/zip"
-
-                 )
-
-                 
-               })
+                 # End of Server
+               }
+               )
 }
 

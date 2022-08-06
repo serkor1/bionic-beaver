@@ -151,16 +151,26 @@ server <- function(input, output, session) {
   
  
   
-  
-  
-  
-  observe(
+  observeEvent(
+    input$tab == "export_data",
+    ignoreInit = TRUE,
+    ignoreNULL = TRUE,
+    
     {
-    .data_downloader(
-      'exporter'
-    )
-  }
+      
+      .data_downloader(
+        'exporter'
+      )
+      
+    }
   )
+  
+  
+  # observe(
+  #   {
+  #   
+  # }
+  # )
   
   
   

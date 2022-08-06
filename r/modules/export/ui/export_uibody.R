@@ -21,7 +21,31 @@
   
   fluidRow(
     
+    column(
+      width = 6,
+      
+      pickerInput(
+        ns('pt_sector_e'),
+        label = NULL,
+        multiple = FALSE,
+        options = pickerOptions(
+          title = "Vælg Sektor"
+        ),
+        width = '100%',
+        choices = outcome[[1]] %>% names()
+      )
+      
+    ),
     
+    column(
+      width = 6,
+      materialSwitch(
+        inputId = ns("do_incident_e"),
+        label = "Incidente Patienter?",inline = TRUE,
+        value = FALSE,
+        status = "primary"
+      )
+    ),
     column(
       width = 6,
       
@@ -32,12 +56,13 @@
         choices = assignment[[1]],
         multiple = FALSE
       ),
-      
+    
+    
       vive_picker(
         id = ns("pt_outcome_e"),
         title = "Outcomes",
         header = "Vælg Outcomes",
-        choices = outcome[[1]],
+        choices = "Ingen Sektor Valgt!",
         multiple = TRUE,
         selectAllText = "Vælg Alle",
         deselectAllText = "Nulstil"
@@ -64,17 +89,6 @@
         multiple = TRUE,
         selectAllText = "Vælg Alle",
         deselectAllText = "Nulstil"
-      )
-    ),
-    
-    
-    column(
-      width = 12,
-      materialSwitch(
-        inputId = ns("do_incident_e"),
-        label = "Incidente Patienter?",inline = TRUE,
-        value = FALSE,
-        status = "primary"
       )
     )
     

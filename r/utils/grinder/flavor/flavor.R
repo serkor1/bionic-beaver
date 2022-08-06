@@ -31,6 +31,9 @@
   
   
   
+  
+  
+  
   # At app startup, the inputs
   # arent, necessarily, rendered
   # first. Using fcase mitigates this
@@ -219,6 +222,10 @@ flavor <- function(data_list, effect, do_match = FALSE) {
   #' depends on the class of the @param data_list
   
   is_export <- inherits(data_list, 'export')
+  
+  message(
+    paste('Is Export:', is_export)
+  )
   
   if (is_export) {
     

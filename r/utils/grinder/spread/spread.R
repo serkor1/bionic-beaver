@@ -299,14 +299,20 @@ spread <- function(
     default = NULL
   )
   
+  
+  class_string <- c(master_class, export)
+  
   # return statement; #####
   
   return(
     structure(
       data_list,
-      class = c(master_class)
+      class = class_string[!sapply(class_string, is.na)]
     )
   )
   
   
 }
+
+
+
