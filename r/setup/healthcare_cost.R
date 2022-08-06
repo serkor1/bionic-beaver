@@ -80,3 +80,11 @@ fwrite(
   sep = ";",
   row.names = FALSE
 )
+
+
+fwrite(
+  healthcare_price,
+  file = "www/documentation/resources/healtcare_price.csv",
+  sep = ";",
+  row.names = FALSE
+)

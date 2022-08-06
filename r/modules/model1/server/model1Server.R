@@ -9,7 +9,7 @@ main_warnings <- function(id){
     # needed inputs and give feedback
     message(
       paste("Chosen:",input$pt_control, "as Control.", "Truthy:", isTruthy(input$pt_control), "\n")
-      )
+    )
     
     message(
       paste("Chosen:",input$pt_target, "as Intervention." , "Truthy:", isTruthy(input$pt_target), "\n")
@@ -35,7 +35,7 @@ main_warnings <- function(id){
       }
     )
     
-
+    
     shinyFeedback::feedbackWarning(
       inputId = "pt_control",
       !isTruthy(input$pt_control),
@@ -251,27 +251,44 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     
     # TODO: Maybe BAZ should be moved inside
     # the effect layer
-    plot_data <- reactive(
-      data %>%
-        flavor(
-          effect = intervention_effect,
-          do_match = as.logical(input$do_match)
-          )
-      )
+    # plot_data <- reactive(
+    #   data %>%
+    #     flavor(
+    #       effect = intervention_effect,
+    #       do_match = as.logical(input$do_match)
+    #     )
+    # )
+    # 
+    # 
+    # 
+    # # Generate Plots
+    # plot_list <- {
+    #   plot_data() %>%
+    #     baselayer() %>%
+    #     baseplot()
+    # }
+    # 
+    # final_plot <- plot_list %>% 
+    #   effectlayer() %>% 
+    #   plot_layout()
     
     
+      
     
-    # Generate Plots
-    plot_list <- {
-        plot_data() %>%
+      
+    final_plot <- reactive(
+      {
+        data %>%
+          flavor(
+            effect = intervention_effect,
+            do_match = as.logical(input$do_match)
+          ) %>%
           baselayer() %>%
-          baseplot()
+          baseplot() %>% 
+          effectlayer() %>% 
+          plot_layout()
       }
-    
-    final_plot <- plot_list %>% 
-      effectlayer() %>% 
-      plot_layout()
-    
+    )
     
     # Create a container for the chosen
     # colors so the changes are applied globally.
@@ -280,73 +297,77 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode) {
     
     
     map(
-      1:length(data()),
+      1:length(final_plot()),
       .f = function(i) {
         
         
         
-          
-          output[[paste0("plot", i)]] <- renderPlotly(
-            {
-              
-              
-              final_plot[[i]] %>% 
-                subplot(
-                  titleX = TRUE,
-                  titleY = TRUE,
-                  shareX = TRUE
-                ) 
-              
-              # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
-              # 
-              #   shinyFeedback::feedbackDanger(
-              #     inputId = "pt_demographic",
-              #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
-              #     text = "Sammenligningen er problematisk!",
-              #     icon = NULL
-              #   )
-              # 
-              # }
-              # chosen_colors <- reactiveValues(
-              #   control_color = input$col_control,
-              #   color_background = input$col_background,
-              #   color_intervention = input$col_intervention
-              # 
-              # )
-              # 
-              # 
-              # plot_data()[[i]]  %>%
-              #   do_plot(
-              #     difference = input$do_difference,
-              #     show_baseline = input$show_baseline,
-              #     color_intervention = chosen_colors$color_intervention,
-              #     color_background    = chosen_colors$color_background,
-              #     color_control      = chosen_colors$control_color
-              #   )
-              # plotly::plot_ly(
-              #   mtcars,
-              #   x = ~mpg,
-              #   y = ~hp,
-              #   type = "scatter",
-              #   mode = "markers"
-              # )
-              
-              
-            }
-          )
         
-
+        output[[paste0("plot", i)]] <- renderPlotly(
+          {
+            
+            
+                final_plot()[[i]] %>% 
+                  subplot(
+                    titleX = TRUE,
+                    titleY = TRUE,
+                    shareX = TRUE
+                  ) 
+            
+           
+            
+            
+            # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+            # 
+            #   shinyFeedback::feedbackDanger(
+            #     inputId = "pt_demographic",
+            #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
+            #     text = "Sammenligningen er problematisk!",
+            #     icon = NULL
+            #   )
+            # 
+            # }
+            # chosen_colors <- reactiveValues(
+            #   control_color = input$col_control,
+            #   color_background = input$col_background,
+            #   color_intervention = input$col_intervention
+            # 
+            # )
+            # 
+            # 
+            # plot_data()[[i]]  %>%
+            #   do_plot(
+            #     difference = input$do_difference,
+            #     show_baseline = input$show_baseline,
+            #     color_intervention = chosen_colors$color_intervention,
+            #     color_background    = chosen_colors$color_background,
+            #     color_control      = chosen_colors$control_color
+            #   )
+            # plotly::plot_ly(
+            #   mtcars,
+            #   x = ~mpg,
+            #   y = ~hp,
+            #   type = "scatter",
+            #   mode = "markers"
+            # )
+            
+            
+          }
+        )
         
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
+        
       }
     )
     
-
+    
+    
     
     
   }
@@ -449,7 +470,7 @@ main_choiceserver <- function(id, data) {
       
       
       
-
+      
       
       
       
@@ -579,10 +600,10 @@ main_tableserver <- function(id, data, intervention_effect){
       #   }
       # ) %>% rbindlist()
       # 
-    
+      
       table_data <- reactive(
         data() %>% flavor(effect =  intervention_effect(), do_match = as.logical(input$do_match))
-        )
+      )
       
       map(
         1:length(data()),
@@ -592,22 +613,22 @@ main_tableserver <- function(id, data, intervention_effect){
           message(
             paste("Grinding tables. Currently at", i, "of", length(data()), "iterations.")
           )
-
           
           
           
-
-
+          
+          
+          
           output[[paste0("table",i)]] <- DT::renderDataTable({
             
             data <- table_data()[[i]]
-
-
+            
+            
             data[order(allocator)] %>% DT::datatable(
               rownames = FALSE,
               extensions = c("Buttons", "RowGroup"),
               caption = "Tabel",
-
+              
               options = list(
                 pageLength = 8,
                 dom = "Bfrtip",
@@ -624,23 +645,23 @@ main_tableserver <- function(id, data, intervention_effect){
                   "$(this.api().table().header()).css({'background-color': '#5E81AC', 'color': '#fff'});",
                   "}")
               )
-
-              )
-
-
+              
+            )
+            
+            
           })
           
           
           
-         
-
-
-
-
-
-
-
-
+          
+          
+          
+          
+          
+          
+          
+          
+          
         }
       )
       

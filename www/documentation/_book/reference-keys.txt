@@ -1,9 +1,15 @@
 dokumentation
 introduktion
 data
+model-1
+diagnoser
+priserne-i-modellen
+priser-for-sundhedsydelser
+priser-for-arbejdsmarkedstilknytning
+populationen
 databaser
 applikationen
-model-1
+model-1-1
 output
 input
 parametre

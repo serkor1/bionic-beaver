@@ -6,14 +6,13 @@ second_dataserver <- function(id, data_list){
     # generate data
     data <- reactive({
       
-      
-      
       data_list %>% grind(
         intervention = paste(input$pt_target),
         control = paste(input$pt_control),
         chars = paste(input$pt_demographic),
-        allocators = input$pt_outcome
+        allocators = paste(input$pt_outcome)
       ) %>% spread()
+      
       
     })
     
@@ -32,6 +31,9 @@ second_dataserver <- function(id, data_list){
 
 second_plotserver <- function(id, data) {
   moduleServer(id, function(input, output, session) {
+    
+    
+    
     
     
     # TODO: Maybe BAZ should be moved inside

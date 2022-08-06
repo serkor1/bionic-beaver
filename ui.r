@@ -122,7 +122,7 @@ bs4DashPage(
         
         menuSubItem(
           text = "Model Dokumentation",
-          tabName = "documentation"
+          tabName = 'documentation'
         ),
         
         menuSubItem(
@@ -157,6 +157,7 @@ bs4DashPage(
     #   includeCSS("www/theme.css")
     # ),
     includeCSS("www/theme.css"),
+    useShinyjs(),
     
     
     #temp_box(),
@@ -251,11 +252,6 @@ bs4DashPage(
       a(
         img(src = "vive.png",height = "20px", width = "50px"),
         href = "https://www.vive.dk/da/",
-        target = "_blank"
-      ),
-      a(
-        img(src = "logo-lif-white.svg",height = "20px", width = "50px"),
-        href = "https://www.lif.dk/",
         target = "_blank"
       )
     )

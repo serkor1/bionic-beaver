@@ -70,9 +70,7 @@
         return(NULL)
       }
       
-      # extract the class of the 
-      # data
-      get_class <- class(data)[3]
+      
       
       # Recalculate difference
       # if matching is chosen.
@@ -120,7 +118,7 @@
       ]
       
       
-      class(data) <- c(class(data), get_class)
+      
       
       
       return(data)
@@ -187,7 +185,7 @@
       
       # extract the class of the 
       # data
-      get_class <- class(data)[3]
+      #get_class <- class(data)[3]
       
       # Calculate effects
       data[
@@ -200,7 +198,7 @@
       ]
       
       
-      class(data) <- c(class(data), get_class)
+      #class(data) <- c(class(data), get_class)
       
       return(data)
       

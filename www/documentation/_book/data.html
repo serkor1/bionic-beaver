@@ -139,11 +139,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="introduktion.html"><a href="introduktion.html"><i class="fa fa-check"></i><b>2</b> Introduktion</a></li>
 <li class="chapter" data-level="3" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>3</b> Data</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data.html"><a href="data.html#databaser"><i class="fa fa-check"></i><b>3.1</b> Databaser</a></li>
+<li class="chapter" data-level="3.1" data-path="data.html"><a href="data.html#model-1"><i class="fa fa-check"></i><b>3.1</b> Model 1</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data.html"><a href="data.html#diagnoser"><i class="fa fa-check"></i><b>3.1.1</b> ICD-10 Koder</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data.html"><a href="data.html#priserne-i-modellen"><i class="fa fa-check"></i><b>3.1.2</b> Priserne i Modellen</a></li>
+<li class="chapter" data-level="3.1.3" data-path="data.html"><a href="data.html#populationen"><i class="fa fa-check"></i><b>3.1.3</b> Populationen</a></li>
+<li class="chapter" data-level="3.1.4" data-path="data.html"><a href="data.html#databaser"><i class="fa fa-check"></i><b>3.1.4</b> Databaser</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="applikationen.html"><a href="applikationen.html"><i class="fa fa-check"></i><b>4</b> Applikationen</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="applikationen.html"><a href="applikationen.html#model-1"><i class="fa fa-check"></i><b>4.1</b> Model 1</a>
+<li class="chapter" data-level="4.1" data-path="applikationen.html"><a href="applikationen.html#model-1-1"><i class="fa fa-check"></i><b>4.1</b> Model 1</a>
 <ul>
 <li class="chapter" data-level="4.1.1" data-path="applikationen.html"><a href="applikationen.html#output"><i class="fa fa-check"></i><b>4.1.1</b> Output</a></li>
 <li class="chapter" data-level="4.1.2" data-path="applikationen.html"><a href="applikationen.html#input"><i class="fa fa-check"></i><b>4.1.2</b> Input</a></li>
@@ -182,14 +188,140 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Data<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Dette afsnit beskrive brugen af data til modellen. Alt databehandling er foregået på Danmarks Statistiks servere.</p>
-<div id="databaser" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Databaser<a href="data.html#databaser" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Der er taget udgangspunkt i følgende databaser</p>
-<ol style="list-style-type: decimal">
-<li>lprdiag</li>
-<li>som</li>
-</ol>
+<div id="model-1" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Model 1<a href="data.html#model-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="diagnoser" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> ICD-10 Koder<a href="data.html#diagnoser" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="priserne-i-modellen" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Priserne i Modellen<a href="data.html#priserne-i-modellen" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="priser-for-sundhedsydelser" class="section level4 hasAnchor" number="3.1.2.1">
+<h4><span class="header-section-number">3.1.2.1</span> 2022-Priser for Sundhedsydelser<a href="data.html#priser-for-sundhedsydelser" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Type</th>
+<th align="left">Ydelse</th>
+<th align="right">Pris</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Primær Sektor</td>
+<td align="left">Almen Praksis</td>
+<td align="right">140</td>
+</tr>
+<tr class="even">
+<td align="left">Primær Sektor</td>
+<td align="left">Anden Speciale</td>
+<td align="right">162</td>
+</tr>
+<tr class="odd">
+<td align="left">Primær Sektor</td>
+<td align="left">Fysioterapi</td>
+<td align="right">304</td>
+</tr>
+<tr class="even">
+<td align="left">Primær Sektor</td>
+<td align="left">Psykiater</td>
+<td align="right">830</td>
+</tr>
+<tr class="odd">
+<td align="left">Primær Sektor</td>
+<td align="left">Psykolog</td>
+<td align="right">596</td>
+</tr>
+<tr class="even">
+<td align="left">Psykiatrien</td>
+<td align="left">Ambulant</td>
+<td align="right">1987</td>
+</tr>
+<tr class="odd">
+<td align="left">Psykiatrien</td>
+<td align="left">Indlæggelse</td>
+<td align="right">3970</td>
+</tr>
+<tr class="even">
+<td align="left">Psykiatrien</td>
+<td align="left">Skadestue</td>
+<td align="right">1987</td>
+</tr>
+<tr class="odd">
+<td align="left">Somatikken</td>
+<td align="left">Ambulant</td>
+<td align="right">2891</td>
+</tr>
+<tr class="even">
+<td align="left">Somatikken</td>
+<td align="left">Indlæggelse</td>
+<td align="right">12201</td>
+</tr>
+<tr class="odd">
+<td align="left">Somatikken</td>
+<td align="left">Skadestue</td>
+<td align="right">2288</td>
+</tr>
+</tbody>
+</table>
+<p>Alle <code>priserne</code> er angivet pr. <code>kontakt</code> eller pr. <code>sengedag</code> til given <code>ydelse</code>. Priserne er justeret for inflation.</p>
+<blockquote>
+<p><strong>Regneeksempel:</strong> Hvis en gruppe, i gennemsnit, har 10 sengedage i Psykiatrien, bliver disse dage
+altså faktureret med 3970 kr. pr. dag. Gruppen koster altså i gennemsnit 39.700 kr. i det givne år.</p>
+</blockquote>
+</div>
+<div id="priser-for-arbejdsmarkedstilknytning" class="section level4 hasAnchor" number="3.1.2.2">
+<h4><span class="header-section-number">3.1.2.2</span> 2022-Priser for Arbejdsmarkedstilknytning<a href="data.html#priser-for-arbejdsmarkedstilknytning" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Type</th>
+<th align="left">Ydelse</th>
+<th align="right">Pris</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Overførsel</td>
+<td align="left">Fleksjob</td>
+<td align="right">3913</td>
+</tr>
+<tr class="even">
+<td align="left">Overførsel</td>
+<td align="left">Førtidspension</td>
+<td align="right">3700</td>
+</tr>
+<tr class="odd">
+<td align="left">Overførsel</td>
+<td align="left">Midlertidig Overførselsindkomst</td>
+<td align="right">2989</td>
+</tr>
+<tr class="even">
+<td align="left">Overførsel</td>
+<td align="left">Selvforsørgende</td>
+<td align="right">9549</td>
+</tr>
+</tbody>
+</table>
+<p>Alle <code>priserne</code> er angivet pr. <code>uge</code> på en given <code>overførsel</code>. Priserne er justeret for inflation, og er angivet i brutto-værdier.</p>
+<blockquote>
+<p><strong>Regneeksempel:</strong> Hvis en gruppe, i gennemsnit, har 10 uger på Førtidspension, bliver denne gruppe
+altså faktureret med 3700 kr. pr. uge. Gruppen koster altså i gennemsnit 37.000 kr. i det givne år.</p>
+</blockquote>
+</div>
+</div>
+<div id="populationen" class="section level3 hasAnchor" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> Populationen<a href="data.html#populationen" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>Populationen</code> er delt i to <code>delpopulationer</code> der er gensidigt ekslusive. Den første <code>delpopulation</code> er alle danskere over 18 år, der har en given <a href="data.html#diagnoser">diagnose</a> i årrene 20xx-20xx. Den anden <code>delpopulation</code> er alle danskere over 18 år, der ikke falder ind under den første <code>delpopulation</code>.</p>
+<blockquote>
+<p><strong>Eksempel:</strong> Hvis person A og B begge er over 18 år i årrene 20xx-20xx, og <em>kun</em> person A har den
+givne diagnose, er kun A altså talt med i den første population. B er således i den anden delpopulation.</p>
+</blockquote>
+</div>
+<div id="databaser" class="section level3 hasAnchor" number="3.1.4">
+<h3><span class="header-section-number">3.1.4</span> Databaser<a href="data.html#databaser" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Modellen tager udgangs punkt i <code>sssy</code>, <code>DREAM</code></p>
 
+</div>
 </div>
 </div>
             </section>

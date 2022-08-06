@@ -46,15 +46,15 @@ server <- function(input, output, session) {
       if (input$tab == "model_1") {
         
         
-        
-        
+        message("In Model 1")
+
         model1_ui <- model1UI(
           id = "model1"
-        ) 
-        
-        
-        
-        
+        )
+
+
+
+
         output$gen_body <- renderUI(
           {
             model1_ui$body
@@ -104,185 +104,122 @@ server <- function(input, output, session) {
         
       }
       
-      
-      if (input$tab == 'export_data') {
-        
-        message('Exporter Modules')
-        
-        # # Generate UI
-        export_ui <- exportUI(
-          id = 'exporter'
-        )
-        
-        
-        showModal(
-          ui = export_ui$body
-        )
-        
-        # output$gen_body <- renderUI(
-        #   {
-        #     export_ui$body
-        #   }
-        # )
-        
-        
-      }
+     
       
     }
   )
   
   
   
-  
-  # Generate Data for Model 1
-  
-  data <- main_dataserver(
-    id = "model1",
-    data_list = data_list[[1]]
+  shinyjs::onclick(
+    id = 'tab-export_data',
+    function() {
+
+      export_ui <- exportUI(
+        id = 'exporter'
+      )
+
+
+      showModal(
+        ui = export_ui$body
+      )
+
+
+    }
+
   )
   
-  effect <- main_effectserver(
-    id = "model1",
-    data = data() # Was isolated
+  
+  shinyjs::onclick(
+    id = 'tab-documentation',
+    function() {
+      
+      runjs(
+        'window.open(
+        "documentation/_book/index.html"
+        )'
+      )
+      
+      
+    }
+    
   )
   
   
-  # data2 <- second_dataserver(
-  #   id = "model2",
-  #   data_list = data_list[[2]]
-  # )
+  
+  
+  
+ 
+  
+  
+  
+  
+  observe(
+    {
+    .data_downloader(
+      'exporter'
+    )
+  }
+  )
   
   
   
   observe({
     
-    .data_downloader(
-      'exporter'
+    data <- main_dataserver(
+      id = "model1",
+      data_list = data_list[[1]]
+    )
+    
+    effect <- main_effectserver(
+      id = "model1",
+      data = data() # Was isolated
     )
     
     main_warnings(
       'model1'
     )
-    
+
     main_choiceserver(
       id = 'model1',
-      data = mtcars
+      data = data()
     )
-    
-    
+
     main_plotserver(
       id = "model1",
       data = data(),
       intervention_effect = effect(),
       light_mode = reactive(input$customSwitch1)
     )
+    
+    
 
 
-    # second_plotserver(
-    #   id   = 'model2',
-    #   data = data2()
-    # )
+
     
   })
   
   
   
-  # 
-  # observe({
-  #   if (input$tab == "model_1") {
-  #     
-  #     message("In Model 1 Observer")
-  #     
-  #     # data <- (
-  #     #   {
-  #     #     reactive(
-  #     #       main_dataserver(
-  #     #         id = "model1",
-  #     #         data_list = data_list[[1]]
-  #     #         )
-  #     #     )
-  #     #   }
-  #     # )
-  #     
-  #     
-  #     data <- main_dataserver(
-  #         id = "model1",
-  #         data_list = data_list[[1]]
-  #       )
-  #     
-  # 
-  # 
-  #     
-  #     
-  #     # effect <- isolate(reactive({
-  #     #   main_effectserver(
-  #     #     id = "model1",
-  #     #     data = data
-  #     #   )
-  #     # }))
-  #     
-  #     effect <- main_effectserver(
-  #         id = "model1",
-  #         data = isolate(data())
-  #       )
-  #     
-  # 
-  # 
-  # 
-  # 
-  #     # main_warnings(
-  #     #   id = "model1"
-  #     # )
-  # 
-  # 
-  # 
-  #     # Generate Chosen Parameters
-  #     # main_choiceserver(
-  #     #   id = "model1",
-  #     #   data = data
-  #     # )
-  #     
-  #     # Generate Plots
-  #     main_plotserver(
-  #       id = "model1",
-  #       data = data(),
-  #       intervention_effect = effect,
-  #       light_mode = reactive(input$customSwitch1)
-  #     )
-  #     
-  #     # main_tableserver(
-  #     #   id = "model1",
-  #     #   data = data(),
-  #     #   intervention_effect = effect()
-  #     # )
-  #     
-  #   } else {
-  #     
-  #     
-  #     # data <- isolate(
-  #     #   {
-  #     #     reactive(
-  #     #       main_dataserver(
-  #     #         id = "model2",
-  #     #         data_list = data_list[[2]]
-  #     #         )
-  #     #     )
-  #     #   }
-  #     # )
-  #     # 
-  #     # second_plotserver(
-  #     #   id = "model2",
-  #     #   data = data()
-  #     # )
-  #     
-  #     
-  #     
-  #     
-  #   }
-  # }
-  # 
-  # )
-  
+  observe({
+    
+    data2 <- second_dataserver(
+      id = "model2",
+      data_list = data_list[[2]]
+    )
+    
+    
+      
+      second_plotserver(
+        id   = 'model2',
+        data = data2()
+      )
+      
+    
+
+    
+
+  })
   
   
   

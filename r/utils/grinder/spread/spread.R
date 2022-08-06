@@ -45,6 +45,7 @@
         
         get_class <- class(data)
         
+        
         data <- data[
           outcome_type %chin% alternate
         ]
@@ -96,7 +97,7 @@
 
         }
 
-        data[
+         data <- data[
           x >= 0
           ,
              `:=`(
@@ -109,7 +110,7 @@
          ]
         
         
-        class(data) <- c(class(data), get_class)
+        class(data) <- c(class(data), get_class[length(get_class)])
 
         return(
           data
@@ -160,6 +161,13 @@
       data_list,
       .f = function(data) {
         
+        if (nrow(data) == 0) {
+          
+          return(
+            NULL
+          )
+        }
+        
         # extract class
         get_class <- class(data)
         
@@ -201,6 +209,10 @@
           
           ,
         ]
+        
+        
+        class(data) <- c(class(data), get_class[length(get_class)])
+        
         
         
         return(
@@ -259,6 +271,7 @@ spread <- function(
   master_class <- class(data_list)
   
   
+  
   # function logic; #####
   
 
@@ -291,7 +304,7 @@ spread <- function(
   return(
     structure(
       data_list,
-      class = c(master_class, export)
+      class = c(master_class)
     )
   )
   

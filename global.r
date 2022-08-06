@@ -62,13 +62,13 @@ list.files(
 )
 
 
-# preload data; 
+# preload data;
+set.seed(1903)
 system.time(
   data_list <- preload_data(
     developper_mode = developper_mode
   )
 )
-
 
 
 # version;

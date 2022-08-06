@@ -33,3 +33,12 @@ fwrite(
   sep = ";",
   row.names = FALSE
 )
+
+
+
+fwrite(
+  transfer_price,
+  file = "www/documentation/resources/transfer_price.csv",
+  sep = ";",
+  row.names = FALSE
+)

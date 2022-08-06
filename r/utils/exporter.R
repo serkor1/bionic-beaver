@@ -122,7 +122,7 @@ baz <- function(data_list) {
           
           write_ods(
             element,
-            update = FALSE,
+            update = TRUE,
             path = paste0(
               "output/",
               get_path,
