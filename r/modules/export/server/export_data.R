@@ -20,7 +20,7 @@
                  # Observer for Logging: ######
                   observe({
                     
-                    req(input$download_model)
+                    #req(input$download_model)
                     
                     message(
                       paste(
