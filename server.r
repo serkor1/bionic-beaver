@@ -118,7 +118,7 @@ server <- function(input, output, session) {
   .model1server_choices(
     id = 'model1'
   )
-  
+
   
   observe({
     .model1server_warnings(
