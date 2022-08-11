@@ -19,7 +19,7 @@ library(rhandsontable)
 library(readODS)
 
 # Developper Mode;
-developper_mode = TRUE
+developper_mode = FALSE
 
 
 
@@ -87,7 +87,6 @@ chars      <- load_parameters$chars
 assignment <- load_parameters$assignment
 outcome    <- load_parameters$outcome
 lookup     <- .gen_lookup(data_list)
-
 
 
 

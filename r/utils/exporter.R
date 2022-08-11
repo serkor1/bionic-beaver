@@ -264,12 +264,21 @@ write_export <- function(prep_export, fname) {
   
   
   
-  
-  
-  prep_export$id %>% write_ods(
+  write_ods(
+    dcast(
+      prep_export$id,value.var = 'value',formula = id ~ variable
+    ),
     path = fname,
-    sheet = "Demografi"
+    sheet = 'Demografi'
   )
+  
+  
+  
+  
+  # unique(prep_export$id) %>% write_ods(
+  #   path = fname,
+  #   sheet = "Demografi"
+  # )
   
   
   map(

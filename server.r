@@ -120,11 +120,10 @@ server <- function(input, output, session) {
   )
 
   
-  observe({
     .model1server_warnings(
       id = 'model1'
     )
-  })
+  
     
   
   .model2server_plot(

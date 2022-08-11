@@ -98,7 +98,8 @@
                       
                       
                       data() %>% 
-                        prep_export() %>% write_export(fname = fname)
+                        prep_export() %>% 
+                        write_export(fname = fname)
                       
                       
                       

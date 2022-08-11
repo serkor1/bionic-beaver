@@ -118,13 +118,13 @@
     {
       data[
         ,
-        id := seq_len(.N)
+        id := .GRP
         ,
         by = .(
-          year,
-          type,
-          allocator,
-          assignment
+          alder,
+          køn,
+          uddannelse,
+          arbejdsmarked
         )
       ]
     },

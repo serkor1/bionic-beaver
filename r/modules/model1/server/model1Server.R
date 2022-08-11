@@ -5,50 +5,66 @@
   moduleServer(id, function(input, output, session)
   {
     
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_control",
-      !isTruthy(input$pt_control),
-      text = "Vælg Sammenligningsgruppe!",icon = NULL
-    )
     
-    
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_target",
-      !isTruthy(input$pt_target),
-      text = "Vælg Gruppe!",icon = NULL
-    )
       
-      shinyFeedback::feedbackWarning(
-        inputId = "pt_outcome",
-        !isTruthy(input$pt_outcome),
-        text = "Vælg Outcome(s)!",icon = NULL
-      )
+
+  
       
     
+    # observe({
+    #   invalidateLater(1000)
+    #   
+    #   shinyFeedback::feedbackWarning(
+    #     inputId = "pt_target",
+    #     !isTruthy(input$pt_target) | !str_detect(input$pt_target, '[:alpha:]'),
+    #     text = "Vælg Gruppe!",icon = NULL
+    #   )
+    #   
+    #   shinyFeedback::feedbackWarning(
+    #     inputId = "pt_control",
+    #     !isTruthy(input$pt_control),
+    #     text = "Vælg Sammenligningsgruppe!",icon = NULL
+    #   )
+    #   
+    #   shinyFeedback::feedbackWarning(
+    #     inputId = "pt_outcome",
+    #     !isTruthy(input$pt_outcome),
+    #     text = "Vælg Outcome(s)!",icon = NULL
+    #   )
+    #   
+    #   
+    #   
+    #   shinyFeedback::feedbackDanger(
+    #     inputId = 'pt_control',
+    #     input$pt_control == input$pt_target,
+    #     text = 'Skift gruppe!',
+    #     icon = NULL
+    #   )
+    #   
+    #   
+    #   if (!isTruthy(input$pt_outcome) & !isTruthy(input$pt_target)){
+    #     createAlert(
+    #       id = "myalert",
+    #       options = list(
+    #         title = "Information",
+    #         closable = TRUE,
+    #         width = 12,
+    #         elevations = 4,
+    #         status = "primary",
+    #         content = "Venter på input..."
+    #       )
+    #     )
+    #   } else {
+    #     closeAlert(id = "myalert")
+    #   }
+    # 
+    # })
     
-      shinyFeedback::feedbackDanger(
-        inputId = 'pt_control',
-        input$pt_control == input$pt_target,
-        text = 'Skift gruppe!',
-        icon = NULL
-      )
+    
+    
+    
+
       
-      
-      if (!isTruthy(input$pt_outcome) & !isTruthy(input$pt_target)){
-        createAlert(
-          id = "myalert",
-          options = list(
-            title = "Information",
-            closable = TRUE,
-            width = 12,
-            elevations = 4,
-            status = "primary",
-            content = "Venter på input..."
-          )
-        )
-      } else {
-        closeAlert(id = "myalert")
-      }
       
       
 
@@ -489,20 +505,37 @@ main_tableserver <- function(id, data, intervention_effect){
     
     
     
+    
+    
     data <- reactive(
       {
         
         req(input$pt_target)
         req(input$pt_outcome)
         
-        message('Grinding Data')
+        message("Grinding Data:")
+        message(
+          paste(
+            'With Parameters:\n',
+            'Intervention:', paste(input$pt_target), '\n',
+            'Control:',paste(input$pt_control), is.null(input$pt_control),'\n',
+            'Outcomes:',paste(input$pt_outcome, collapse = ","),'\n',
+            'Characteristics:', paste(input$pt_demographic, collapse = ","),'\n',
+            'Incidence:', input$do_incident, '\n',
+            'Alternate:', input$do_cost
+                )
+        )
+        
+        
+        
         
         data_list %>% grind(
           intervention     = paste(input$pt_target),
           control          = paste(input$pt_control),
           allocators       = paste(input$pt_outcome),
           chars            = paste(input$pt_demographic),
-          alternate = FALSE
+          do_incidence = input$do_incident,
+          alternate = input$do_cost
         ) %>% spread()
       }
     )
@@ -522,12 +555,13 @@ main_tableserver <- function(id, data, intervention_effect){
     # plot
     plot_data <- reactive({
       
+      message('Plotting Data')
       
       
-      data() %>% flavor(effect = intervention_effect()) %>%
+      data() %>% flavor(effect = intervention_effect())  %>%
         baselayer() %>%
-        baseplot() %>% 
-        effectlayer() %>% 
+        baseplot() %>%
+        effectlayer() %>%
         plot_layout()
       
       
@@ -552,6 +586,10 @@ main_tableserver <- function(id, data, intervention_effect){
         
         output[[paste0("plot", i)]] <- renderPlotly(
           {
+            
+            # validate(
+            #   need(input$pt_target, 'Check at least one letter!')
+            # )
             
             
             plot_data()[[i]] %>%

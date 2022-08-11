@@ -11,7 +11,7 @@
     control = NULL,
     allocators = NULL,
     chars = NULL,
-    do_incidence = TRUE
+    do_incidence = NULL
 ) {
   
   
@@ -34,10 +34,7 @@
   )
   
   
-  do_incidence <- fcase(
-    isTRUE(do_incidence), 1,
-    default = 0
-  )
+  
   
   
   
@@ -46,6 +43,14 @@
   data_list <- map(
     data_list,
     .f = function(data) {
+      
+      
+      # WARNING:
+      data[
+        is.na(type),
+        type := do_incidence
+      ]
+      
       
       # filter according to incidence
       data <- data[
@@ -59,7 +64,7 @@
         
         extract_id <- .extract_id(
           lookup = lookup[[1]],
-          chars = chars
+          values = chars
         )
         
         
@@ -72,7 +77,7 @@
       
       # classify data
       data <- data[
-        assignment %chin% c(intervention, control, "matching") &
+        assignment %chin% c(intervention, control, 'matching') &
           allocator %chin% c(allocators) 
       ]
       
@@ -96,7 +101,9 @@
         skip_absent = TRUE
       )
       
-      
+      return(
+        data
+      )
       
     }
   )
@@ -151,7 +158,7 @@
         
         extract_id <- .extract_id(
           lookup = lookup[[2]],
-          chars = chars
+          values = chars
         )
         
         
@@ -201,7 +208,7 @@ grind <- function(
     chars = NULL,
     alternate = FALSE,
     export = FALSE,
-    do_incidence = NULL
+    do_incidence = FALSE
 ) {
   
   #' Function Information
@@ -232,10 +239,16 @@ grind <- function(
     default = "cost"
   )
   
+  do_incidence <- fcase(
+    isTRUE(do_incidence), 1,
+    default = 0
+  )
   
   # global data manipulation; ####
   
   if (inherits(data_list, 'model1')) {
+    
+   
     
     data_list <- .grind_model1(
       data_list,
