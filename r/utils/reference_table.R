@@ -33,7 +33,7 @@
           
           
          counter <<- counter + 1
-         message(paste(counter))
+         
          if (counter > 1) {
            
            return(NULL)

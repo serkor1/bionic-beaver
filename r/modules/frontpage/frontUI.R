@@ -6,9 +6,32 @@ frontUI <- function(id) {
   
   ui_body <- tagList(
     
+    fluidRow(
+      column(
+        width = 12,
+        bs4Card(
+          title = "Disclaimer",
+          status = "danger",
+          solidHeader = TRUE,
+          background = 'danger',
+          width = 12,
+          collapsible = TRUE,
+          collapsed = TRUE,
+          icon = icon("exclamation", verify_fa = FALSE),
+          
+          p(
+            "Brugen af modellen sker efter den enkelte brugers valg af beregningsgrupper og antagelser. 
+VIVE har udtrukket data for alle individer med de pågældende diagnoser og opstillet modellens beregningsramme. 
+Der er ingen tekniske begrænsninger på, hvilke grupper man kan sammenligne, så det er brugeren af modellen, der skal stå inde for, at beregningen giver mening."
+          )
+
+        )
+      )
+    ),
     
     
     fluidRow(
+      
       column(
         width = 6,
         
@@ -62,34 +85,9 @@ Modellen er udviklet af VIVE finansieret af Lægemiddelindustriforeningen. Data 
       
       
       
-    ),
-    
-    fluidRow(
-      column(
-        width = 12,
-        bs4Card(
-          title = "Disclaimer",
-          status = "danger",
-          width = 12,
-          collapsible = FALSE,
-          icon = icon("exclamation", verify_fa = FALSE),
-          
-          p(
-            "Brugen af modellen sker efter den enkelte brugers valg af beregningsgrupper og antagelser. 
-VIVE har udtrukket data for alle individer med de pågældende diagnoser og opstillet modellens beregningsramme. 
-Der er ingen tekniske begrænsninger på, hvilke grupper man kan sammenligne, så det er brugeren af modellen, der skal stå inde for, at beregningen giver mening."
-            ),
-          
-          
-          
-          downloadButton(
-            outputId = ns("mainDownload"),
-            label = "Download Data"
-          )
-          
-        )
-      )
     )
+    
+    
     
     
     

@@ -93,7 +93,7 @@
               fluidRow(
                 column(
                   width = 12,
-                  shinycssloaders::withSpinner(
+                  withSpinner(
                      plotlyOutput(
                       outputId = ns(paste0("plot",i)),height = '800px'
                     ),
