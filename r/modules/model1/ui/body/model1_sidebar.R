@@ -173,35 +173,50 @@
       content = "Skal den generelle befolkning vises?"
     ),
     
-    pickerInput(
+    # pickerInput(
+    #   inputId = ns("col_intervention"),
+    #   label = "Intevention",
+    #   selected = "steelblue",
+    #   choices = colors(),
+    #   options = list(
+    #     `live-search` = TRUE,
+    #     `size` = 5)
+    # ),
+    # 
+    # pickerInput(
+    #   inputId = ns("col_control"),
+    #   label = "Control",
+    #   selected = "orange",
+    #   choices = colors(),
+    #   options = list(
+    #     `live-search` = TRUE,
+    #     `size` = 5)
+    # ),
+    
+    colorPickr(
       inputId = ns("col_intervention"),
-      label = "Intevention",
-      selected = "steelblue",
-      choices = colors(),
-      options = list(
-        `live-search` = TRUE,
-        `size` = 5)
+      preview = TRUE,
+      label = 'Intevention',
+      selected = '#4682B4',
+      update = 'changestop'
     ),
     
-    pickerInput(
+    colorPickr(
       inputId = ns("col_control"),
-      label = "Control",
-      selected = "orange",
-      choices = colors(),
-      options = list(
-        `live-search` = TRUE,
-        `size` = 5)
+      preview = TRUE,
+      label = 'Control',
+      selected = '#FFA500',
+      update = 'changestop'
     ),
     
-    pickerInput(
+    colorPickr(
       inputId = ns("col_background"),
-      label = "Population",
-      selected = "white",
-      choices = colors(),
-      options = list(
-        `live-search` = TRUE,
-        `size` = 5)
+      preview = TRUE,
+      label = 'Baggrundsfarve',
+      selected = '#FFFFFF',
+      update = 'changestop'
     ),
+   
     
     actionButton(
       inputId = ns("col_reset"),

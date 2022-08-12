@@ -557,18 +557,17 @@ main_tableserver <- function(id, data, intervention_effect){
     
     
     # plot
-    baseline_plot <- reactive({
+    plot_data <- reactive({
       
       message('Plotting Data')
       
       data() %>% flavor(effect = intervention_effect())  %>%
         baselayer() %>%
         baseplot() %>%
-        effectlayer() 
-      
-      
-      
-      
+        effectlayer() %>%
+        plot_layout(
+          background_color = input$col_background
+        )
       
       
       
@@ -596,16 +595,7 @@ main_tableserver <- function(id, data, intervention_effect){
     
     
     
-    plot_data <- reactive({
-
-      baseline_plot() %>%
-        plot_layout(
-          background_color = input$col_background,
-          intervention_color = input$col_intervention,
-          control_color = input$col_control
-        )
-
-    })
+    
     
 
       map(
@@ -631,23 +621,16 @@ main_tableserver <- function(id, data, intervention_effect){
                   message = 'Vælg outcome(s)'
                 )
               )
-              
-              
-                
-                
-             
+
 
 
               tryCatch(
-                {
-                  plot_data()[[i]] %>%
-                    subplot(
-                      titleX = TRUE,
-                      titleY = TRUE,
-                      shareX = TRUE
-                    ) 
-                },
-                
+                plot_data()[[i]] %>%
+                  subplot(
+                    titleX = TRUE,
+                    titleY = TRUE,
+                    shareX = TRUE
+                  ),
                 error = function(condition) {
 
                   validate(
@@ -731,12 +714,10 @@ main_tableserver <- function(id, data, intervention_effect){
 
       }
     )
-      
-      
-  }
-  )
-}
 
 
 
     
+    
+    })
+}

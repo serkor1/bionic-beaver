@@ -5,7 +5,11 @@
 # date: 2022-06-16
 
 
-.layout_model1 <- function(plot_list) {
+
+.layout_model1 <- function(
+    plot_list,
+    background_color = 'white', intervention_color = '#4682B4', control_color = '#FFA500'
+    ) {
   map(plot_list,
       function(plot) {
         map(plot,
@@ -34,9 +38,46 @@
                                   get_allocator)
               
               
+              
+              plot <- plot %>% style(
+                line = list(
+                  color = control_color
+                ), 
+                marker = list(
+                  color = control_color
+                ),
+                traces = 3
+              ) %>% style(
+                line = list(
+                  color = intervention_color
+                ), 
+                marker = list(
+                  color = intervention_color
+                ),
+                traces = c(2)
+              ) %>% style(
+                traces = 4,
+                line = list(
+                  dash = "dot",
+                  color = intervention_color
+                ),
+                marker = list(
+                  color = intervention_color
+                )
+              )
+              
+              
+              
+              
               # Add Layout; #####
               plotly::layout(
                 plot,
+                paper_bgcolor = '#ffffff00',
+                plot_bgcolor='#ffffff00',
+                font = list(
+                  size = 14,
+                  color = background_color
+                ),
                 
                 yaxis = list(
                   showgrid = FALSE,
@@ -59,17 +100,20 @@
                   text = "Intervention start",
                   yref = "paper",
                   x = 0,
-                  y = 1.1,
+                  y = 1,
                   showarrow = FALSE,
-                  font = list(size = 14,
-                              color = 'blue')
+                  font = list(
+                    size = 14,
+                    color = background_color)
                 ),
                 
                 shapes = list(
                   list(
                     type = "line",
-                    line = list(color = 'blue',
-                                dash  = "dot"),
+                    line = list(
+                      color = background_color,
+                      dash  = "dot"
+                      ),
                     y0 = 0,
                     y1 = 1,
                     yref = "paper",
@@ -86,7 +130,9 @@
         
         
         
-      })
+      }
+
+      )
   
 }
 
@@ -96,8 +142,16 @@
 
 # Add layout;
 
-plot_layout <- function(plot_list) {
+plot_layout <- function(plot_list,background_color = 'white', intervention_color = '#4682B4', control_color = '#FFA500') {
+  
   if (inherits(plot_list, 'model1')) {
-    plot_list %>% .layout_model1()
-  }
+   
+     plot_list %>% .layout_model1(
+       background_color = background_color,
+       intervention_color = intervention_color,
+       control_color = control_color
+     )
+  
+    }
+  
 }
