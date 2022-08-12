@@ -513,7 +513,6 @@ main_tableserver <- function(id, data, intervention_effect){
         req(input$pt_target)
         req(input$pt_outcome)
         
-        
         message("Grinding Data:")
         message(
           paste(
@@ -553,13 +552,11 @@ main_tableserver <- function(id, data, intervention_effect){
     )
     
     
-    
-    
-    
     # plot
     plot_data <- reactive({
       
       message('Plotting Data')
+      
       
       data() %>% flavor(effect = intervention_effect())  %>%
         baselayer() %>%
@@ -594,128 +591,121 @@ main_tableserver <- function(id, data, intervention_effect){
     
     
     
-    
-
-      map(
+    map(
       1:4,
       .f = function(i) {
-
-
-
-
-
-          output[[paste0("plot", i)]] <- renderPlotly(
-            {
-
-
-
-              validate(
+        
+        
+       
+        
+        
+        output[[paste0("plot", i)]] <- renderPlotly(
+          {
+            
+          
+            
+            validate(
                 need(
                   input$pt_target,
                   message = 'Vælg en sygdomsgruppe!'
-                ),
+                  ),
                 need(
                   input$pt_outcome,
                   message = 'Vælg outcome(s)'
                 )
-              )
-
-
-
-              tryCatch(
-                plot_data()[[i]] %>%
-                  subplot(
-                    titleX = TRUE,
-                    titleY = TRUE,
-                    shareX = TRUE
-                  ),
-                error = function(condition) {
-
-                  validate(
-                    need(
-                      is.null(input$pt_outcome),
-                      message ="Error")
+            )
+            
+            waiter <- waiter::Waiter$new(id = 'plot1')
+            waiter$show()
+            Sys.sleep(1)
+            
+          tryCatch(
+            plot_data()[[i]] %>%
+              subplot(
+                titleX = TRUE,
+                titleY = TRUE,
+                shareX = TRUE
+              ),
+           error = function(condition) {
+              
+             validate(
+               need(
+                 is.null(input$pt_outcome),
+                 message ="Error")
+             )
+              
+            },
+            warning = function(condition) {
+              
+              validate(
+                need(
+                  is.null(input$pt_outcome),
+                  message = paste(
+                    'Ingen relevante outcome(s) valgt. Se:', paste(chose_outcomes(), collapse = ",")
                   )
-
-                },
-                warning = function(condition) {
-
-                  validate(
-                    need(
-                      is.null(input$pt_outcome),
-                      message = paste(
-                        'Ingen relevante outcome(s) valgt. Se:', paste(chose_outcomes(), collapse = ",")
-                      )
-                    )
                   )
-
-                }
               )
-
-
-
-
-
-
-
-
-              # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
-              #
-              #   shinyFeedback::feedbackDanger(
-              #     inputId = "pt_demographic",
-              #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
-              #     text = "Sammenligningen er problematisk!",
-              #     icon = NULL
-              #   )
-              #
-              # }
-              # chosen_colors <- reactiveValues(
-              #   control_color = input$col_control,
-              #   color_background = input$col_background,
-              #   color_intervention = input$col_intervention
-              #
-              # )
-              #
-              #
-              # plot_data()[[i]]  %>%
-              #   do_plot(
-              #     difference = input$do_difference,
-              #     show_baseline = input$show_baseline,
-              #     color_intervention = chosen_colors$color_intervention,
-              #     color_background    = chosen_colors$color_background,
-              #     color_control      = chosen_colors$control_color
-              #   )
-              # plotly::plot_ly(
-              #   mtcars,
-              #   x = ~mpg,
-              #   y = ~hp,
-              #   type = "scatter",
-              #   mode = "markers"
-              # )
-
-
+              
             }
-          )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          )  
+            
+           
+            
+            on.exit(waiter$hide())
+            
+            # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+            #
+            #   shinyFeedback::feedbackDanger(
+            #     inputId = "pt_demographic",
+            #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
+            #     text = "Sammenligningen er problematisk!",
+            #     icon = NULL
+            #   )
+            #
+            # }
+            # chosen_colors <- reactiveValues(
+            #   control_color = input$col_control,
+            #   color_background = input$col_background,
+            #   color_intervention = input$col_intervention
+            #
+            # )
+            #
+            #
+            # plot_data()[[i]]  %>%
+            #   do_plot(
+            #     difference = input$do_difference,
+            #     show_baseline = input$show_baseline,
+            #     color_intervention = chosen_colors$color_intervention,
+            #     color_background    = chosen_colors$color_background,
+            #     color_control      = chosen_colors$control_color
+            #   )
+            # plotly::plot_ly(
+            #   mtcars,
+            #   x = ~mpg,
+            #   y = ~hp,
+            #   type = "scatter",
+            #   mode = "markers"
+            # )
+            
+            
+          }
+        )
+        
+        
+        
+        
+        
+        
+        
+        
+        
       }
     )
-
-
-
     
     
-    })
+    
+    
+    
+  }
+  )
 }

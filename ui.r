@@ -158,6 +158,7 @@ bs4DashPage(
     # ),
     includeCSS("www/theme.css"),
     useShinyjs(),
+    waiter::use_waiter(),
     
     
     #temp_box(),

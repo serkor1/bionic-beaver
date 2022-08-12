@@ -33,7 +33,7 @@
   bs4TabCard(
     width = 12,
     status = "primary",
-    collapsible = FALSE,height = '750px',
+    collapsible = FALSE,height = '825px',
     sidebar = .sidebar(id, input, output),
     title = span(
       
@@ -91,9 +91,17 @@
               
               
               fluidRow(
-                plotlyOutput(
-                  outputId = ns(paste0("plot",i)),height = '800px'
+                column(
+                  width = 12,
+                  shinycssloaders::withSpinner(
+                     plotlyOutput(
+                      outputId = ns(paste0("plot",i)),height = '800px'
+                    ),
+                    type = 7,
+                    size = 2,hide.ui = FALSE
+                  )
                 )
+                
               )
               
               
