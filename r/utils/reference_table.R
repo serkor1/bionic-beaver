@@ -30,11 +30,13 @@
         element,
         .f = function(element) {
           
+          
+          
          counter <<- counter + 1
          
          if (counter > 1) {
            
-           NULL
+           return(NULL)
            
          } else {
            
@@ -55,24 +57,24 @@
           # 2) split variables
           # and cast
           
-         data[
+         data <- unique(data[
            ,
            c("variable", "value") :=  tstrsplit(chars, "_", fixed=TRUE)
            ,
-         ]
+         ])
          
          
-         dcast(
-           data,
-           value.var = 'value',
-           formula = id ~ variable
-         )
+         # dcast(
+         #   data,
+         #   value.var = 'value',
+         #   formula = id ~ variable
+         # )
           
           
           
           
           
-          
+          return(data)
            
            
          }
@@ -109,7 +111,7 @@
 
 .extract_id <- function(
     lookup = lookup,
-  chars = NULL,
+  values = NULL,
   vars = c("alder", 'arbejdsmarked', 'køn', 'uddannelse')
 ) {
   
@@ -125,30 +127,37 @@
     
   }
   
-  lookup[
-    ,
-    lapply(
-      .SD,
-      function(x) {
-        
-        
-        x %chin% str_remove_all(chars, "[:alpha:]+_")
-        
-      }
-    )
-    ,
-    by = .(id),
-    .SDcols = colnames(lookup)[-1]
-  ][
-    ,
-    .(
-      id,
-      fetch = apply(.SD, 1, sum)
-    ),
-    .SDcols = colnames(lookup)[-1]
-  ][
-    fetch == length(chars)
-  ]$id
+  # lookup[
+  #   ,
+  #   lapply(
+  #     .SD,
+  #     function(x) {
+  #       
+  #       
+  #       x %chin% str_remove_all(chars, "[:alpha:]+_")
+  #       
+  #     }
+  #   )
+  #   ,
+  #   by = .(id),
+  #   .SDcols = colnames(lookup)[-1]
+  # ][
+  #   ,
+  #   .(
+  #     id,
+  #     fetch = apply(.SD, 1, sum)
+  #   ),
+  #   .SDcols = colnames(lookup)[-1]
+  # ][
+  #   fetch == length(chars)
+  # ]$id
+  
+  
+  sort(
+    unique(lookup[
+    chars %chin% values
+  ]$id)
+  )
 
   
 }

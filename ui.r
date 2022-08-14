@@ -1,3 +1,7 @@
+# script: Userinterface
+# objective: Generate a dynamic UI
+# date: 2022-08-12
+# author: Serkan Korkmaz
 
 bs4DashPage(
   help = TRUE,
@@ -14,7 +18,7 @@ bs4DashPage(
     ),
     bs4dash_layout(
       main_bg = "#353c42",
-      sidebar_width = "350px"
+      sidebar_width = "200px"
     ),
     bs4dash_sidebar_light(
       bg = "#272c30",
@@ -31,12 +35,15 @@ bs4DashPage(
       light = "#73808c",
     ),
     bs4dash_color(
-      gray_900 = "#FFF", white = "#272c30"
+      gray_900 = "#FFF",
+      white = "#272c30"
     )
   ),
   # Loaader; ####
   preloader = list(
-    html = tagList(spin_1(),"Indlæser ...")
+    html = tagList(
+      spin_1(),"Indlæser ..."
+      )
   ),
   
   # Global Options; ###
@@ -46,64 +53,56 @@ bs4DashPage(
   # Title; ####
   # title on Navigation bar
   # on browser
-  title = "Den Sunhedsøkonomiske Investeringsmodel",
+  title = "Den Sundhedsøkonomiske Investeringsmodel",
   
   # header; ####
-  header = bs4DashNavbar(border = FALSE,
-                         fixed = TRUE,
-                         titleWidth = "350px",
-                         
-                         title = bs4DashBrand(
-                           color = "primary",
-                           opacity = 0,image = NULL,
-                           # title = div(
-                           #   align = 'center',
-                           # span(
-                           #   icon("dashboard", verify_fa = FALSE),
-                           #   strong("Dashboard")
-                           # )
-                           # )
-                           title = column(
-                             width = 6,offset = 4,
-                             span(
-                               icon("dashboard", verify_fa = FALSE),
-                               strong("Dashboard")
-                             )
-                           )
-                         ),
-                         rightUi = tags$li(
-                           uiOutput("gen_header"),
-                           class = "dropdown"
-                         )
+  header = bs4DashNavbar(
+    border = FALSE,
+    fixed = TRUE,
+    #titleWidth = "200p",
+    title = bs4DashBrand(
+      color = "primary",
+      opacity = 0,
+      image = NULL,
+      title = column(
+        width = 12,
+        offset = 2,
+        tags$div(
+          
+          span(
+            icon("dashboard", verify_fa = FALSE),
+            strong("Dashboard")
+          )
+        )
+        
+        )
+      )
   ),
   
   
   # sidebar; ####
   sidebar = bs4DashSidebar(
+    # Sidebar Start:
     fixed = TRUE,
     minified = TRUE,
     collapsed = TRUE,
-    
+    # Sidebar Content Start
     sidebarMenu(
       id = "tab",
       compact = FALSE,
       flat = TRUE,
       childIndent = TRUE,
-      
       menuItem(
         text = "Forsiden",
-        icon = icon('home', verify_fa = FALSE),
+        icon = icon('home', verify_fa = FALSE,lib = 'font-awesome'),
         startExpanded = TRUE,
         tabName = "front_page",
         selected = TRUE
       ),
-      
-      
       menuItem(
         text = "Vælg Model",
         startExpanded = TRUE,
-        icon = icon("cog", verify_fa = FALSE),
-        
+        icon = icon("calculator", verify_fa = FALSE,lib = 'font-awesome'),
         menuSubItem(
           text = "Målgruppemodel",
           tabName = "model_1"
@@ -112,120 +111,57 @@ bs4DashPage(
           text = "Forældremodellen",
           tabName = "model_2"
         )
-        
       ),
       
       bs4SidebarMenuItem(
         text = "Data",
         startExpanded = TRUE,
-        icon = icon("cog", verify_fa = FALSE),
-        
+        icon = icon("sitemap", verify_fa = FALSE,lib = 'font-awesome'),
         menuSubItem(
           text = "Model Dokumentation",
           tabName = 'documentation'
         ),
-        
         menuSubItem(
           text = "VIVEs Dokumentation",
           tabName = "report"
         ),
-        
-        
         menuSubItem(
           text = "Download Data",
           tabName = "export_data"
-          
         )
-        
       )
-      
-      
-      
-      
-      
-      
-      
-      
-      
     )
-  )
-  ,
+    
+    # Sidebar End
+  ),
   
   # body; ####
   body = bs4DashBody(
-    # tags$head(
-    #   includeCSS("www/theme.css")
-    # ),
+    # Body Start;
     includeCSS("www/theme.css"),
     useShinyjs(),
-    
-    
-    #temp_box(),
-    # tabBox(
-    #   id = "tabcard",
-    #   title = "A card with tabs",
-    #   selected = "Tab 2",
-    #   status = "primary",
-    #   solidHeader = FALSE,
-    #   type = "tabs",
-    #   tabPanel(
-    #     title = "Tab 1",
-    #     "Content 1"
-    #   ),
-    #   tabPanel(
-    #     title = "Tab 2",
-    #     "Content 2"
-    #   ),
-    #   tabPanel(
-    #     title = "Tab 3",
-    #     "Content 3"
-    #   )
-    #   ),
-    
-    
-    # tags$style("
-    #           body {
-    # -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
-    # zoom: 0.8; /* Other non-webkit browsers */
-    # zoom: 80%; /* Webkit browsers */"
-    # }
-    # ),
-    # CSS Code;
-    # TODO: Migrate to External file
-    # tags$head(tags$style('#test .card-header{ display: none}')),
-    # tags$head(
-    #   tags$style(HTML("
-    #   .shiny-output-error-validation {
-    #     color: white;
-    #   }
-    # "))
-    # ),
-    
-    useShinyjs(),
-    shinyFeedback::useShinyFeedback(),
-    
+    useShinyFeedback(),
+    use_waiter(),
     uiOutput("gen_body"),
     uiOutput("performance")
+    
+    # Body End
     
   ),
   
   # footer; #####
   footer = bs4DashFooter(
+    # Footer Start;
     fixed = TRUE,
-    left = span("Den Sundhedsøkonomiske Investeringsmodel",
-                
-                bs4Badge(
-                  color = "info",
-                  rounded = TRUE,
-                  fifelse(isTRUE(developper_mode), "Developper Mode", "Live Mode")
-                ),
-                bs4Badge(
-                  color = "info",
-                  rounded = TRUE,
-                  paste("Version", version)
-                  
-                )
-                
+    left = span(
+      "Den Sundhedsøkonomiske Investeringsmodel",
+      bs4Badge(
+        color = "info",rounded = TRUE,fifelse(isTRUE(developper_mode), "Developper Mode", "Live Mode")),
+      bs4Badge(
+        color = "info",
+        rounded = TRUE,
+        paste("Version", version)
+        )
     ),
     right = span(
       a(
@@ -248,12 +184,13 @@ bs4DashPage(
         href = "documentation/_book/index.html",
         target = "_blank"
       ),
-      
       a(
-        img(src = "vive.png",height = "20px", width = "50px"),
+        img(src = "vive.png",height = "25px", width = "50px"),
         href = "https://www.vive.dk/da/",
         target = "_blank"
       )
     )
+    
+    # Footer End;
   )
 )

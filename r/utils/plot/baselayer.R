@@ -103,9 +103,10 @@
         data   = data,
         type   = "bar",
         orientation = 'h',
-        showlegend = fifelse(
-          iterator == 1, TRUE, FALSE
-        )
+        showlegend = FALSE
+        # showlegend = fifelse(
+        #   iterator == 1, TRUE, FALSE
+        # )
       )
       
     }

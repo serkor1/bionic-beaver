@@ -4,9 +4,6 @@
 # author: Serkan Korkmaz
 
 
-
-
-
 .mainbox_model1 <- function(
   input,
   output,
@@ -33,7 +30,8 @@
   bs4TabCard(
     width = 12,
     status = "primary",
-    collapsible = FALSE,height = '750px',
+    collapsible = FALSE,
+    height = '825px',
     sidebar = .sidebar(id, input, output),
     title = span(
       
@@ -91,9 +89,17 @@
               
               
               fluidRow(
-                plotlyOutput(
-                  outputId = ns(paste0("plot",i)),height = '800px'
+                column(
+                  width = 12,
+                  withSpinner(
+                     plotlyOutput(
+                      outputId = ns(paste0("plot",i)),height = '800px'
+                    ),
+                    type = 7,
+                    size = 2,hide.ui = FALSE
+                  )
                 )
+                
               )
               
               
@@ -150,7 +156,7 @@
     column(
       width = 4,
       bs4InfoBox(
-        title = strong("Valgt Gruppe"),
+        title = strong("Valgt gruppe"),
         subtitle =  textOutput(ns("chosen_target"),inline = TRUE),
         color = "primary",
         width = 12,
@@ -159,7 +165,7 @@
         icon = icon("lungs-virus")
       ),
       bs4InfoBox(
-        title = strong("Valgt Sammenligningsgruppe"),
+        title = strong("Valgt sammenligningsgruppe"),
         subtitle =  textOutput(ns("chosen_control"),inline = TRUE),
         color = "primary",
         width = 12,

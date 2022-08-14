@@ -101,10 +101,20 @@
       
       plot %>% add_trace(
         y = "Valgt Gruppe",
-        x = ~intervention
-      ) %>% add_trace(
+        x = ~intervention,
+        marker = list(
+                      
+                      line = list(color = 'black',
+                                  
+                                  width = 1.5))
+        ) %>% add_trace(
         y = "Sammenligningsgruppe",
-        x = ~control
+        x = ~control,
+        marker = list(
+                      
+                      line = list(color = 'black',
+                                  
+                                  width = 1.5))
       )
       
     }

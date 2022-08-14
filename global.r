@@ -9,19 +9,18 @@ library(bs4Dash)
 library(shinyjs)
 library(shinyWidgets)
 library(data.table)
-library(waiter)
 library(plotly)
-library(waiter)
 library(DT)
 library(fresh)
 library(purrr)
 library(rhandsontable)
 library(readODS)
+library(shinycssloaders)
+library(shinyFeedback)
+library(waiter)
 
 # Developper Mode;
-developper_mode = TRUE
-
-
+developper_mode = FALSE
 
 # Setup script; ####
 # 
@@ -87,7 +86,6 @@ chars      <- load_parameters$chars
 assignment <- load_parameters$assignment
 outcome    <- load_parameters$outcome
 lookup     <- .gen_lookup(data_list)
-
 
 
 

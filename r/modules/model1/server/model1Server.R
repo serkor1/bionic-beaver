@@ -5,50 +5,66 @@
   moduleServer(id, function(input, output, session)
   {
     
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_control",
-      !isTruthy(input$pt_control),
-      text = "Vælg Sammenligningsgruppe!",icon = NULL
-    )
     
-    
-    shinyFeedback::feedbackWarning(
-      inputId = "pt_target",
-      !isTruthy(input$pt_target),
-      text = "Vælg Gruppe!",icon = NULL
-    )
       
-      shinyFeedback::feedbackWarning(
-        inputId = "pt_outcome",
-        !isTruthy(input$pt_outcome),
-        text = "Vælg Outcome(s)!",icon = NULL
-      )
+
+  
       
     
+    # observe({
+    #   invalidateLater(1000)
+    #   
+    #   shinyFeedback::feedbackWarning(
+    #     inputId = "pt_target",
+    #     !isTruthy(input$pt_target) | !str_detect(input$pt_target, '[:alpha:]'),
+    #     text = "Vælg Gruppe!",icon = NULL
+    #   )
+    #   
+    #   shinyFeedback::feedbackWarning(
+    #     inputId = "pt_control",
+    #     !isTruthy(input$pt_control),
+    #     text = "Vælg Sammenligningsgruppe!",icon = NULL
+    #   )
+    #   
+    #   shinyFeedback::feedbackWarning(
+    #     inputId = "pt_outcome",
+    #     !isTruthy(input$pt_outcome),
+    #     text = "Vælg Outcome(s)!",icon = NULL
+    #   )
+    #   
+    #   
+    #   
+    #   shinyFeedback::feedbackDanger(
+    #     inputId = 'pt_control',
+    #     input$pt_control == input$pt_target,
+    #     text = 'Skift gruppe!',
+    #     icon = NULL
+    #   )
+    #   
+    #   
+    #   if (!isTruthy(input$pt_outcome) & !isTruthy(input$pt_target)){
+    #     createAlert(
+    #       id = "myalert",
+    #       options = list(
+    #         title = "Information",
+    #         closable = TRUE,
+    #         width = 12,
+    #         elevations = 4,
+    #         status = "primary",
+    #         content = "Venter på input..."
+    #       )
+    #     )
+    #   } else {
+    #     closeAlert(id = "myalert")
+    #   }
+    # 
+    # })
     
-      shinyFeedback::feedbackDanger(
-        inputId = 'pt_control',
-        input$pt_control == input$pt_target,
-        text = 'Skift gruppe!',
-        icon = NULL
-      )
+    
+    
+    
+
       
-      
-      if (!isTruthy(input$pt_outcome) & !isTruthy(input$pt_target)){
-        createAlert(
-          id = "myalert",
-          options = list(
-            title = "Information",
-            closable = TRUE,
-            width = 12,
-            elevations = 4,
-            status = "primary",
-            content = "Venter på input..."
-          )
-        )
-      } else {
-        closeAlert(id = "myalert")
-      }
       
       
 
@@ -80,7 +96,7 @@
         test = length(demographic) == 0 | length(demographic) == get_len,
         yes  = 'Alle valgt',
         no   = paste(
-          input$pt_demographic,
+          str_extract_all(input$pt_demographic, pattern = '(?<=_).+'),
           collapse = ", "
         )
       )
@@ -489,20 +505,38 @@ main_tableserver <- function(id, data, intervention_effect){
     
     
     
+    
+    
     data <- reactive(
       {
         
         req(input$pt_target)
         req(input$pt_outcome)
         
-        message('Grinding Data')
+        
+        message("Grinding data for model1:")
+        message(
+          paste(
+            'With Parameters:\n',
+            'Intervention:', paste(input$pt_target), '\n',
+            'Control:',paste(input$pt_control), is.null(input$pt_control),'\n',
+            'Outcomes:',paste(input$pt_outcome, collapse = ","),'\n',
+            'Characteristics:', paste(input$pt_demographic, collapse = ","),'\n',
+            'Incidence:', input$do_incident, '\n',
+            'Alternate:', input$do_cost
+                )
+        )
+        
+        
+        
         
         data_list %>% grind(
           intervention     = paste(input$pt_target),
           control          = paste(input$pt_control),
           allocators       = paste(input$pt_outcome),
           chars            = paste(input$pt_demographic),
-          alternate = FALSE
+          do_incidence = input$do_incident,
+          alternate = input$do_cost
         ) %>% spread()
       }
     )
@@ -519,16 +553,23 @@ main_tableserver <- function(id, data, intervention_effect){
     )
     
     
+    
+    
+    
     # plot
-    plot_data <- reactive({
+    baseline_plot <- reactive({
+      
+      message('Plotting Data')
       
       
-      
-      data() %>% flavor(effect = intervention_effect()) %>%
+      data() %>% flavor(effect = intervention_effect())  %>%
         baselayer() %>%
-        baseplot() %>% 
-        effectlayer() %>% 
-        plot_layout()
+        baseplot() %>%
+        effectlayer() 
+      
+      
+      
+      
       
       
       
@@ -537,78 +578,18 @@ main_tableserver <- function(id, data, intervention_effect){
     })
     
     
-    
-    
-    
-    
-    
-    
-    map(
-      1:4,
-      .f = function(i) {
+    chose_outcomes <- reactive(
+      {
         
-        
-        
-        
-        output[[paste0("plot", i)]] <- renderPlotly(
-          {
-            
-            
-            plot_data()[[i]] %>%
-              subplot(
-                titleX = TRUE,
-                titleY = TRUE,
-                shareX = TRUE
-              )
-            
-            
-            
-            
-            # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
-            #
-            #   shinyFeedback::feedbackDanger(
-            #     inputId = "pt_demographic",
-            #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
-            #     text = "Sammenligningen er problematisk!",
-            #     icon = NULL
-            #   )
-            #
-            # }
-            # chosen_colors <- reactiveValues(
-            #   control_color = input$col_control,
-            #   color_background = input$col_background,
-            #   color_intervention = input$col_intervention
-            #
-            # )
-            #
-            #
-            # plot_data()[[i]]  %>%
-            #   do_plot(
-            #     difference = input$do_difference,
-            #     show_baseline = input$show_baseline,
-            #     color_intervention = chosen_colors$color_intervention,
-            #     color_background    = chosen_colors$color_background,
-            #     color_control      = chosen_colors$control_color
-            #   )
-            # plotly::plot_ly(
-            #   mtcars,
-            #   x = ~mpg,
-            #   y = ~hp,
-            #   type = "scatter",
-            #   mode = "markers"
-            # )
-            
-            
-          }
+        fcase(
+          input$pt_outcome %chin% outcome[[1]]$Overførsel, 'Arbejdsmarked',
+          input$pt_outcome %chin% outcome[[1]]$`Primær Sektor`, 'Primær Sektor',
+          input$pt_outcome %chin% outcome[[1]]$Psykiatrien, 'Psykiatrien',
+          input$pt_outcome %chin% outcome[[1]]$Somatikken, 'Somatik'
+          
+          
+          
         )
-        
-        
-        
-        
-        
-        
-        
-        
         
       }
     )
@@ -616,7 +597,151 @@ main_tableserver <- function(id, data, intervention_effect){
     
     
     
+    plot_data <- reactive({
+
+      baseline_plot() %>%
+        plot_layout(
+          background_color = input$col_background,
+          intervention_color = input$col_intervention,
+          control_color = input$col_control
+        )
+
+    })
     
+
+      map(
+      1:4,
+      .f = function(i) {
+
+
+
+
+
+          output[[paste0("plot", i)]] <- renderPlotly(
+            {
+
+
+
+              validate(
+                need(
+                  input$pt_target,
+                  message = 'Vælg en sygdomsgruppe!'
+                ),
+                need(
+                  input$pt_outcome,
+                  message = 'Vælg outcome(s)'
+                )
+              )
+              
+              
+              message(
+                paste(
+                  "Data Dim:", dim(data()[[i]])
+                )
+              )
+              
+                
+
+
+              tryCatch(
+                {
+                  plot_data()[[i]] %>%
+                    subplot(
+                      titleX = TRUE,
+                      titleY = TRUE,
+                      shareX = TRUE
+                    )
+                },
+
+                error = function(condition) {
+
+                  validate(
+                    need(
+                      is.null(input$pt_outcome),
+                      message ="Error")
+                  )
+
+                },
+                warning = function(condition) {
+
+                  validate(
+                    need(
+                      is.null(input$pt_outcome),
+                      message = paste(
+                        'Ingen relevante outcome(s) valgt. Se:', paste(chose_outcomes(), collapse = ",")
+                      )
+                    )
+                  )
+
+                }
+              )
+
+
+
+
+
+
+
+
+              # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
+              #
+              #   shinyFeedback::feedbackDanger(
+              #     inputId = "pt_demographic",
+              #     !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
+              #     text = "Sammenligningen er problematisk!",
+              #     icon = NULL
+              #   )
+              #
+              # }
+              # chosen_colors <- reactiveValues(
+              #   control_color = input$col_control,
+              #   color_background = input$col_background,
+              #   color_intervention = input$col_intervention
+              #
+              # )
+              #
+              #
+              # plot_data()[[i]]  %>%
+              #   do_plot(
+              #     difference = input$do_difference,
+              #     show_baseline = input$show_baseline,
+              #     color_intervention = chosen_colors$color_intervention,
+              #     color_background    = chosen_colors$color_background,
+              #     color_control      = chosen_colors$control_color
+              #   )
+              # plotly::plot_ly(
+              #   mtcars,
+              #   x = ~mpg,
+              #   y = ~hp,
+              #   type = "scatter",
+              #   mode = "markers"
+              # )
+
+
+            }
+          )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      }
+    )
+      
+      
   }
   )
 }
+
+
+
+    

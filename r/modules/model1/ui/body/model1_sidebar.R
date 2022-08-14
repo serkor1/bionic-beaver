@@ -173,35 +173,50 @@
       content = "Skal den generelle befolkning vises?"
     ),
     
-    pickerInput(
+    # pickerInput(
+    #   inputId = ns("col_intervention"),
+    #   label = "Intevention",
+    #   selected = "steelblue",
+    #   choices = colors(),
+    #   options = list(
+    #     `live-search` = TRUE,
+    #     `size` = 5)
+    # ),
+    # 
+    # pickerInput(
+    #   inputId = ns("col_control"),
+    #   label = "Control",
+    #   selected = "orange",
+    #   choices = colors(),
+    #   options = list(
+    #     `live-search` = TRUE,
+    #     `size` = 5)
+    # ),
+    
+    colorPickr(
       inputId = ns("col_intervention"),
-      label = "Intevention",
-      selected = "steelblue",
-      choices = colors(),
-      options = list(
-        `live-search` = TRUE,
-        `size` = 5)
+      preview = TRUE,
+      label = 'Intevention',
+      selected = '#4682B4',
+      update = 'changestop'
     ),
     
-    pickerInput(
+    colorPickr(
       inputId = ns("col_control"),
-      label = "Control",
-      selected = "orange",
-      choices = colors(),
-      options = list(
-        `live-search` = TRUE,
-        `size` = 5)
+      preview = TRUE,
+      label = 'Control',
+      selected = '#FFA500',
+      update = 'changestop'
     ),
     
-    pickerInput(
+    colorPickr(
       inputId = ns("col_background"),
-      label = "Population",
-      selected = "white",
-      choices = colors(),
-      options = list(
-        `live-search` = TRUE,
-        `size` = 5)
+      preview = TRUE,
+      label = 'Baggrundsfarve',
+      selected = '#FFFFFF',
+      update = 'changestop'
     ),
+   
     
     actionButton(
       inputId = ns("col_reset"),
@@ -238,7 +253,7 @@
     ),
     
     pickerInput(
-      inputId = ns("col_intersvention"),
+      inputId = ns("m1col_intervention"),
       label = "Intevention",
       selected = "steelblue",
       choices = colors(),
@@ -248,7 +263,7 @@
     ),
     
     pickerInput(
-      inputId = ns("col_consrol"),
+      inputId = ns("m1col_control"),
       label = "Control",
       selected = "orange",
       choices = colors(),
@@ -258,7 +273,7 @@
     ),
     
     pickerInput(
-      inputId = ns("col_bacdkground"),
+      inputId = ns("m1col_background"),
       label = "Population",
       selected = "white",
       choices = colors(),
@@ -268,7 +283,7 @@
     ),
     
     actionButton(
-      inputId = ns("col_resset"),
+      inputId = ns("col_reset"),
       label = "Nulstil Farver"
     )
     
@@ -365,9 +380,9 @@
   # generate sidebar
   
   bs4CardSidebar(
-    width = 25,
+    width = 30,
     icon = span("Parametre og Indstillinger", icon("cog")),
-    background = "#85929e",
+    #background = "#85929e",
     startOpen = TRUE,
     id = "id_placeholder",
     gen_panel
