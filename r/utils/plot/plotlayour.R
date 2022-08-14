@@ -199,21 +199,30 @@ plot_layout <- function(plot_list,background_color = 'white', intervention_color
   
   if (inherits(plot_list, 'model1')) {
    
-     plot_list %>% .layout_model1(
-       background_color = background_color,
-       intervention_color = intervention_color,
-       control_color = control_color
-     )
+    message('Moel1')
+    
+    return(
+      plot_list %>% .layout_model1(
+        background_color = background_color,
+        intervention_color = intervention_color,
+        control_color = control_color
+      )
+    )
+    
   
   } 
   
   if (inherits(plot_list, 'model2')) {
     
-    plot_list %>% .layout_model2(
-      intervention_color = intervention_color,
-      control_color = control_color,
-      background_color = background_color
+    message('model2')
+    return(
+      plot_list %>% .layout_model2(
+        intervention_color = intervention_color,
+        control_color = control_color,
+        background_color = background_color
+      )
     )
+    
     
     
   }

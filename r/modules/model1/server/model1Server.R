@@ -561,6 +561,7 @@ main_tableserver <- function(id, data, intervention_effect){
       
       message('Plotting Data')
       
+      
       data() %>% flavor(effect = intervention_effect())  %>%
         baselayer() %>%
         baseplot() %>%
@@ -633,9 +634,13 @@ main_tableserver <- function(id, data, intervention_effect){
               )
               
               
+              message(
+                paste(
+                  "Data Dim:", dim(data()[[i]])
+                )
+              )
+              
                 
-                
-             
 
 
               tryCatch(
@@ -645,9 +650,9 @@ main_tableserver <- function(id, data, intervention_effect){
                       titleX = TRUE,
                       titleY = TRUE,
                       shareX = TRUE
-                    ) 
+                    )
                 },
-                
+
                 error = function(condition) {
 
                   validate(

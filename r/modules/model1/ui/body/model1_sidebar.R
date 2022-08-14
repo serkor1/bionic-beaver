@@ -253,7 +253,7 @@
     ),
     
     pickerInput(
-      inputId = ns("col_intersvention"),
+      inputId = ns("m1col_intervention"),
       label = "Intevention",
       selected = "steelblue",
       choices = colors(),
@@ -263,7 +263,7 @@
     ),
     
     pickerInput(
-      inputId = ns("col_consrol"),
+      inputId = ns("m1col_control"),
       label = "Control",
       selected = "orange",
       choices = colors(),
@@ -273,7 +273,7 @@
     ),
     
     pickerInput(
-      inputId = ns("col_bacdkground"),
+      inputId = ns("m1col_background"),
       label = "Population",
       selected = "white",
       choices = colors(),
@@ -283,7 +283,7 @@
     ),
     
     actionButton(
-      inputId = ns("col_resset"),
+      inputId = ns("col_reset"),
       label = "Nulstil Farver"
     )
     

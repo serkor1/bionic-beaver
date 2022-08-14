@@ -125,9 +125,9 @@ server <- function(input, output, session) {
     )
   
     
-    .model2server_choices(id = 'model2')
-    
-  
+  .model2server_choices(id = 'model2')
+
+
   .model2server_plot(
     id = 'model2',
     data_list = data_list[[2]]
