@@ -66,7 +66,12 @@
       
       plot %>% add_trace(
         x = ~cintervention,
-        y = "Kontrafaktisk Værdi"
+        y = "Kontrafaktisk Værdi",
+        marker = list(
+          
+          line = list(color = 'black',
+                      
+                      width = 1.5))
       ) 
       
 

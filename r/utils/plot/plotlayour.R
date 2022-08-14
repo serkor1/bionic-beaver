@@ -8,8 +8,11 @@
 
 .layout_model1 <- function(
     plot_list,
-    background_color = 'white', intervention_color = '#4682B4', control_color = '#FFA500'
+    background_color = 'white',
+    intervention_color = '#4682B4',
+    control_color = '#FFA500'
     ) {
+  
   map(plot_list,
       function(plot) {
         map(plot,
@@ -138,6 +141,56 @@
 
 
 
+.layout_model2 <- function(
+    plot_list,
+    background_color = 'white',
+    intervention_color = '#4682B4',
+    control_color = '#FFA500'  
+) {
+  
+  
+  map(
+    plot_list,
+    .f = function(plot) {
+      
+     plot <-  plot %>% style(
+        marker = list(
+          color = intervention_color,
+          line = list(
+            color = 'black',
+            width = 1.5
+          )
+        ),
+        traces = c(2,4)
+      ) %>% style(
+        traces = 3,
+        marker = list(
+          color = control_color,
+          line = list(
+            color = 'black',
+            width = 1.5
+          )
+        )
+      )
+     
+     
+     plotly::layout(
+       plot,
+       paper_bgcolor = '#ffffff00',
+       plot_bgcolor='#ffffff00',
+       font = list(
+         size = 14,
+         color = background_color
+       )
+     )
+      
+      
+    }
+  )
+  
+  
+  
+}
 
 
 # Add layout;
@@ -152,6 +205,17 @@ plot_layout <- function(plot_list,background_color = 'white', intervention_color
        control_color = control_color
      )
   
-    }
+  } 
+  
+  if (inherits(plot_list, 'model2')) {
+    
+    plot_list %>% .layout_model2(
+      intervention_color = intervention_color,
+      control_color = control_color,
+      background_color = background_color
+    )
+    
+    
+  }
   
 }

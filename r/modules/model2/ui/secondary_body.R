@@ -17,9 +17,9 @@
   
   # genereate sidebar; #####
   gen_sidebar <- bs4CardSidebar(
-    width       = 25,
-    icon        = span("Indstillinger", icon("cog")),
-    background  = "#bfc9d1",
+    width       = 30,
+    icon        = span("Parametre og Indstillinger", icon("cog")),
+    #background  = "#bfc9d1",
     startOpen   = TRUE,
     easyClose   = TRUE,
     id          = "sidebar_id",
@@ -27,7 +27,8 @@
       id = "tabcards",
       type = "pills",
       tabPanel(
-        title = "Parametre",icon = icon("cog"),
+        title = "Parametre",
+        #icon = icon("cog"),
         
         column(
           width = 12,
@@ -82,10 +83,27 @@
         
       ),
       tabPanel(
-        title = "Tab2"
+        title = "Effekt",
+        
+        sliderInput(
+          inputId = ns('effect'),
+          label   = 'Forventet Effekt',
+          min = 0,
+          max = 100,
+          value = 0
+        )
+        
       ),
       tabPanel(
-        title = "Tab3"
+        title = "Visuelt",
+        
+        .options_plot_model2(
+          id = id,
+          input = input,
+          output = output
+        )
+        
+        
       )
     )
     
@@ -94,8 +112,8 @@
   
   
   # card; #####
-  bs4Card(
-    title = "Temporary Title",
+  bs4TabCard(
+    title = NULL,
     width = 12,
     height = "500px",
     collapsible = FALSE,
@@ -103,7 +121,12 @@
     headerBorder = FALSE,
     status = "primary",
     sidebar = gen_sidebar,
-    ...
+    tabPanel(
+      title = 'Forældremodellen',
+      icon = icon('building',verify_fa = FALSE),
+      ...
+    )
+    
   )
   
   
@@ -123,23 +146,28 @@ model2UI_body <- function(id, output) {
     
     # Force Alerts to be at the bottom
     div(id = ns("myalert"), style = "position: absolute; bottom: 0; right: 0;"),
-    
-    fluidRow(
-      column(
-        width = 12,
-        radioGroupButtons(
-          inputId = paste0("change_view"),width = "100%",
-          label = NULL,
-          choices = c(`Grafik <i class='fa fa-bar-chart'></i>` = "see_plot", ` Tabel <i class='fa fa-line-chart'></i>` = "see_table"),
-          justified = TRUE,
-          size = "sm"
-        )
-      )
-      
-      
-      
+    .model2UI_choices(
+      id = id,
+      output = output
     ),
-    fluidRow(
+    
+    
+    # fluidRow(
+    #   column(
+    #     width = 12,
+    #     radioGroupButtons(
+    #       inputId = paste0("change_view"),width = "100%",
+    #       label = NULL,
+    #       choices = c(`Grafik <i class='fa fa-bar-chart'></i>` = "see_plot", ` Tabel <i class='fa fa-line-chart'></i>` = "see_table"),
+    #       justified = TRUE,
+    #       size = "sm"
+    #     )
+    #   )
+    #   
+    #   
+    #   
+    # ),
+    
       .box_main(
         id,
         output,
@@ -155,7 +183,7 @@ model2UI_body <- function(id, output) {
         
         
         )
-    )
+    
     
     
   )

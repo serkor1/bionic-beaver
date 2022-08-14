@@ -96,7 +96,7 @@
         test = length(demographic) == 0 | length(demographic) == get_len,
         yes  = 'Alle valgt',
         no   = paste(
-          input$pt_demographic,
+          str_extract_all(input$pt_demographic, pattern = '(?<=_).+'),
           collapse = ", "
         )
       )
@@ -514,7 +514,7 @@ main_tableserver <- function(id, data, intervention_effect){
         req(input$pt_outcome)
         
         
-        message("Grinding Data:")
+        message("Grinding data for model1:")
         message(
           paste(
             'With Parameters:\n',
