@@ -6,42 +6,52 @@
   {
     
     
-      
+      observe(
+        {
+          
+          if (isTruthy(input$pt_control) | isTruthy(input$pt_target) ) {
+            
+            shinyFeedback::feedbackDanger(
+              inputId = 'pt_control',
+              input$pt_control == input$pt_target,
+              text = 'Skift gruppe!',
+              icon = NULL
+            )
+          }
+          
+          
+        }
+      )
 
-  
+    
       
     
     # observe({
     #   invalidateLater(1000)
-    #   
+    # 
     #   shinyFeedback::feedbackWarning(
     #     inputId = "pt_target",
     #     !isTruthy(input$pt_target) | !str_detect(input$pt_target, '[:alpha:]'),
     #     text = "Vælg Gruppe!",icon = NULL
     #   )
-    #   
+    # 
     #   shinyFeedback::feedbackWarning(
     #     inputId = "pt_control",
     #     !isTruthy(input$pt_control),
     #     text = "Vælg Sammenligningsgruppe!",icon = NULL
     #   )
-    #   
+    # 
     #   shinyFeedback::feedbackWarning(
     #     inputId = "pt_outcome",
     #     !isTruthy(input$pt_outcome),
     #     text = "Vælg Outcome(s)!",icon = NULL
     #   )
+    # 
+    # 
+    # 
     #   
-    #   
-    #   
-    #   shinyFeedback::feedbackDanger(
-    #     inputId = 'pt_control',
-    #     input$pt_control == input$pt_target,
-    #     text = 'Skift gruppe!',
-    #     icon = NULL
-    #   )
-    #   
-    #   
+    # 
+    # 
     #   if (!isTruthy(input$pt_outcome) & !isTruthy(input$pt_target)){
     #     createAlert(
     #       id = "myalert",
@@ -318,6 +328,9 @@ main_plotserver <- function(id, data, intervention_effect = NULL, light_mode =NU
         output[[paste0("plot", i)]] <- renderPlotly(
           {
             
+
+            
+            
             
             final_plot()[[i]] %>%
               subplot(
@@ -554,6 +567,129 @@ main_tableserver <- function(id, data, intervention_effect){
     
     
     
+    flavored_data <- reactive(
+      {
+        
+        data() %>% flavor(effect = intervention_effect())
+        
+      }
+    )
+    
+    
+    # table;
+    map(
+      1:4,
+      .f = function(i) {
+
+
+        message(
+          paste("Grinding tables. Currently at", i, "of", 4, "iterations.")
+        )
+
+
+
+
+
+
+        output[[paste0("table",i)]] <- DT::renderDataTable({
+          
+          
+          # Validating Input; 
+          validate(
+            need(
+              input$pt_target,
+              message = 'Vælg en sygdomsgruppe!'
+            ),
+            need(
+              input$pt_outcome,
+              message = 'Vælg outcome(s)'
+            ),
+            need(
+              input$pt_target != input$pt_control,
+              message = 'Valgte grupper skal være forskellige.'
+            )
+          )
+          
+          
+          
+          
+          
+          tryCatch(
+            {
+              
+              
+              data <- flavored_data()[[i]]
+              
+              
+              data[order(allocator)] %>% DT::datatable(
+                rownames = FALSE,
+                extensions = c("Buttons", "RowGroup"),
+                caption = "Tabel",
+                
+                options = list(
+                  pageLength = 8,
+                  dom = "Bfrtip",
+                  columnDefs =list(
+                    list(
+                      className = "dt-head-center dt-center", targets = 1:(ncol(data) - 1)
+                    )
+                  ),
+                  rowGroup = list(dataSrc = c(1)),
+                  buttons = c("csv", "excel"),
+                  fixedHeader = TRUE,
+                  initComplete = JS(
+                    "function(settings, json) {",
+                    "$(this.api().table().header()).css({'background-color': '#5E81AC', 'color': '#fff'});",
+                    "}"
+                    )
+                )
+                
+              )
+              
+            },
+            
+            error = function(condition) {
+              
+              validate(
+                need(
+                  is.null(input$pt_outcome),
+                  message ="Error")
+              )
+              
+            },
+            warning = function(condition) {
+              
+              validate(
+                need(
+                  is.null(input$pt_outcome),
+                  message = paste(
+                    'Ingen relevante outcome(s) valgt. Se:', paste(chose_outcomes(), collapse = ",")
+                  )
+                )
+              )
+              
+            }
+          )
+          
+          
+
+
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+      }
+    )
+    
     
     
     # plot
@@ -562,7 +698,7 @@ main_tableserver <- function(id, data, intervention_effect){
       message('Plotting Data')
       
       
-      data() %>% flavor(effect = intervention_effect())  %>%
+      flavored_data() %>%
         baselayer() %>%
         baseplot() %>%
         effectlayer() 
@@ -593,6 +729,11 @@ main_tableserver <- function(id, data, intervention_effect){
         
       }
     )
+    
+    
+    
+    
+    
     
     
     
@@ -630,15 +771,17 @@ main_tableserver <- function(id, data, intervention_effect){
                 need(
                   input$pt_outcome,
                   message = 'Vælg outcome(s)'
+                ),
+                need(
+                  input$pt_target != input$pt_control,
+                  message = 'Valgte grupper skal være forskellige.'
                 )
               )
               
               
-              message(
-                paste(
-                  "Data Dim:", dim(data()[[i]])
-                )
-              )
+              # TODO: Check if default is truthy
+              # needs to be population by default.
+              
               
                 
 

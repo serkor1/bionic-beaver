@@ -76,24 +76,15 @@
           conditionalPanel(
             condition = "input.change_views == 'see_plot'",ns = ns,
             {
-              h3("Plot")
-              
-              column(
-                width = 12,
-                fluidRow(
-                  h3("Plot"),
-                  
-                  hr()
-                )
-              )
-              
               
               fluidRow(
+                column(width = 12, h3('Grafisk Output')),
+                br(),
                 column(
                   width = 12,
                   withSpinner(
                      plotlyOutput(
-                      outputId = ns(paste0("plot",i)),height = '800px'
+                      outputId = ns(paste0("plot",i)),height = '500px'
                     ),
                     type = 7,
                     size = 2,hide.ui = FALSE
@@ -102,21 +93,30 @@
                 
               )
               
-              
-              
-              
-              # model1UI_performance(
-              #   id_value = ns(paste0("effect",i)),
-              #   id,
-              #   output
-              # )
+
             }
           ),
           
           conditionalPanel(
             condition = "input.change_views == 'see_table'",ns = ns,
             {
-              h3("Tablez")
+              fluidRow(
+                column(width = 12, h3('Tabel Output')),
+                
+                br(),
+                
+                column(
+                  width = 12,
+                  withSpinner(
+                    DT::dataTableOutput(
+                      outputId = ns(paste0("table",i)), height = '500px'
+                    ),
+                    type = 7,
+                    size = 2,hide.ui = FALSE
+                  )
+                )
+                
+              )
             }
           )
           

@@ -3,6 +3,8 @@
 # date: 2022-08-12
 # author: Serkan Korkmaz
 
+yellow <- '#f7dc6f'
+
 bs4DashPage(
   help = TRUE,
   freshTheme = create_theme(
@@ -17,7 +19,7 @@ bs4DashPage(
       text_light = "#272c30"
     ),
     bs4dash_layout(
-      main_bg = "#353c42",
+      main_bg = '#ffffff', #"#353c42",
       sidebar_width = "200px"
     ),
     bs4dash_sidebar_light(
@@ -39,6 +41,7 @@ bs4DashPage(
       white = "#272c30"
     )
   ),
+  
   # Loaader; ####
   preloader = list(
     html = tagList(
@@ -138,7 +141,7 @@ bs4DashPage(
   # body; ####
   body = bs4DashBody(
     # Body Start;
-    includeCSS("www/theme.css"),
+    includeCSS("www/customtheme.css"),
     useShinyjs(),
     useShinyFeedback(),
     use_waiter(),
