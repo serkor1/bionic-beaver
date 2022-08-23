@@ -382,7 +382,6 @@
   bs4CardSidebar(
     width = 30,
     icon = span("Parametre og Indstillinger", icon("cog")),
-    #background = "#85929e",
     startOpen = TRUE,
     id = "id_placeholder",
     gen_panel

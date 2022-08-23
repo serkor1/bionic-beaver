@@ -14,11 +14,13 @@
   #   default = FALSE
   # )
   # 
-  alternate <- fcase(
-    isTRUE(alternate), 'qty',
-    default = "cost"
+  alternate <-  fcase(
+    isTRUE(alternate), 'cost',
+    default = "qty"
   )
   
+  
+ 
   
   # function logic; ####
 
@@ -50,6 +52,25 @@
           outcome_type %chin% alternate
         ]
         
+        # NOTE: MOve this to preloader when Carolines
+        # data arrives.
+        group_cols <- .find_cols(
+          cols = colnames(data),
+          pattern = c("x", "year", "assignment", "allocator", "allocator", 'id'),
+          negate = FALSE
+        )
+
+
+
+        data <- data[
+          ,
+          .(
+            outcome = mean(outcome, na.rm = TRUE),
+            weight = mean(weight, na.rm = TRUE)
+          )
+          ,
+          by = c(group_cols)
+        ]
         
         group_cols <- .find_cols(
           cols = colnames(data),
@@ -59,9 +80,9 @@
         
         data <- data[
           ,
-          list(
-            outcome = mean(
-              outcome, na.rm = TRUE
+          .(
+            outcome = sum(
+              outcome * weight, na.rm = TRUE
             )
           )
           ,
@@ -175,14 +196,14 @@
         data <- data[
           ,
           .(
-            outcome = mean(outcome)
+            outcome = sum(outcome * weight)
           )
           ,
           by = .(id, assignment_factor, allocator)
         ][
           ,
           .(
-            outcome = mean(outcome)
+            outcome = sum(outcome * weight)
           )
           ,
           by = .(assignment_factor, allocator)

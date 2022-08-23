@@ -30,7 +30,7 @@
   }
   
   
-  
+  list_names <- names(data_list)
   
   
   
@@ -131,7 +131,10 @@
     }
   )
   
+  names(data_list) <- list_names
   # return; ####
+  
+  
   
   return(
     data_list
@@ -248,6 +251,8 @@ flavor <- function(data_list, effect, do_match = FALSE) {
       do_match
     )
     
+    class(data_list) <- c(class(data_list), 'model1')
+    
   }
   
   if (inherits(data_list, 'model2')) {
@@ -257,6 +262,7 @@ flavor <- function(data_list, effect, do_match = FALSE) {
       effect
     )
     
+    class(data_list) <- c(class(data_list), 'model2')
     
   }
   
@@ -270,6 +276,8 @@ flavor <- function(data_list, effect, do_match = FALSE) {
     )
     
   }
+  
+  
   
   
   return(

@@ -31,7 +31,7 @@
     width = 12,
     status = "primary",
     collapsible = FALSE,
-    height = '825px',
+    height = '1200px',
     sidebar = .sidebar(id, input, output),
     title = span(
       
@@ -54,7 +54,8 @@
           tabset_names[i] %chin% c("primary_care"), "stethoscope",
           tabset_names[i] %chin% c("psychiatric_care"), "couch",
           tabset_names[i] %chin% c("somatic_care"), "hospital",
-          tabset_names[i] %chin% c("transfers"), "briefcase"
+          tabset_names[i] %chin% c("transfers"), "briefcase",
+          default = 'capsules'
           
         )
         
@@ -65,7 +66,8 @@
               tabset_names[i] %chin% c("primary_care"), "Almen praksis",
               tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
               tabset_names[i] %chin% c("somatic_care"), "Somatik",
-              tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet"
+              tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet",
+              default = 'Præparater'
               
             )
           ),
@@ -84,7 +86,10 @@
                   width = 12,
                   withSpinner(
                      plotlyOutput(
-                      outputId = ns(paste0("plot",i)),height = '500px'
+                      outputId = ns(paste0("plot",i)),
+                      height = '1000px',
+                      width = '100%',
+                      inline = FALSE
                     ),
                     type = 7,
                     size = 2,hide.ui = FALSE
@@ -109,7 +114,8 @@
                   width = 12,
                   withSpinner(
                     DT::dataTableOutput(
-                      outputId = ns(paste0("table",i)), height = '500px'
+                      outputId = ns(paste0("table",i)),
+                      height = '1000px',
                     ),
                     type = 7,
                     size = 2,hide.ui = FALSE
@@ -155,24 +161,25 @@
   fluidRow(
     column(
       width = 4,
-      bs4InfoBox(
-        title = strong("Valgt gruppe"),
-        subtitle =  textOutput(ns("chosen_target"),inline = TRUE),
-        color = "primary",
-        width = 12,
-        fill = TRUE,
-        gradient = TRUE,
-        icon = icon("lungs-virus")
-      ),
-      bs4InfoBox(
-        title = strong("Valgt sammenligningsgruppe"),
-        subtitle =  textOutput(ns("chosen_control"),inline = TRUE),
-        color = "primary",
-        width = 12,
-        fill = TRUE,
-        gradient = TRUE,
-        icon = icon("lungs-virus")
-      )
+        bs4InfoBox(
+          title = strong("Valgt gruppe"),
+          subtitle =  textOutput(ns("chosen_target"),inline = TRUE),
+          color = "primary",
+          width = 12,
+          fill = TRUE,
+          gradient = TRUE,
+          icon = icon("lungs-virus")
+        ),
+        bs4InfoBox(
+          title = strong("Valgt sammenligningsgruppe"),
+          subtitle =  textOutput(ns("chosen_control"),inline = TRUE),
+          color = "primary",
+          width = 12,
+          fill = TRUE,
+          gradient = TRUE,
+          icon = icon("lungs-virus")
+        )
+      
     ),
     
     column(
@@ -383,25 +390,28 @@ model1UI_performance <- function(id, output, input, id_value) {
     div(id = ns("myalert"), style = "position: absolute; bottom: 0; right: 0;"),
     # Infobox
     
-    .model1UI_choices(id,output,input),
+    fluidRow(
+      style = "height:10%;",
+      column(
+        width = 12,
+        .model1UI_choices(id,output,input)
+      ),
+      br()
+      
+    ),
     
-    
-    
-    # .box_resultmain(
-    #   id = id,
-    #   output = output
-    # 
-    # 
-    # 
-    # ),
-    
-    .model1UI_output(
-      id,
-      output,
-      input
+    fluidRow(
+      style = "height:90%; position:relative;",
+      column(
+        width = 12,
+        .model1UI_output(
+          id,
+          output,
+          input
+        )
       )
-    
-    
+      
+    )
     
     
     

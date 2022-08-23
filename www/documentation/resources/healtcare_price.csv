@@ -4,9 +4,9 @@ Primær Sektor;Anden Speciale;162
 Primær Sektor;Fysioterapi;304
 Primær Sektor;Psykiater;830
 Primær Sektor;Psykolog;596
-Psykiatrien;Ambulant;1987
-Psykiatrien;Indlæggelse;3970
-Psykiatrien;Skadestue;1987
-Somatikken;Ambulant;2891
-Somatikken;Indlæggelse;12201
-Somatikken;Skadestue;2288
+psykiatrien;Ambulant;1987
+psykiatrien;Indlæggelse;3970
+psykiatrien;Skadestue;1987
+somatikken;Ambulant;2891
+somatikken;Indlæggelse;12201
+somatikken;Skadestue;2288

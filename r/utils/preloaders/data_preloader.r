@@ -62,6 +62,14 @@
       
       
       if (str_detect(path, 'model1')) {
+        
+        if (str_detect(path, 'medication')) {
+
+          message('Medication Data')
+
+          return(data)
+
+        }
 
 
         data <- cost_data[data, on = .(allocator)][
@@ -80,7 +88,10 @@
         get_names[i]
       )
       
-      data
+      return(
+        data
+      )
+      
       
     }
   ) %>% set_names(
@@ -239,7 +250,7 @@
       # recomennded as the remaining scripts depends
       # on these variables.
       # DO IT AT OWN RISK.
-      c('chars', 'year', 'type', 'assignment', 'allocator', 'id', 'price', 'disease')
+      c('chars', 'year', 'type', 'assignment', 'allocator', 'id', 'price', 'disease', 'weight')
     ),
     negate = TRUE
   )
@@ -270,6 +281,13 @@
   }
 
   
+  
+  
+  # TODO: Add id wise aggregator
+  # here.
+  
+  
+  
   class(data) <- c(
     class(data),
     get_class
@@ -279,7 +297,7 @@
   # return statement
   
   return(
-    setDT(data)
+    setDT(unique(data))
   )
   
   

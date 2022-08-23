@@ -1,9 +1,11 @@
 server <- function(input, output, session) {
   
   
+  
+  
+  
   # Start of Server Logic;
   
-  #
   observe({
     
     message(
@@ -100,6 +102,10 @@ server <- function(input, output, session) {
     }
   )
   
+ 
+  
+  
+  
   
   
   
@@ -109,7 +115,8 @@ server <- function(input, output, session) {
   )
   
   
-  .model1server_plot(
+  
+  .model1server_output(
     id = "model1",
     data_list = data_list[[1]]
   )
@@ -126,6 +133,9 @@ server <- function(input, output, session) {
   
     
   .model2server_choices(id = 'model2')
+  
+  
+ 
 
 
   .model2server_plot(
@@ -139,7 +149,17 @@ server <- function(input, output, session) {
   
   
   
-  
+  # NOTE: 
+  # 
+  # The Controlbar is disabled and hidden
+  # as bs4dash is bugged once changin skin color
+  # without skinselector()
+  disable(
+    'controlbar-toggle'
+  )
+  hide(
+    'controlbar-toggle'
+  )
   
   
   waiter::waiter_hide()

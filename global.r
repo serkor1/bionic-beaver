@@ -18,6 +18,7 @@ library(readODS)
 library(shinycssloaders)
 library(shinyFeedback)
 library(waiter)
+library(formattable)
 
 # Developper Mode;
 developper_mode = FALSE

@@ -10,39 +10,69 @@
     plot_list,
     background_color = 'white',
     intervention_color = '#4682B4',
-    control_color = '#FFA500'
+    control_color = '#FFA500',
+    alternate = TRUE
     ) {
+  
+  
+  
+  
+  
   
   map(plot_list,
       function(plot) {
         map(plot,
             function(plot) {
+              
+             
+              
               # Generate Y axis Text; #####
               get_data <- plotly_data(plot)
-              
-              
+
+
               get_allocator <- str_to_sentence(str_remove(
                 unique(get_data$allocator),
                 "[:graph:]*[:blank:]*[:graph:]*_"
               ))
               
+              
+              
+
               yaxis_text <- fcase(
                 inherits(get_data, c("primary_care")),
-                "Gennemsnitlig besøg pr. person",
+                fifelse(
+                  alternate,
+                  no = "Gennemsnitlig besøg pr. person",
+                  yes ="Gennemsnitlig omkostninger pr. person"
+                  ),
                 inherits(get_data, c(
                   "psychiatric_care", "somatic_care"
                 )),
-                "Gennemsnitlig sengedage pr. person",
+                fifelse(
+                  alternate,
+                  no = "Gennemsnitlig sengedage pr. person",
+                  yes ="Gennemsnitlig omkostninger pr. person"
+                )
+                ,
                 inherits(get_data, c("transfers")),
-                "Gennemsnitlig antal uger pr. person"
+                fifelse(
+                  alternate,
+                  no = "Gennemsnitlig antal uger pr. person",
+                  yes ="Gennemsnitlig omkostninger pr. person"
+                ),
+                default = fifelse(
+                  alternate,
+                  no = "Gennemsnitlig antal recepter pr. person",
+                  yes ="Gennemsnitlig omkostninger pr. person"
+                )
               )
-              
+
               yaxis_text <- paste(yaxis_text, '\n',
                                   get_allocator)
               
               
               
-              plot <- plot %>% style(
+              plot <- plot %>% plotly::style(
                 line = list(
                   color = control_color
                 ), 
@@ -50,7 +80,7 @@
                   color = control_color
                 ),
                 traces = 3
-              ) %>% style(
+              ) %>% plotly::style(
                 line = list(
                   color = intervention_color
                 ), 
@@ -58,7 +88,7 @@
                   color = intervention_color
                 ),
                 traces = c(2)
-              ) %>% style(
+              ) %>% plotly::style(
                 traces = 4,
                 line = list(
                   dash = "dot",
@@ -195,17 +225,24 @@
 
 # Add layout;
 
-plot_layout <- function(plot_list,background_color = 'white', intervention_color = '#4682B4', control_color = '#FFA500') {
+plot_layout <- function(
+    plot_list,
+    background_color = 'white',
+    intervention_color = '#4682B4',
+    control_color = '#FFA500',
+    alternate = FALSE
+    ) {
   
   if (inherits(plot_list, 'model1')) {
    
-    message('Moel1')
+    
     
     return(
       plot_list %>% .layout_model1(
         background_color = background_color,
         intervention_color = intervention_color,
-        control_color = control_color
+        control_color = control_color,
+        alternate = alternate
       )
     )
     
@@ -214,7 +251,7 @@ plot_layout <- function(plot_list,background_color = 'white', intervention_color
   
   if (inherits(plot_list, 'model2')) {
     
-    message('model2')
+    
     return(
       plot_list %>% .layout_model2(
         intervention_color = intervention_color,

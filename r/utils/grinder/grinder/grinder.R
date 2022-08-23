@@ -35,6 +35,8 @@
   
   
   
+  chars_ <- chars
+  iterator <- 0
   
   
   
@@ -44,6 +46,8 @@
     data_list,
     .f = function(data) {
       
+      
+      iterator <<- iterator + 1
       
       # WARNING:
       data[
@@ -63,14 +67,20 @@
         
         
         extract_id <- .extract_id(
-          lookup = lookup[[1]],
+          lookup = lookup[[1]][[iterator]],
           values = chars
         )
-        
-        
+
+
         data <- data[
           id %in% extract_id
         ]
+        
+        
+        
+        # data <- data[
+        #   chars %chin% chars_
+        # ]
         
       }
       

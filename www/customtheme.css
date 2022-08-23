@@ -1,14 +1,30 @@
 /* This is for additional theming */
 
+/*
 .navbar {
     background-color:  #343a40;
 }
 
+
 .main-footer {
   background-color:  #343a40;
 }
+*/
 
+/*
+.navbar-dark-mode {
+    background-color: #343a40;         
+      }
+.navbar-white {
+background-color: #ffc107; 
+}
+*/
 
+/*
+.main-header-navbar-navbar-expand-navbar-primary-navbar-ligth {
+  color: yellow;
+}
+*/
 
  .body {
              -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
@@ -16,10 +32,14 @@
              zoom: 80%; /* Webkit browsers */
              }
              
-      
+             
+/*
 div {
   color: white;
 }
+*/
+
+
 
 
 /*
@@ -36,7 +56,7 @@ div {
 
 
 .shiny-output-error {
-  color: white;
+  /* color: white; */
   right: 0px;
   width: auto;
   border: 1px solid #dc3545;
@@ -44,8 +64,16 @@ div {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  height: auto;
+}
+
+
+.dtrg-group {
+  color: black;
 }
 
 
 
+.dropdown-header {
+    font-size: 18px;
+}

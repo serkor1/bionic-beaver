@@ -3,42 +3,29 @@
 # date: 2022-08-12
 # author: Serkan Korkmaz
 
-yellow <- '#f7dc6f'
 
 bs4DashPage(
   help = TRUE,
   freshTheme = create_theme(
-    bs4dash_vars(
-      navbar_light_color = "#bec5cb",
-      navbar_light_active_color = "#FFF",
-      navbar_light_hover_color = "#FFF"
-    ),
-    bs4dash_yiq(
-      contrasted_threshold = 10,
-      text_dark = "#FFF",
-      text_light = "#272c30"
-    ),
+    # bs4dash_vars(
+    #   navbar_light_color = '#343a40'
+    # ),
+    # bs4dash_vars(
+    #   navbar_light_bgcolor = '#e90c0c'
+    # ),
+    # bs4dash_yiq(
+    #   contrasted_threshold = 10,
+    #   text_dark = "#FFF",
+    #   text_light = "#272c30"
+    # ),
     bs4dash_layout(
-      main_bg = '#ffffff', #"#353c42",
-      sidebar_width = "200px"
-    ),
-    bs4dash_sidebar_light(
-      bg = "#272c30",
-      color = "#bec5cb",
-      hover_color = "#FFF",
-      submenu_bg = "#73808c",
-      submenu_color = "#FFF",
-      submenu_hover_color = "#FFF"
+      #main_bg = "#353c42",
+      sidebar_width = "200px",
     ),
     bs4dash_status(
       primary = "#5E81AC",
       danger = "#BF616A",
-      dark = "#343a40",
-      light = "#73808c",
-    ),
-    bs4dash_color(
-      gray_900 = "#FFF",
-      white = "#272c30"
+      dark = "#343a40"
     )
   ),
   
@@ -62,7 +49,6 @@ bs4DashPage(
   header = bs4DashNavbar(
     border = FALSE,
     fixed = TRUE,
-    #titleWidth = "200p",
     title = bs4DashBrand(
       color = "primary",
       opacity = 0,
@@ -80,6 +66,11 @@ bs4DashPage(
         
         )
       )
+  ),
+  
+  controlbar = bs4DashControlbar(
+    disable = FALSE,
+    skinSelector()
   ),
   
   

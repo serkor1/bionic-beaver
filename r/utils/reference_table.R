@@ -32,52 +32,45 @@
           
           
           
-         counter <<- counter + 1
-         
-         if (counter > 1) {
-           
-           return(NULL)
-           
-         } else {
-           
-           
-           # 1) Extract characteristics
-           # and ID
+          
+          
+          # 1) Extract characteristics
+          # and ID
           data <- unique(
-             element[
-               ,
-               .(
-                 id,
-                 chars
-               )
-               ,
-             ]
-           )
+            element[
+              ,
+              .(
+                id,
+                chars
+              )
+              ,
+            ]
+          )
           
           # 2) split variables
           # and cast
           
-         data <- unique(data[
-           ,
-           c("variable", "value") :=  tstrsplit(chars, "_", fixed=TRUE)
-           ,
-         ])
-         
-         
-         # dcast(
-         #   data,
-         #   value.var = 'value',
-         #   formula = id ~ variable
-         # )
+          data <- unique(data[
+            ,
+            c("variable", "value") :=  tstrsplit(chars, "_", fixed=TRUE)
+            ,
+          ])
+
+          # # 
+          # data <- dcast(
+          #   data,
+          #   value.var = 'value',
+          #   formula = id ~ .
+          # )
           
           
           
           
           
           return(data)
-           
-           
-         }
+          
+          
+          
          
          
           
@@ -99,7 +92,7 @@
   
   
   
-  return(flatten(lookup))
+  return(lookup)
   
   
   
@@ -127,37 +120,36 @@
     
   }
   
-  # lookup[
-  #   ,
-  #   lapply(
-  #     .SD,
-  #     function(x) {
-  #       
-  #       
-  #       x %chin% str_remove_all(chars, "[:alpha:]+_")
-  #       
-  #     }
-  #   )
-  #   ,
-  #   by = .(id),
-  #   .SDcols = colnames(lookup)[-1]
-  # ][
-  #   ,
-  #   .(
-  #     id,
-  #     fetch = apply(.SD, 1, sum)
-  #   ),
-  #   .SDcols = colnames(lookup)[-1]
-  # ][
-  #   fetch == length(chars)
-  # ]$id
   
   
-  sort(
-    unique(lookup[
-    chars %chin% values
-  ]$id)
-  )
+  values <- sort(values)
+  prefixes <- unique(str_split_fixed(values, '_', 2)[,1])
+  
+  
+  reduce(map(
+    prefixes,
+    .f = function(x) {
+      
+      reduce(map(
+        values[str_detect(values, x)],
+        .f = function(x) {
+          
+          
+          lookup[
+            chars %chin% x
+          ]$id
+          
+          
+        }
+      ), union)
+      
+      
+      
+      
+      
+    }
+  ), intersect)
+  
 
   
 }
