@@ -122,7 +122,6 @@ second_dataserver <- function(id, data_list){
       
       req(input$pt_target)
       req(input$pt_control)
-      req(input$pt_outcome)
       
       
       message(
@@ -145,8 +144,7 @@ second_dataserver <- function(id, data_list){
       data_list %>% grind(
         intervention = paste(input$pt_target),
         control = paste(input$pt_control),
-        chars = paste(input$pt_demographic),
-        allocators = paste(input$pt_outcome)
+        chars = paste(input$pt_demographic)
       ) %>% spread()
       
       
@@ -162,8 +160,11 @@ second_dataserver <- function(id, data_list){
       data() %>% 
         flavor(effect = input$effect) %>%
         baselayer() %>%
-        baseplot() %>% 
-        effectlayer()
+        baseplot() 
+      
+      
+      # %>% 
+      #   effectlayer()
       
       
       
@@ -175,12 +176,15 @@ second_dataserver <- function(id, data_list){
     plot_data <- reactive(
       {
         
-        baseline_plot() %>%
-          plot_layout(
-            intervention_color = input$col_intervention,
-            control_color = input$col_control,
-            background_color = input$col_background
-          )
+        baseline_plot()
+        
+        # TODO: Broken Fix later
+        # %>%
+        #   plot_layout(
+        #     intervention_color = input$col_intervention,
+        #     control_color = input$col_control,
+        #     background_color = input$col_background
+        #   )
         
       }
     )
@@ -198,10 +202,6 @@ second_dataserver <- function(id, data_list){
           need(
             input$pt_control,
             message = 'Vælg en sammenligningsgruppe'
-          ),
-          need(
-            input$pt_outcome,
-            message = 'Vælg outcome(s)'
           )
         )
 

@@ -50,15 +50,15 @@
               multiple = FALSE
             ),
             
-            vive_picker(
-              id = ns("pt_outcome"),
-              title = "Outcomes",
-              header = "Vælg Outcomes",
-              choices = outcome[[2]],
-              multiple = TRUE,
-              selectAllText = "Vælg Alle",
-              deselectAllText = "Nulstil"
-            ),
+            # vive_picker(
+            #   id = ns("pt_outcome"),
+            #   title = "Outcomes",
+            #   header = "Vælg Outcomes",
+            #   choices = outcome[[2]],
+            #   multiple = TRUE,
+            #   selectAllText = "Vælg Alle",
+            #   deselectAllText = "Nulstil"
+            # ),
             
             
             
@@ -70,8 +70,16 @@
               multiple = TRUE,
               selectAllText = "Vælg Alle",
               deselectAllText = "Nulstil"
-            ),
+            )
             
+          ),
+          
+          sliderInput(
+            inputId = ns('effect'),
+            label   = 'Sygedage',
+            min = 1,
+            max = 14,
+            value = 1,width = '100%'
           )
           
         )
@@ -80,18 +88,6 @@
         
         
         
-        
-      ),
-      tabPanel(
-        title = "Effekt",
-        
-        sliderInput(
-          inputId = ns('effect'),
-          label   = 'Forventet Effekt',
-          min = 0,
-          max = 100,
-          value = 0
-        )
         
       ),
       tabPanel(

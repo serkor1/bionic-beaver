@@ -63,7 +63,7 @@
       
       if (str_detect(path, 'model1')) {
         
-        if (str_detect(path, 'medication')) {
+        if (str_detect(get_path[i], 'medication')) {
 
           message('Medication Data')
 

@@ -72,22 +72,51 @@
           by = c(group_cols)
         ]
         
+        
+        
         group_cols <- .find_cols(
           cols = colnames(data),
           pattern = c("x", "year", "assignment", "allocator", "allocator"),
           negate = FALSE
         )
         
+        
+        # TODO: At a later point perhaps
+        
         data <- data[
           ,
           .(
-            outcome = sum(
-              outcome * weight, na.rm = TRUE
+            outcome = mean(
+              outcome, na.rm = TRUE
             )
           )
           ,
           by = c(group_cols)
         ]
+        
+        
+        # if (inherits(data_list, 'TRUE')) {
+        #   
+        #   
+        #   
+        #   
+        # } else {
+        #   
+        #   data <- data[
+        #     ,
+        #     .(
+        #       outcome = sum(
+        #         outcome * weight, na.rm = TRUE
+        #       )
+        #     )
+        #     ,
+        #     by = c(group_cols)
+        #   ]
+        #   
+        #   
+        #   
+        # }
+        
         
         
         data <- dcast(data,
@@ -193,20 +222,40 @@
         get_class <- class(data)
         
         
+        # data <- data[
+        #   ,
+        #   .(
+        #     outcome = sum(outcome * weight)
+        #   )
+        #   ,
+        #   by = .(id, assignment_factor, allocator)
+        # ][
+        #   ,
+        #   .(
+        #     outcome = sum(outcome * weight)
+        #   )
+        #   ,
+        #   by = .(assignment_factor, allocator)
+        # ]
+        
         data <- data[
           ,
           .(
-            outcome = sum(outcome * weight)
+            outcome = mean(
+              outcome, na.rm = TRUE
+            )
           )
           ,
-          by = .(id, assignment_factor, allocator)
+          by = .(id, assignment_factor)
         ][
           ,
           .(
-            outcome = sum(outcome * weight)
+            outcome = mean(outcome)
           )
           ,
-          by = .(assignment_factor, allocator)
+          by = .(
+            assignment_factor
+          )
         ]
         
         
@@ -218,18 +267,18 @@
         )
         
         
-        data[
-          ,
-          `:=`(
-            difference = rowSums(
-              cbind(-control, intervention)
-            ),
-            cdifference = NA,
-            cintervention = NA
-          )
-          
-          ,
-        ]
+        # data[
+        #   ,
+        #   `:=`(
+        #     difference = rowSums(
+        #       cbind(-control, intervention)
+        #     ),
+        #     cdifference = NA,
+        #     cintervention = NA
+        #   )
+        #   
+        #   ,
+        # ]
         
         
         class(data) <- c(class(data), get_class[length(get_class)])

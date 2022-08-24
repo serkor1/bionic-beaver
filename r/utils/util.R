@@ -323,11 +323,6 @@ generate_data <- function() {
         "7-11 år",
         "12-17 år"
       ),
-      ftype = c(
-        "Enlig Mand",
-        "Enlig Kvinde",
-        "Samboende"
-      ),
       feduc = c(
         "Faglært",
         "Ufaglært",
@@ -340,10 +335,10 @@ generate_data <- function() {
   
   model_2[
     ,
-    indk := runif(
+    outcome := runif(
       .N,
-      min = 10000,
-      max = 100000
+      min = 500,
+      max = 900
     )
     ,
   ]

@@ -180,8 +180,7 @@
       
       
       data <- data[
-        assignment %chin% c(intervention, control) &
-          allocator %chin% c(allocators) 
+        assignment %chin% c(intervention, control)
       ]
       
       
@@ -238,8 +237,10 @@ grind <- function(
   
   # global function options; #####
   
-  master_class <- class(data_list)
+  
+  
   get_char <- chars
+  
   has_char <- str_detect(
     paste(get_char, collapse = ""),
     pattern = '[:alpha:]'
@@ -253,6 +254,12 @@ grind <- function(
     isTRUE(do_incidence), 1,
     default = 0
   )
+  
+  
+  # check_char <- length(chars) > 1
+  
+  
+  master_class <- c(class(data_list), has_char)
   
   # global data manipulation; ####
   
@@ -278,7 +285,6 @@ grind <- function(
       data_list,
       intervention = intervention,
       control = control,
-      allocators = allocators,
       chars = chars
     )
     
@@ -299,27 +305,6 @@ grind <- function(
   )
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
