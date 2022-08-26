@@ -57,10 +57,15 @@
         rownames = FALSE,
         extensions = c("Buttons", "RowGroup"),
         caption = paste('Tabel:', yaxis_text),
+        fillContainer = TRUE,
+        #filter = 'none',
         
         options = list(
+          ordering = FALSE,
+          scrollX = TRUE,
           pageLength = 8,
-          dom = "Bfrtip",
+          #dom = "Bfrtip",
+          dom = 'Btp',
           columnDefs =list(
             list(
               className = "dt-head-center dt-center", targets = 1:(ncol(element) - 1)

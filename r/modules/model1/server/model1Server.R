@@ -2,8 +2,40 @@
 # for the main model.
 # main warning logic; #####
 
-.model1server_output <- function(id, data_list) {
+.model1server_output <- function(id, data_list, get_switch) {
   moduleServer(id, function(input, output, session) {
+    
+    
+    
+    observeEvent(
+      get_switch(),
+      {
+        
+        if (isFALSE(get_switch())) {
+          
+          updateColorPickr(
+            inputId = 'col_background',
+            value = '#000000',
+            session = session,
+            action = 'enable'
+          )
+          
+          
+          
+        } else {
+          
+          updateColorPickr(
+            inputId = 'col_background',
+            value = '#FFFFFF',
+            session = session,
+            action = 'enable'
+          )
+          
+        }
+        
+        
+      }
+    )
     
     # Server Start
     data <- reactive(
@@ -221,7 +253,9 @@
     
     
     plot_data <- reactive({
-
+      
+      message('Running')
+      
       baseline_plot() %>%
         plot_layout(
           background_color = input$col_background,
@@ -370,6 +404,8 @@
 
       }
     )
+      
+      
       
       
       # Server End #####

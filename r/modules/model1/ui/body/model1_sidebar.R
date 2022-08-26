@@ -3,6 +3,70 @@
 # date: 2022-07-22
 # author: Serkan Korkmaz
 
+
+# Add Text to menu
+# 
+
+
+.param_text_model1 <- function() {
+  
+  
+    column(
+      width = 12,
+      br(),
+      h5('Valg af Parametre'),
+      
+      hr(),
+      
+      
+      p('For at starte modellen, skal der vælges en sygdomsgruppe og en, eller flere, outcomes. Denne gruppe kan sammenlignes med den generelle befolkningeller en specifik sygdomsgruppe'),
+      
+      p(strong('Bemærk:'), 'Det er muligt at vælge demografiske karakteristika.')
+    )
+  
+}
+
+
+.effect_text_model1 <- function() {
+  
+  column(
+    width = 12,
+    br(),
+    h5('Valg af Effekt'),
+    
+    hr(),
+    
+    
+    p(
+      'For at beregne den relative forskel mellem dine valgte grupper kan du her vælge en årlig effekt angivet i procent.'
+    )
+  )
+  
+  
+}
+
+
+
+.visual_text_model1 <- function() {
+  
+  column(
+    width = 12,
+    br(),
+    h5('Visuelle Indstillinger'),
+    
+    hr(),
+    
+    p(
+      'Skift farverne efter behov.'
+    ),
+    
+    p(strong('Bemærk:'), 'hvis du downloader graferne, er har disse en gennemsnigtig baggrund.')
+    
+  )
+  
+  
+}
+
 # parameters; #####
 .param_model1 <- function(
     id,
@@ -21,6 +85,7 @@
   column(
     width = 12,
     
+    .param_text(),
     
     vive_picker(
       id = ns("pt_target"),
@@ -109,7 +174,19 @@
       title = "Klik for at vælge Omkostning pr. patient.",
       placement = "right",
       content = "Klik for at vælge Omkostning pr. patient."
-    )
+    ),
+    
+    
+    materialSwitch(
+      inputId = ns("show_baseline"),
+      value = TRUE,
+      status = "info",
+      label = "Vis Befolkningsværdi"
+    ) %>% popover(
+      placement = "bottom",
+      title = "Skal den generelle befolkning vises?",
+      content = "Skal den generelle befolkning vises?"
+    ),
     
   )
   
@@ -134,6 +211,9 @@
   
   column(
     width = 12,
+    
+    .effect_text_model1(),
+    
     map(
       1:5,
       .f = function(i) {
@@ -161,37 +241,12 @@
   
   column(
     width = 12,
-    h5("Grafindstillinger"),
-    materialSwitch(
-      inputId = ns("show_baseline"),
-      value = TRUE,
-      status = "info",
-      label = "Vis Befolkningsværdi"
-    ) %>% popover(
-      placement = "bottom",
-      title = "Skal den generelle befolkning vises?",
-      content = "Skal den generelle befolkning vises?"
-    ),
     
-    # pickerInput(
-    #   inputId = ns("col_intervention"),
-    #   label = "Intevention",
-    #   selected = "steelblue",
-    #   choices = colors(),
-    #   options = list(
-    #     `live-search` = TRUE,
-    #     `size` = 5)
-    # ),
-    # 
-    # pickerInput(
-    #   inputId = ns("col_control"),
-    #   label = "Control",
-    #   selected = "orange",
-    #   choices = colors(),
-    #   options = list(
-    #     `live-search` = TRUE,
-    #     `size` = 5)
-    # ),
+    .visual_text_model1(),
+    
+    
+    
+    
     
     colorPickr(
       inputId = ns("col_intervention"),
@@ -209,12 +264,16 @@
       update = 'changestop'
     ),
     
+    
+    # NOTE: It has to be on updated on save
+    # otherwise it can't update on server-side at
+    # switching.
     colorPickr(
       inputId = ns("col_background"),
       preview = TRUE,
       label = 'Baggrundsfarve',
       selected = '#FFFFFF',
-      update = 'changestop'
+      update = c('save'),
     ),
    
     
@@ -341,11 +400,16 @@
     
     
     # third tab:
+    
+    
     tabPanel(
       title = "Visuelle Indstillinger",
       conditionalPanel(
         condition = "input.change_views == 'see_plot'",ns = ns,
         {
+          
+          
+          
           
           .options_plot_model1(
             input = input,
@@ -353,28 +417,21 @@
             id = id
           )
           
-        }
-      ),
-      
-      conditionalPanel(
-        condition = "input.change_views == 'see_table'",ns = ns,
-        
-        {
           
-          .options_table_model1(
-            input = input,
-            output = output,
-            id = id
-          )
+          
+          
+          
           
           
         }
       )
       
-      
     )
     
+    
   )
+    
+  
   
   
   # generate sidebar

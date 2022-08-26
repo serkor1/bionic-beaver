@@ -31,7 +31,7 @@
     width = 12,
     status = "primary",
     collapsible = FALSE,
-    height = '1200px',
+    height = '100%',
     sidebar = .sidebar(id, input, output),
     title = span(
       
@@ -106,7 +106,8 @@
             condition = "input.change_views == 'see_table'",ns = ns,
             {
               fluidRow(
-                column(width = 12, h3('Tabel Output')),
+                column(width = 12, 
+                       h3('Tabel Output')),
                 
                 br(),
                 

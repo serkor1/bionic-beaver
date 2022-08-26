@@ -1,8 +1,13 @@
 server <- function(input, output, session) {
   
   
-  
-  
+  observe({
+    
+    message(
+      paste('Outside Module:', input$customSwitch1)
+    )
+    
+  })
   
   # Start of Server Logic;
   
@@ -118,7 +123,7 @@ server <- function(input, output, session) {
   
   .model1server_output(
     id = "model1",
-    data_list = data_list[[1]]
+    data_list = data_list[[1]],get_switch = reactive(input$customSwitch1)
   )
   
   

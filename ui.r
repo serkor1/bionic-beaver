@@ -136,8 +136,11 @@ bs4DashPage(
     useShinyjs(),
     useShinyFeedback(),
     use_waiter(),
-    uiOutput("gen_body"),
-    uiOutput("performance")
+        uiOutput("gen_body")
+      
+      
+    
+    
     
     # Body End
     
