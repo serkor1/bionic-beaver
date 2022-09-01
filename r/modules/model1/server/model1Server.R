@@ -241,20 +241,10 @@
       
     })
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+  
     
     plot_data <- reactive({
       
-      message('Running')
       
       baseline_plot() %>%
         plot_layout(

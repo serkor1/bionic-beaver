@@ -51,7 +51,7 @@
       
       # WARNING:
       data[
-        is.na(type),
+        assignment %chin% 'matching',
         type := do_incidence
       ]
       
