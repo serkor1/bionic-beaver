@@ -85,7 +85,7 @@
   column(
     width = 12,
     
-    .param_text(),
+    .param_text_model1(),
     
     vive_picker(
       id = ns("pt_target"),
