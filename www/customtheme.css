@@ -26,6 +26,13 @@ background-color: #ffc107;
 }
 */
 
+.WebContainer{
+    width:100%;
+    /*min-width:1000px;*/
+    height:auto;
+}
+
+
  .body {
              -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
              zoom: 0.8; /* Other non-webkit browsers */

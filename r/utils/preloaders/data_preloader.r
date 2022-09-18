@@ -110,7 +110,7 @@
 
 .convert_long <- function(
     data,
-    char_vector = c('x','køn', 'alder', 'arbejdsmarked', 'uddannelse', 'feduc', 'ftype')
+    char_vector = c('x','køn', 'alder', 'arbejdsmarked', 'uddannelse', 'feduc', 'ftype', 'total_n', 'total_N')
 ) {
   
   #' Function Information
@@ -250,7 +250,7 @@
       # recomennded as the remaining scripts depends
       # on these variables.
       # DO IT AT OWN RISK.
-      c('chars', 'year', 'type', 'assignment', 'allocator', 'id', 'price', 'disease', 'weight')
+      c('chars', 'year', 'type', 'assignment', 'allocator', 'id', 'price', 'disease', 'weight', 'total_n', 'total_N')
     ),
     negate = TRUE
   )
