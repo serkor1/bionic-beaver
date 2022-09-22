@@ -33,29 +33,30 @@
     collapsible = FALSE,
     height = '100%',
     sidebar = .sidebar(id, input, output),
-    title = span(
-      
-      radioGroupButtons(
-        inputId = ns(paste0("change_views")),
-        width = "500px",
-        label = NULL,
-        choices = c(`Grafik <i class='fa fa-bar-chart'></i>` = "see_plot", ` Tabel <i class='fa fa-line-chart'></i>` = "see_table"),
-        justified = TRUE, size = "sm"
-      )
-      
-      
-      
-    ),
+    # This has been moved to sidebar
+    # title = span(
+    #   
+    #   radioGroupButtons(
+    #     inputId = ns(paste0("change_views")),
+    #     width = "500px",
+    #     label = NULL,
+    #     choices = c(`Grafik <i class='fa fa-bar-chart'></i>` = "see_plot", ` Tabel <i class='fa fa-line-chart'></i>` = "see_table"),
+    #     justified = TRUE, size = "sm"
+    #   )
+    #   
+    #   
+    #   
+    # ),
     .list = map(
       seq_along(tabset_names),
       .f = function(i){
         
         icon_name <- fcase(
-          tabset_names[i] %chin% c("primary_care"), "stethoscope",
-          tabset_names[i] %chin% c("psychiatric_care"), "couch",
+          tabset_names[i] %chin% c("primary_care"), "house-chimney-medical",
+          tabset_names[i] %chin% c("psychiatric_care"), "head-side-heart",
           tabset_names[i] %chin% c("somatic_care"), "hospital",
-          tabset_names[i] %chin% c("transfers"), "briefcase",
-          default = 'capsules'
+          tabset_names[i] %chin% c("transfers"), "money-bill-transfer",
+          default = 'prescription-bottle-medical'
           
         )
         
@@ -63,11 +64,11 @@
         tabPanel(
           title = paste(
             fcase(
-              tabset_names[i] %chin% c("primary_care"), "Almen praksis",
-              tabset_names[i] %chin% c("psychiatric_care"), "Psykiatri",
-              tabset_names[i] %chin% c("somatic_care"), "Somatik",
-              tabset_names[i] %chin% c("transfers"), "Arbejdsmarkedet",
-              default = 'Præparater'
+              tabset_names[i] %chin% c("primary_care"), "Primær Sundhedssektor",
+              tabset_names[i] %chin% c("psychiatric_care"), "Psykiatrisk Hospitalskontakt",
+              tabset_names[i] %chin% c("somatic_care"), "Somatisk Hospitalskontakt",
+              tabset_names[i] %chin% c("transfers"), "Overførsler",
+              default = 'Præparatforbrug'
               
             )
           ),
@@ -80,8 +81,14 @@
             {
               
               fluidRow(
-                column(width = 12, h3('Grafisk Output')),
+                
+                column(
+                  width = 12,
+                  h5('Grafisk præsentation')
+                  ),
+                
                 br(),
+                
                 column(
                   width = 12,
                   withSpinner(
@@ -106,8 +113,10 @@
             condition = "input.change_views == 'see_table'",ns = ns,
             {
               fluidRow(
-                column(width = 12, 
-                       h3('Tabel Output')),
+                column(
+                  width = 12,
+                  h5('Tabel Output')
+                  ),
                 
                 br(),
                 
@@ -192,7 +201,7 @@
         width = 12,
         fill = TRUE,
         gradient = TRUE,
-        icon = icon("user-graduate")
+        icon = icon("school")
       ),
       bs4InfoBox(
         title = strong("Arbejdsmarkedsstatus"),
@@ -201,7 +210,7 @@
         width = 12,
         fill = TRUE,
         gradient = TRUE,
-        icon = icon("briefcase", verify_fa = TRUE)
+        icon = icon("car-building", verify_fa = TRUE)
       )
     ),
     
@@ -226,6 +235,8 @@
         icon = icon("id-card")
       )
     )
+    
+    
     
   )
   

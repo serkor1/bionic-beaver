@@ -68,40 +68,74 @@
       # Create a data.table
       # based on the choices in each element
       # of the list
-      choices <- get_list %>% map(
-        function(data) {
-          
-          
-          
-        # Extract Unique Choices
-        # from the data based on the variable
-        # name.
-         get_choice <-  unique(
-           data[,.(tmp = eval(variable)),]
-          )
-         
-         
-         
-         # Split in class subclass
-         # for the named list
-         get_choice <- unique(get_choice[
-           ,
-           c("class", "subclass") := tstrsplit(tmp, "_", fixed = TRUE)
-           ,
-         ][,.(class, subclass),])
-         
-         
-         
-         
-         
+      # choices <- get_list %>% map(
+      #   function(data) {
+      #     
+      #     
+      #     
+      #   # Extract Unique Choices
+      #   # from the data based on the variable
+      #   # name.
+      #    get_choice <-  unique(
+      #      data[,.(tmp = eval(variable)),]
+      #     )
+      #    
+      #    
+      #    
+      #    # Split in class subclass
+      #    # for the named list
+      #    get_choice <- unique(get_choice[
+      #      ,
+      #      c("class", "subclass") := tstrsplit(tmp, "_", fixed = TRUE)
+      #      ,
+      #    ][,.(class, subclass),])
+      #    
+      #    
+      #    
+      #    
+      #    
+      # 
+      #    
+      #    
+      # 
+      #     
+      #     
+      #   }
+      # ) %>% rbindlist()  
+      
+      choices <- na.omit(rbindlist(
+        map(
+          get_list,
+          function(data) {
+            
+            
+            
+            
+            
+            # Extract Unique Choices
+            # from the data based on the variable
+            # name.
+            get_choice <-  unique(
+              data[,.(tmp = eval(variable)),]
+            )
+            
+            
+            
+            # Split in class subclass
+            # for the named list
+            get_choice <- unique(get_choice[
+              ,
+              c("class", "subclass") := tstrsplit(tmp, "_", fixed = TRUE)
+              ,
+            ][,.(class, subclass),])
 
-         
-         
-
-          
-          
-        }
-      ) %>% rbindlist()  
+            
+          }
+        )
+        
+      )
+      )
+      
       
       # While the choices are unique by default
       # there are repeated measures in each set

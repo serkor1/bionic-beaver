@@ -151,42 +151,57 @@
       selectAllText = "Vælg Alle",
       deselectAllText = "Nulstil"
     ),
+    br(),
+    
+    fluidRow(
+      column(
+        width = 5,
+        offset = 1,
+        materialSwitch(
+          inputId = ns("do_incident"),
+          label = "Incidente Patienter?",
+          value = FALSE,
+          status = "primary"
+        ) %>% popover(
+          title = "Klik for at vælge Incidente patienter.",
+          placement = "right",
+          content = "Klik for at vælge Incidente patienter."
+        )
+      ),
+      column(
+        offset = 1,
+        width = 5,
+        materialSwitch(
+          inputId = ns("do_cost"),
+          label = "Omkostninger?",
+          value = FALSE,
+          status = "primary"
+        ) %>% popover(
+          title = "Klik for at vælge Omkostning pr. patient.",
+          placement = "right",
+          content = "Klik for at vælge Omkostning pr. patient."
+        )
+      )
+      
+    )
     
     
-    materialSwitch(
-      inputId = ns("do_incident"),
-      label = "Incidente Patienter?",
-      value = FALSE,
-      status = "primary"
-    ) %>% popover(
-      title = "Klik for at vælge Incidente patienter.",
-      placement = "right",
-      content = "Klik for at vælge Incidente patienter."
-    ),
     
     
-    materialSwitch(
-      inputId = ns("do_cost"),
-      label = "Omkostninger?",
-      value = FALSE,
-      status = "primary"
-    ) %>% popover(
-      title = "Klik for at vælge Omkostning pr. patient.",
-      placement = "right",
-      content = "Klik for at vælge Omkostning pr. patient."
-    ),
-    
-    
-    materialSwitch(
-      inputId = ns("show_baseline"),
-      value = TRUE,
-      status = "info",
-      label = "Vis Befolkningsværdi"
-    ) %>% popover(
-      placement = "bottom",
-      title = "Skal den generelle befolkning vises?",
-      content = "Skal den generelle befolkning vises?"
-    ),
+    # 
+    # ,
+    # 
+    # 
+    # materialSwitch(
+    #   inputId = ns("show_baseline"),
+    #   value = TRUE,
+    #   status = "info",
+    #   label = "Vis Befolkningsværdi"
+    # ) %>% popover(
+    #   placement = "bottom",
+    #   title = "Skal den generelle befolkning vises?",
+    #   content = "Skal den generelle befolkning vises?"
+    # ),
     
   )
   
@@ -424,7 +439,24 @@
           
           
         }
+      ),
+      conditionalPanel(
+        condition = "input.change_views != 'see_plot'",ns = ns,
+        {
+          
+          
+          
+          
+          NULL
+          
+          
+          
+          
+          
+          
+        }
       )
+      
       
     )
     
@@ -438,10 +470,76 @@
   
   bs4CardSidebar(
     width = 30,
-    icon = span("Parametre og Indstillinger", icon("cog")),
+    icon = h6(
+      span(
+        "Vælg parametre og indstillinger",
+        icon("bars")
+        )
+      ),
     startOpen = TRUE,
     id = "id_placeholder",
-    gen_panel
+    
+    
+    column(
+      width = 12,
+      p(strong('Gruppestørrelse')),
+      fluidRow(
+        column(
+          width = 6,
+          descriptionBlock(
+            number = textOutput(ns("n_treatment"),inline = TRUE),
+            numberIcon = icon('people'),
+            header = 'Sygdomsgruppe',
+            rightBorder = FALSE
+          )
+        ),
+        column(
+          width = 6,
+          descriptionBlock(
+            number = textOutput(ns("n_control"),inline = TRUE),
+            numberIcon = icon('people'),
+            header = 'Sammenligningsgruppen',
+            rightBorder = FALSE
+          )
+        )
+      )
+      
+      
+      
+    ),
+    
+    hr(),
+    # Chose Type of view;
+      column(
+        width = 12,
+        radioGroupButtons(
+          inputId = ns(paste0("change_views")),
+          width = "100%",
+          label = NULL,
+          choices = c(`Graf <i class="fa-solid fa-chart-line"></i>` = "see_plot", ` Tabel <i class="fa-solid fa-table-columns"></i>` = "see_table"),
+          justified = TRUE,
+          size = "sm"
+        )
+      ),
+    
+    column(
+      width = 12,
+      actionButton(
+        'placebo',
+        label = 'Download materiale',
+        icon = icon('download'),size = 'sm',width = '100%'
+      )
+    ),
+    
+    hr(),
+    
+   
+    
+    # Panels
+   
+      gen_panel
+    
+    
   )
   
   

@@ -65,14 +65,15 @@
           scrollX = TRUE,
           pageLength = 8,
           #dom = "Bfrtip",
-          dom = 'Btp',
+          #dom = 'Btp',
+          dom = 'tp',
           columnDefs =list(
             list(
               className = "dt-head-center dt-center", targets = 1:(ncol(element) - 1)
             )
           ),
           rowGroup = list(dataSrc = c(1)),
-          buttons = c("csv", "excel"),
+          #buttons = c("csv", "excel"),
           fixedHeader = TRUE,
           initComplete = JS(
             "function(settings, json) {",

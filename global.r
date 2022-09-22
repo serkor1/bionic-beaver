@@ -88,4 +88,3 @@ assignment <- load_parameters$assignment
 outcome    <- load_parameters$outcome
 lookup     <- .gen_lookup(data_list)
 
-

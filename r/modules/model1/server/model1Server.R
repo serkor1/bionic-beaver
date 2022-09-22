@@ -1,18 +1,29 @@
-# Script; Server Logic
-# for the main model.
-# main warning logic; #####
+# script: model1Server
+# objective: Collect all relevant server elements
+# for model1. 
+# NOTE: This doesnt include inessential elements like choices,
+# which can be rendered outside this server.
+# date: 2022-09-22
+# author: Serkan Korkmaz
 
 .model1server_output <- function(id, data_list, get_switch) {
   moduleServer(id, function(input, output, session) {
     
+    # server logic; 
     
     
+    # Server events; #####
+    
+    
+    # Change axis colors depending
+    # on color mode;
     observeEvent(
       get_switch(),
       {
         
         if (isFALSE(get_switch())) {
           
+          # Dark Mode:
           updateColorPickr(
             inputId = 'col_background',
             value = '#000000',
@@ -24,6 +35,7 @@
           
         } else {
           
+          # Light Mode:
           updateColorPickr(
             inputId = 'col_background',
             value = '#FFFFFF',
@@ -37,25 +49,112 @@
       }
     )
     
-    # Server Start
+    
+   # reset the value of chosen
+   # pt_control.
+   # It goes back to NULL when clicked.
+   # Otherwise there is no switch between
+   # population and specific control values
+    shinyjs::onclick(
+      id = 'do_match',
+      expr = reset(
+        id = 'pt_control'
+      )
+    )
+    
+    # Generate Data for the server; #####
     data <- reactive(
       {
         
+        # Require that at least
+        # pt_target and pt_outcome is chosen.
         req(input$pt_target)
         req(input$pt_outcome)
         
+        # Verbose:
+        # This is mainly to debug, and see how many times 
+        # this expression is called
         message('Grinding data for model1:\n')
         
         grinded_data <- grind(
-          data_list = data_list,
+          data_list        = data_list,
           intervention     = paste(input$pt_target),
           control          = paste(input$pt_control),
           allocators       = paste(input$pt_outcome),
           chars            = paste(input$pt_demographic),
-          do_incidence = input$do_incident
+          do_incidence     = input$do_incident
         )
         
         
+        # Calculate total group size
+        # for the chosen disease groups
+        group_size <- na.omit(rbindlist(
+          grinded_data,
+          fill = TRUE
+        )[
+          ,
+          .(
+            total_N = unique(total_N, na.rm = TRUE)
+          )
+          ,
+          by = .(
+            assignment_factor
+          )
+        ])
+        
+        
+        output$n_treatment <- renderText({
+          
+          formatC(
+            x = group_size[
+              assignment_factor %chin% c('intervention'),
+              .(
+                value = total_N
+              )
+            ]$value,
+            big.mark = '.',
+            decimal.mark = ','
+          )
+          
+          
+        })
+        
+        output$n_control <- renderText({
+          
+          if (as.logical(input$do_match)){
+            
+            value <- group_size[
+              assignment_factor %chin% c('population'),
+              .(
+                value = total_N
+              )
+            ]$value
+            
+          } else {
+            
+            value <- group_size[
+              assignment_factor %chin% c('control'),
+              .(
+                value = total_N
+              )
+            ]$value
+            
+            
+          }
+          
+          
+          formatC(
+            x = value,
+            big.mark = '.',
+            decimal.mark = ','
+          )
+          
+          
+        })
+        
+        
+        # Spread the data and 
+        # and return it as a list.
         grinded_data <- spread(
           data_list = grinded_data,
           
@@ -75,38 +174,47 @@
     
     
     # serverwide variables; #####
+    
+    # Generate a vector of intervention effects
+    # as a reactive numeric object
     intervention_effect <- reactive(
-      c(
-        input$effect_1,
-        input$effect_2,
-        input$effect_3,
-        input$effect_4,
-        input$effect_5
-      ) %>% as.numeric()
+      as.numeric(
+        c(
+          input$effect_1,
+          input$effect_2,
+          input$effect_3,
+          input$effect_4,
+          input$effect_5
+        )
+      )
     )
     
     
-    
+    # Flavor the data
+    # with counterfactuals
     flavored_data <- reactive(
       {
-        
-        
-        data() %>% flavor(
+        flavor(
+          data(),
           effect = intervention_effect()
-          )
-        
+        )
       }
     )
     
+    # generate chosen outcome classes
+    # for the model.
+    # This is used to guide the user
+    # whenever the chosen outcomes doesnt
+    # correspond to the chosen tab.
     chose_outcomes <- reactive(
       {
         
         fcase(
-          input$pt_outcome %chin% outcome[[1]]$Overførsel, 'Arbejdsmarked',
-          input$pt_outcome %chin% outcome[[1]]$`Primær Sektor`, 'Primær Sektor',
-          input$pt_outcome %chin% outcome[[1]]$Psykiatrien, 'Psykiatrien',
-          input$pt_outcome %chin% outcome[[1]]$Somatikken, 'Somatik',
-          input$pt_outcome %chin% outcome[[1]]$Lægemiddelforbrug, 'Præparater'
+          input$pt_outcome %chin% outcome[[1]]$Overførsel, 'Overførsler',
+          input$pt_outcome %chin% outcome[[1]]$`Primær Sektor`, 'Primær sundhedssektor',
+          input$pt_outcome %chin% outcome[[1]]$Psykiatrien, 'Psykiatrisk hospitalskontakt',
+          input$pt_outcome %chin% outcome[[1]]$Somatikken, 'Somatisk hospitalskontakt',
+          input$pt_outcome %chin% outcome[[1]]$Lægemiddelforbrug, 'Præparatforbrug'
           
           
           
@@ -116,8 +224,28 @@
     )
     
     
+    validate_input <- function() {
+      
+      # Validating Input;
+      validate(
+        need(
+          input$pt_target,
+          message = 'Vælg en sygdomsgruppe!'
+        ),
+        need(
+          input$pt_outcome,
+          message = 'Vælg outcome(s)'
+        ),
+        need(
+          input$pt_target != input$pt_control,
+          message = 'Valgte grupper skal være forskellige.'
+        )
+      )
+      
+    }
     
-    # render tables; #####
+    
+    # Render Tables; ####
     table_data <- reactive(
       {
         
@@ -142,27 +270,7 @@
         output[[paste0("table",i)]] <- DT::renderDataTable({
 
 
-          # Validating Input;
-          validate(
-            need(
-              input$pt_target,
-              message = 'Vælg en sygdomsgruppe!'
-            ),
-            need(
-              input$pt_outcome,
-              message = 'Vælg outcome(s)'
-            ),
-            need(
-              input$pt_target != input$pt_control,
-              message = 'Valgte grupper skal være forskellige.'
-            )
-          )
-
-
-          message(
-            paste("Grinding tables. Currently at", i, "of", 5, "iterations.")
-          )
-
+          validate_input()
 
 
           tryCatch(
@@ -220,24 +328,14 @@
     
     
     # Render plots; #####
-    # plot
     baseline_plot <- reactive({
-      
-      message('Plotting Data')
-      
-      
-      flavored_data() %>%
-        baselayer() %>%
-        baseplot() %>%
-        effectlayer()
-
-
-      
-      
-      
-      
-      
-      
+      effectlayer(
+        baseplot(
+          baselayer(
+            flavored_data()
+          )
+        )
+      )
       
     })
     
@@ -245,13 +343,12 @@
     
     plot_data <- reactive({
       
-      
-      baseline_plot() %>%
         plot_layout(
+          
           background_color = input$col_background,
           intervention_color = input$col_intervention,
           control_color = input$col_control,
-          alternate = input$do_cost
+          alternate = input$do_cost,plot_list = baseline_plot() 
         )
 
     })
@@ -270,23 +367,7 @@
 
 
 
-              validate(
-                need(
-                  input$pt_target,
-                  message = 'Vælg en sygdomsgruppe!'
-                ),
-                need(
-                  input$pt_outcome,
-                  message = 'Vælg outcome(s)'
-                ),
-                need(
-                  input$pt_target != input$pt_control,
-                  message = 'Valgte grupper skal være forskellige.'
-                )
-              )
-              
-              # TODO: Check if default is truthy
-              # needs to be population by default.
+              validate_input()
               
               
                 
@@ -311,13 +392,6 @@
                       message = 'Sammenligningen er problematisk.'
                     )
                   )
-                  
-                  # validate(
-                  #   need(
-                  #     isTruthy(flavored_data()[[i]]$intervention),
-                  #     message = 'Problem'
-                  #   )
-                  # )
 
                 },
                 warning = function(condition) {
@@ -333,47 +407,6 @@
                   )
                 }
               )
-
-
-
-
-
-
-
-
-              # if (isTruthy(input$pt_target) & isTruthy(input$pt_control)) {
-              #
-                # shinyFeedback::feedbackDanger(
-                #   inputId = "pt_demographic",
-                #   !(isTruthy(plot_data()[[i]]$control) & isTruthy(plot_data()[[i]]$intervention)),
-                #   text = "Sammenligningen er problematisk!",
-                #   icon = NULL
-                # )
-              #
-              # }
-              # chosen_colors <- reactiveValues(
-              #   control_color = input$col_control,
-              #   color_background = input$col_background,
-              #   color_intervention = input$col_intervention
-              #
-              # )
-              #
-              #
-              # plot_data()[[i]]  %>%
-              #   do_plot(
-              #     difference = input$do_difference,
-              #     show_baseline = input$show_baseline,
-              #     color_intervention = chosen_colors$color_intervention,
-              #     color_background    = chosen_colors$color_background,
-              #     color_control      = chosen_colors$control_color
-              #   )
-              # plotly::plot_ly(
-              #   mtcars,
-              #   x = ~mpg,
-              #   y = ~hp,
-              #   type = "scatter",
-              #   mode = "markers"
-              # )
 
 
             }

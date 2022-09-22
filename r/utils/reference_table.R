@@ -33,16 +33,33 @@
           
           
           
+          idx <- which(
+            sapply(
+              colnames(element),
+              function(x) {
+                
+                str_detect(
+                  x, pattern = 'id|chars|total_n|total_N'
+                )
+                
+              }
+            )
+          )
+          
           
           # 1) Extract characteristics
           # and ID
           data <- unique(
             element[
               ,
-              .(
-                id,
-                chars
-              )
+              # .(
+              #   id,
+              #   chars,
+              #   total_n,
+              #   total_N
+              # )
+              # 
+              ..idx
               ,
             ]
           )
@@ -103,16 +120,21 @@
 # ID extractor; #####
 
 .extract_id <- function(
-    lookup = lookup,
-  values = NULL,
-  vars = c("alder", 'arbejdsmarked', 'køn', 'uddannelse')
+  lookup = lookup,
+  values = NULL
 ) {
   
   
   #' function information
   #' 
-  #' @param chars can be NULL. A vector
-  #' of socioeconomic characteristics
+  #' @param values character vector of choices.
+  #' 
+  #' 
+  #' Returns the Intersection of the union to avoid 
+  #' duplicates.
+  #' 
+  #' NOTE: This function has been verified, and works 
+  #' as intended.
   
   if (is.null(chars)) {
     

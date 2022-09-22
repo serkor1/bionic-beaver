@@ -19,7 +19,16 @@
     default = "qty"
   )
   
-  
+  if (inherits(data_list, 'aggregate')) {
+    
+    is_aggregated <- TRUE
+    
+  } else {
+    
+    is_aggregated <- FALSE
+    
+    
+  }
  
   
   # function logic; ####
@@ -82,17 +91,38 @@
         
         
         # TODO: At a later point perhaps
+       
         
-        data <- data[
-          ,
-          .(
-            outcome = mean(
-              outcome, na.rm = TRUE
+        if (is_aggregated) {
+          
+          data <- data[
+            ,
+            .(
+              outcome = sum(
+                outcome * weight, na.rm = TRUE
+              )
             )
-          )
-          ,
-          by = c(group_cols)
-        ]
+            ,
+            by = c(group_cols)
+          ]
+          
+        } else {
+          
+          data <- data[
+            ,
+            .(
+              outcome = mean(
+                outcome, na.rm = TRUE
+              )
+            )
+            ,
+            by = c(group_cols)
+          ]
+          
+        }
+        
+        
+        
         
         
         # if (inherits(data_list, 'TRUE')) {
@@ -102,16 +132,16 @@
         #   
         # } else {
         #   
-        #   data <- data[
-        #     ,
-        #     .(
-        #       outcome = sum(
-        #         outcome * weight, na.rm = TRUE
-        #       )
-        #     )
-        #     ,
-        #     by = c(group_cols)
-        #   ]
+          # data <- data[
+          #   ,
+          #   .(
+          #     outcome = sum(
+          #       outcome * weight, na.rm = TRUE
+          #     )
+          #   )
+          #   ,
+          #   by = c(group_cols)
+          # ]
         #   
         #   
         #   

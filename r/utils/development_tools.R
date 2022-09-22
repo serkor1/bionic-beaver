@@ -102,3 +102,22 @@ dev_load_char <- function(
 }
 
 
+
+
+
+
+
+verify_data <- function(
+){
+  
+  #' function information
+  #' 
+  #' This function verifies that
+  #' the calculations in the model corresponds
+  #' to actual values.
+  
+  
+  
+  
+  
+}

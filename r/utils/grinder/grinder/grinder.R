@@ -259,7 +259,9 @@ grind <- function(
   # check_char <- length(chars) > 1
   
   
-  master_class <- c(class(data_list), has_char)
+  master_class <- c(
+    class(data_list)
+    )
   
   # global data manipulation; ####
   
@@ -294,7 +296,11 @@ grind <- function(
   
   data_list <- structure(
     data_list,
-    class = master_class
+    class = c(
+      master_class, fifelse(
+        !has_char, 'aggregate', 'no_aggregate'
+        )
+    )
   )
   
   
@@ -305,7 +311,6 @@ grind <- function(
   )
   
 }
-
 
 
 

@@ -1,13 +1,10 @@
 server <- function(input, output, session) {
   
   
-  observe({
-    
-    message(
-      paste('Outside Module:', input$customSwitch1)
-    )
-    
-  })
+  removeCssClass(
+    selector = '.brand-image',
+    class = 'img-circle elevation-3'
+  )
   
   # Start of Server Logic;
   

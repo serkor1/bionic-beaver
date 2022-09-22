@@ -43,28 +43,30 @@ bs4DashPage(
   # Title; ####
   # title on Navigation bar
   # on browser
-  title = "Den Sundhedsøkonomiske Investeringsmodel",
+  title = "Beregner til Investeringer i Sundhed",
   
   # header; ####
   header = bs4DashNavbar(
     border = FALSE,
+    controlbarIcon = icon('house'),
     fixed = TRUE,
     title = bs4DashBrand(
       color = "primary",
-      opacity = 0,
-      image = NULL,
-      title = column(
-        width = 12,
-        offset = 2,
-        tags$div(
-          
-          span(
-            icon("dashboard", verify_fa = FALSE),
-            strong("Dashboard")
-          )
-        )
-        
-        )
+      opacity = 1,
+      image = 'heart-pulse-thin.svg',
+      title = 'Dashboard'
+      # title = column(
+      #   width = 12,
+      #   offset = 2,
+      #   tags$div(
+      #     
+      #     span(
+      #       icon("dashboard", verify_fa = FALSE),
+      #       strong("Dashboard")
+      #     )
+      #   )
+      #   
+      #   )
       )
   ),
   
@@ -99,11 +101,13 @@ bs4DashPage(
         icon = icon("calculator", verify_fa = FALSE,lib = 'font-awesome'),
         menuSubItem(
           text = "Målgruppemodel",
-          tabName = "model_1"
+          tabName = "model_1",
+          icon = icon('angles-right', verify_fa = FALSE)
         ),
         menuSubItem(
           text = "Forældremodellen",
-          tabName = "model_2"
+          tabName = "model_2",
+          icon = icon('angles-right', verify_fa = FALSE)
         )
       ),
       
@@ -113,15 +117,18 @@ bs4DashPage(
         icon = icon("sitemap", verify_fa = FALSE,lib = 'font-awesome'),
         menuSubItem(
           text = "Model Dokumentation",
-          tabName = 'documentation'
+          tabName = 'documentation',
+          icon = icon('book-heart', verify_fa = FALSE)
         ),
         menuSubItem(
           text = "VIVEs Dokumentation",
-          tabName = "report"
+          tabName = "report",
+          icon    = icon('books', verify_fa = FALSE)
         ),
         menuSubItem(
           text = "Download Data",
-          tabName = "export_data"
+          tabName = "export_data",
+          icon = icon('download', verify_fa = FALSE)
         )
       )
     )
@@ -131,10 +138,17 @@ bs4DashPage(
   
   # body; ####
   body = bs4DashBody(
+    
+    # Font Awesome pro Kit
+    tags$script(
+      src ="https://kit.fontawesome.com/226906fa85.js"
+    ),
+    
     # Body Start;
     includeCSS("www/customtheme.css"),
     useShinyjs(),
     useShinyFeedback(),
+    
     use_waiter(),
         uiOutput("gen_body")
       
@@ -151,7 +165,7 @@ bs4DashPage(
     # Footer Start;
     fixed = TRUE,
     left = span(
-      "Den Sundhedsøkonomiske Investeringsmodel",
+      "Beregner til Investeringer i Sundhed (BIS)",
       bs4Badge(
         color = "info",rounded = TRUE,fifelse(isTRUE(developper_mode), "Developper Mode", "Live Mode")),
       bs4Badge(
@@ -171,12 +185,13 @@ bs4DashPage(
       a(icon("github"),
         "Repository",
         href = "https://github.com/serkor1/bionic-beaver",
-        target = "_blank"),
+        target = "_blank",
+        id     = 'github'),
       # add horizontal space between
       # the links.
       HTML("&nbsp"),
       a(
-        icon("book"),
+        icon('book-heart', verify_fa = FALSE),
         "Dokumentation",
         href = "documentation/_book/index.html",
         target = "_blank"
