@@ -2,23 +2,30 @@
 rm(list = ls()); gc()
 
 # packages;
+suppressPackageStartupMessages(
+  {
+    # Essential Shiny libraries
+    library(shiny)
+    library(bs4Dash)
+    library(shinyjs)
+    library(shinyWidgets)
+    library(shinycssloaders)
+    library(shinyFeedback)
+    library(fresh)
+    library(waiter)
+    library(DT)
+    
+    # Essential Backend libraries
+    library(stringr)
+    library(data.table)
+    library(plotly)
+    library(purrr)
+    library(rhandsontable)
+    library(readODS)
+    library(formattable)
+  }
+)
 
-library(stringr)
-library(shiny)
-library(bs4Dash)
-library(shinyjs)
-library(shinyWidgets)
-library(data.table)
-library(plotly)
-library(DT)
-library(fresh)
-library(purrr)
-library(rhandsontable)
-library(readODS)
-library(shinycssloaders)
-library(shinyFeedback)
-library(waiter)
-library(formattable)
 
 # Developper Mode;
 developper_mode = FALSE
