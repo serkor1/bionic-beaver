@@ -60,29 +60,9 @@
         data <- data[
           outcome_type %chin% alternate
         ]
-        
-        # NOTE: MOve this to preloader when Carolines
-        # data arrives.
-        group_cols <- .find_cols(
-          cols = colnames(data),
-          pattern = c("x", "year", "assignment", "allocator", "allocator", 'id'),
-          negate = FALSE
-        )
 
 
 
-        data <- data[
-          ,
-          .(
-            outcome = mean(outcome, na.rm = TRUE),
-            weight = mean(weight, na.rm = TRUE)
-          )
-          ,
-          by = c(group_cols)
-        ]
-        
-        
-        
         group_cols <- .find_cols(
           cols = colnames(data),
           pattern = c("x", "year", "assignment", "allocator", "allocator"),
@@ -90,36 +70,64 @@
         )
         
         
-        # TODO: At a later point perhaps
-       
+        data <- data[
+          ,
+          .(
+            outcome = sum(
+              outcome * weight, na.rm = TRUE
+            )/sum(weight, na.rm = TRUE)
+          )
+          ,
+          by = c(group_cols)
+        ]
         
-        if (is_aggregated) {
-          
-          data <- data[
-            ,
-            .(
-              outcome = sum(
-                outcome * weight, na.rm = TRUE
-              )
-            )
-            ,
-            by = c(group_cols)
-          ]
-          
-        } else {
-          
-          data <- data[
-            ,
-            .(
-              outcome = mean(
-                outcome, na.rm = TRUE
-              )
-            )
-            ,
-            by = c(group_cols)
-          ]
-          
-        }
+        
+        # # TODO: At a later point perhaps
+        # 
+        # 
+        # if (is_aggregated) {
+        #   
+        #   message('In Aggregated')
+        #   
+        #   data <- data[
+        #     ,
+        #     .(
+        #       outcome = sum(
+        #         outcome * weight, na.rm = TRUE
+        #       )/sum(weight, na.rm = TRUE)
+        #     )
+        #     ,
+        #     by = c(group_cols)
+        #   ]
+        #   
+        # } else {
+        #   
+        #   message('Not in Aggregated')
+        #   
+        #   # data <- data[
+        #   #   ,
+        #   #   .(
+        #   #     outcome = mean(
+        #   #       outcome, na.rm = TRUE
+        #   #     )
+        #   #   )
+        #   #   ,
+        #   #   by = c(group_cols)
+        #   # ]
+        #   
+        #   data <- data[
+        #     ,
+        #     .(
+        #       outcome = sum(
+        #         outcome * weight, na.rm = TRUE
+        #       )/sum(weight, na.rm = TRUE)
+        #     )
+        #     ,
+        #     by = c(group_cols)
+        #   ]
+        #   
+        #   
+        # }
         
         
         
