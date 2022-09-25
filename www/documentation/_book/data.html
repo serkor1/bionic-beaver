@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Data | Dokumentation</title>
+  <title>2 Data | Beregner til Investeringer i Sundhed (BIS)</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Data | Dokumentation" />
+  <meta property="og:title" content="2 Data | Beregner til Investeringer i Sundhed (BIS)" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ set in the _output.yml file.</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Data | Dokumentation" />
+  <meta name="twitter:title" content="2 Data | Beregner til Investeringer i Sundhed (BIS)" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
@@ -27,9 +27,12 @@ set in the _output.yml file.</p>" />
   
 
 <meta name="author" content="Serkan Korkmaz, VIVE Sundhed" />
+<meta name="author" content="Caroline Louise Westergaard, VIVE Sundhed" />
+<meta name="author" content="Rasmus Højbjerg Jacobsen, VIVE Effekt" />
+<meta name="author" content="Jakob Kjellberg, VIVE Sundhed" />
 
 
-<meta name="date" content="2022-08-26" />
+<meta name="date" content="2022-09-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -152,8 +155,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#model-1"><i class="fa fa-check"></i><b>2.2</b> Model 1</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="data.html"><a href="data.html#diagnoseklassificering"><i class="fa fa-check"></i><b>2.2.1</b> Diagnoseklassificering</a></li>
-<li class="chapter" data-level="2.2.2" data-path="data.html"><a href="data.html#priserne-i-modellen"><i class="fa fa-check"></i><b>2.2.2</b> Priserne i Modellen</a></li>
-<li class="chapter" data-level="2.2.3" data-path="data.html"><a href="data.html#populationen"><i class="fa fa-check"></i><b>2.2.3</b> Populationen</a></li>
+<li class="chapter" data-level="2.2.2" data-path="data.html"><a href="data.html#klassificering-og-opgørelse-af-udfald"><i class="fa fa-check"></i><b>2.2.2</b> Klassificering og opgørelse af udfald</a></li>
+<li class="chapter" data-level="2.2.3" data-path="data.html"><a href="data.html#priserne-i-modellen"><i class="fa fa-check"></i><b>2.2.3</b> Priserne i Modellen</a></li>
+<li class="chapter" data-level="2.2.4" data-path="data.html"><a href="data.html#populationen"><i class="fa fa-check"></i><b>2.2.4</b> Populationen</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#model-2"><i class="fa fa-check"></i><b>2.3</b> Model 2</a></li>
 </ul></li>
@@ -186,7 +190,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Dokumentation</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Beregner til Investeringer i Sundhed (BIS)</a>
           </h1>
         </div>
 
@@ -198,16 +202,218 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">2</span> Data<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="databaser" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Databaser<a href="data.html#databaser" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Register</th>
+<th align="left">Formål</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">lprdiag</td>
+<td align="left">Identificering a population, og tilhørende diagnoser</td>
+</tr>
+<tr class="even">
+<td align="left">lpradm</td>
+<td align="left">Somatiske Kontakter</td>
+</tr>
+<tr class="odd">
+<td align="left">psykadm</td>
+<td align="left">Psykiatriske Kontakter</td>
+</tr>
+<tr class="even">
+<td align="left">sssy</td>
+<td align="left">Ydelser i Primærsektoren</td>
+</tr>
+<tr class="odd">
+<td align="left">dream</td>
+<td align="left">Sociale ydelser</td>
+</tr>
+<tr class="even">
+<td align="left">lmdb</td>
+<td align="left">Receptpligtige præparater</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="model-1" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Model 1<a href="data.html#model-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="diagnoseklassificering" class="section level3 hasAnchor" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Diagnoseklassificering<a href="data.html#diagnoseklassificering" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="5%" />
+<col width="94%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Diagnose</th>
+<th align="left">ICD10_Kode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Lunge Kræft</td>
+<td align="left">DC33, DC34</td>
+</tr>
+<tr class="even">
+<td align="left">Bryst Kræft</td>
+<td align="left">DC50</td>
+</tr>
+<tr class="odd">
+<td align="left">Tarm Kræft</td>
+<td align="left">DC18, DC19, DC20, DC21</td>
+</tr>
+<tr class="even">
+<td align="left">Prostata Kræft</td>
+<td align="left">DC61</td>
+</tr>
+<tr class="odd">
+<td align="left">Svær Psykisk Sygdom</td>
+<td align="left">DF20, DF21, DF22, DF23, DF24, DF25, DF26, DF27, DF28, DF29, DF30, DF31, DF603</td>
+</tr>
+<tr class="even">
+<td align="left">Moderat Psykisk Sygdom</td>
+<td align="left">DF32, DF33, DF34, DF35, DF36, DF37, DF38, DF39, DF40, DF41, DF42, DF43, DF50, DF60, DF61, DF62, DF90, DF91, DF92, DF988C</td>
+</tr>
+<tr class="odd">
+<td align="left">Kronisk Leversygdom</td>
+<td align="left">DK70, DK73, DK74</td>
+</tr>
+<tr class="even">
+<td align="left">Ryg- Og Nakkesmerter</td>
+<td align="left">DM51, DM52, DM53, DM54</td>
+</tr>
+<tr class="odd">
+<td align="left">Leddegigt</td>
+<td align="left">DM05, DM06</td>
+</tr>
+<tr class="even">
+<td align="left">Kol</td>
+<td align="left">DJ44</td>
+</tr>
+<tr class="odd">
+<td align="left">Diabetes Type 2</td>
+<td align="left">DE119</td>
+</tr>
+<tr class="even">
+<td align="left">Diabetes Type 2 Med Komplikationer</td>
+<td align="left">DE111, DE112, DE113, DE114, DE115, DE116, DE117, DE118</td>
+</tr>
+<tr class="odd">
+<td align="left">Diabetes Type 1</td>
+<td align="left">DE109</td>
+</tr>
+<tr class="even">
+<td align="left">Diabetes Type 1 Med Komplikationer</td>
+<td align="left">DE101, DE102, DE103, DE104, DE105, DE106, DE107, DE108</td>
+</tr>
+<tr class="odd">
+<td align="left">Alkohol Misbrug</td>
+<td align="left">DF10, DF11, DF12, DF13, DF14, DF15, DF16, DF17, DF18, DF19</td>
+</tr>
+<tr class="even">
+<td align="left">Hjertekar</td>
+<td align="left">DI01, DI02, DI03, DI04, DI05, DI06, DI07, DI08, DI09, DI10, DI11, DI12, DI13, DI14, DI15, DI16, DI17, DI18, DI19, DI20, DI21, DI22, DI23, DI24, DI25, DI26, DI27, DI28, DI29, DI30, DI31, DI32, DI33, DI34, DI35, DI36, DI37, DI38, DI39, DI40, DI41, DI42, DI43, DI44, DI45, DI46, DI47, DI48, DI49, DI50, DI51, DI52, DI53, DI54, DI55, DI56, DI57, DI58, DI59, DI60, DI61, DI62, DI63, DI64, DI65, DI66, DI67, DI68, DI69, DI70, DI71, DI72, DI73, DI74, DI75, DI76, DI77, DI78, DI79, DI80, DI81, DI82, DI83, DI84, DI85, DI86, DI87, DI88, DI89, DI90, DI91, DI92, DI93, DI94, DI95, DI96, DI97, DI98, DI99</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="priserne-i-modellen" class="section level3 hasAnchor" number="2.2.2">
-<h3><span class="header-section-number">2.2.2</span> Priserne i Modellen<a href="data.html#priserne-i-modellen" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="sundhedsdata" class="section level4 hasAnchor" number="2.2.2.1">
-<h4><span class="header-section-number">2.2.2.1</span> Sundhedsdata<a href="data.html#sundhedsdata" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="klassificering-og-opgørelse-af-udfald" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Klassificering og opgørelse af udfald<a href="data.html#klassificering-og-opgørelse-af-udfald" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Primærsektoren</strong></p>
+<p>Alle individder der optræder i <code>SSSY</code> med en tilhørende <code>spec2</code>-kode er blevet klassificeret efter følgende tabelværdier,</p>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Outcome</th>
+<th align="left">Spec2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Almen Praksis</td>
+<td align="left">70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90</td>
+</tr>
+<tr class="even">
+<td align="left">Psykolog</td>
+<td align="left">63</td>
+</tr>
+<tr class="odd">
+<td align="left">Psykiater</td>
+<td align="left">24,35</td>
+</tr>
+<tr class="even">
+<td align="left">Fysioterapi</td>
+<td align="left">61,62,65,51</td>
+</tr>
+<tr class="odd">
+<td align="left">Anden Speciale</td>
+<td align="left">Alle andre koder</td>
+</tr>
+</tbody>
+</table>
+<p>I tilfælde hvor individdets <code>spec2</code> kode ikke falder indunder <code>Almen Praksis</code>, <code>Psykolog</code>, <code>Psykiater</code> eller <code>Fysioterapi</code> er denne kodet som <code>Anden Speciale</code>.</p>
+<p><code>Ydelserne</code> i primær sektoren er opgjort som antallet af optrædelser i <code>SSSY</code> det givne år. Dette indebærer således <strong>alle</strong> kontakter patienten måtte have til, eksempelvis, <code>almen praksis</code> upåagtet om patient optræder mere end én gang i forbindelse med en konsultation.</p>
+<p><strong>Overførselsindkomster</strong></p>
+<p>Patienterne er blevet inddelt efter type af overførselsindkomster jf. følgende kriterier,</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Outcome</th>
+<th align="left">Kode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Selvforsørgende</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Førtidspension</td>
+<td align="left">783,781</td>
+</tr>
+<tr class="odd">
+<td align="left">Fleksjob</td>
+<td align="left">771,774</td>
+</tr>
+<tr class="even">
+<td align="left">Midlertidig Overførselsindkomst</td>
+<td align="left">Alle andre koder</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fcase</span>(</span>
+<span id="cb1-2"><a href="data.html#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">is.na</span>(variabel), <span class="st">&#39;Selvforsørgedende&#39;</span>,</span>
+<span id="cb1-3"><a href="data.html#cb1-3" aria-hidden="true" tabindex="-1"></a>    variabel <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">783</span>, <span class="dv">781</span>), <span class="st">&#39;Førtidspension&#39;</span>,</span>
+<span id="cb1-4"><a href="data.html#cb1-4" aria-hidden="true" tabindex="-1"></a>    variabel <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">771</span>,<span class="dv">774</span>), <span class="st">&#39;Fleksjob&#39;</span>,</span>
+<span id="cb1-5"><a href="data.html#cb1-5" aria-hidden="true" tabindex="-1"></a>    variabel <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">996</span><span class="sc">:</span><span class="dv">999</span>), <span class="st">&#39;Drop&#39;</span>,</span>
+<span id="cb1-6"><a href="data.html#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">default =</span> <span class="st">&#39;Midlertidig Overførselsindkomst&#39;</span></span>
+<span id="cb1-7"><a href="data.html#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Hvis patienten optræder i <code>DREAM</code>, men ikke har nogle angivne værdier (<code>NA</code>) tæller denne som værende <code>selvforsørgende</code> i den angivne uge. Patienter der er kodet som <code>[783, 781]</code> eller <code>[771, 774]</code> tæller som hhv. modtager af <code>Førtidspension</code> eller <code>Fleksjob</code>. Patienter der ikke passer ind i nogle af kategorierne er angivet som værende på <code>midlertidig overførselsindkomst</code>. Patienter der overgår til folkepension, emmigrere eller afgår ved døden er talt med som 0 i alle kategorier.</p>
+<p><strong>Sengedage i Psykiatrien og Somatikken</strong></p>
+<p>Patientens sengedage fordelt på <code>ambulatorium</code>, <code>skadestue</code> og <code>indlæggelse</code> er opgjort efter <code>v_sengdage</code> i psykiatrien og somatikken.</p>
+<p>Disse tre kategorier er identificeret efter følgende kriterier,</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="data.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fcase</span>(</span>
+<span id="cb2-2"><a href="data.html#cb2-2" aria-hidden="true" tabindex="-1"></a>    c_indm <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> c_pattype <span class="sc">==</span> <span class="dv">2</span>, <span class="st">&#39;Skadestue&#39;</span>,</span>
+<span id="cb2-3"><a href="data.html#cb2-3" aria-hidden="true" tabindex="-1"></a>    c_indm <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> c_pattype <span class="sc">==</span> <span class="dv">0</span>, <span class="st">&#39;Indlæggelse&#39;</span>,</span>
+<span id="cb2-4"><a href="data.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    c_indm <span class="sc">==</span> <span class="dv">2</span> <span class="sc">&amp;</span> c_pattype <span class="sc">==</span> <span class="dv">2</span>, <span class="st">&#39;Ambulant&#39;</span>,</span>
+<span id="cb2-5"><a href="data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>    c_indm <span class="sc">==</span> <span class="dv">2</span> <span class="sc">&amp;</span> c_pattype <span class="sc">==</span> <span class="dv">0</span>, <span class="st">&#39;Indlæggelse&#39;</span>,</span>
+<span id="cb2-6"><a href="data.html#cb2-6" aria-hidden="true" tabindex="-1"></a>    c_indm <span class="sc">==</span> <span class="dv">2</span>, <span class="st">&#39;Ambulant&#39;</span>,</span>
+<span id="cb2-7"><a href="data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>    c_indm <span class="sc">==</span> <span class="dv">3</span>, <span class="st">&#39;Skadestue&#39;</span></span>
+<span id="cb2-8"><a href="data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><strong>Receptpligtig Medicin</strong></p>
+<p>Receptpligtig medicin er opgjort efter <code>Det offentliges andel</code> og <code>Patientandel</code>. Opgørelsen af dette er baseret på <code>eksp</code> og <code>ptp</code>.</p>
+</div>
+<div id="priserne-i-modellen" class="section level3 hasAnchor" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Priserne i Modellen<a href="data.html#priserne-i-modellen" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="sundhedsdata" class="section level4 hasAnchor" number="2.2.3.1">
+<h4><span class="header-section-number">2.2.3.1</span> Sundhedsdata<a href="data.html#sundhedsdata" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table>
 <thead>
 <tr class="header">
@@ -280,8 +486,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Gruppen koster altså i gennemsnit 39.700 kr. i det givne år.</p>
 </blockquote>
 </div>
-<div id="overførselsindkomster" class="section level4 hasAnchor" number="2.2.2.2">
-<h4><span class="header-section-number">2.2.2.2</span> Overførselsindkomster<a href="data.html#overførselsindkomster" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="overførselsindkomster" class="section level4 hasAnchor" number="2.2.3.2">
+<h4><span class="header-section-number">2.2.3.2</span> Overførselsindkomster<a href="data.html#overførselsindkomster" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table>
 <thead>
 <tr class="header">
@@ -315,14 +521,16 @@ Gruppen koster altså i gennemsnit 37.000 kr. i det givne år.</p>
 </blockquote>
 </div>
 </div>
-<div id="populationen" class="section level3 hasAnchor" number="2.2.3">
-<h3><span class="header-section-number">2.2.3</span> Populationen<a href="data.html#populationen" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="populationen" class="section level3 hasAnchor" number="2.2.4">
+<h3><span class="header-section-number">2.2.4</span> Populationen<a href="data.html#populationen" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><code>Populationen</code> består af to <code>delpopulationer</code> der er gensidigt eksklusive. Den første <code>delpopulation</code> er alle danskere over <code>18 år</code> der optræder i <code>lpr</code> med en diagnose i årrene <code>2009</code>-<code>2013</code>.</p>
 <p>Den anden <code>delpopulation</code> er alle danskere over <code>18 år</code> der ikke er en del af den første <code>delpopulation.</code></p>
 <blockquote>
-<p><strong>Eksempel:</strong> Hvis person A og B begge er over 18 år i årrene 2009-2013, og kun person A har den &gt;givne diagnose, er kun A altså talt med i den første population. B er således i den anden
+<p><strong>Eksempel:</strong> Hvis person A og B begge er over 18 år i årrene 2009-2013, og kun person A har den
+givne diagnose, er kun A altså talt med i den første population. B er således i den anden
 delpopulation.</p>
 </blockquote>
+<p><code>Populationen</code> er bestem ud fra patientens aktionsdiagnose <code>c_diagtype == 'A'</code> hvorfor patienter med relevante bidiagnoser, men ikke aktionsdiagnoser, ikke er den del af <code>populationen</code>.</p>
 </div>
 </div>
 <div id="model-2" class="section level2 hasAnchor" number="2.3">
@@ -367,7 +575,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-intro.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-data.Rmd",
 "text": "Edit"
 },
 "history": {

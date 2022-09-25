@@ -4,6 +4,7 @@ data
 databaser
 model-1
 diagnoseklassificering
+klassificering-og-opgørelse-af-udfald
 priserne-i-modellen
 sundhedsdata
 overførselsindkomster

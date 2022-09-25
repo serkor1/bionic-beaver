@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4 For Udviklere | Dokumentation</title>
+  <title>4 For Udviklere | Beregner til Investeringer i Sundhed (BIS)</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4 For Udviklere | Dokumentation" />
+  <meta property="og:title" content="4 For Udviklere | Beregner til Investeringer i Sundhed (BIS)" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ set in the _output.yml file.</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 For Udviklere | Dokumentation" />
+  <meta name="twitter:title" content="4 For Udviklere | Beregner til Investeringer i Sundhed (BIS)" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
@@ -27,9 +27,12 @@ set in the _output.yml file.</p>" />
   
 
 <meta name="author" content="Serkan Korkmaz, VIVE Sundhed" />
+<meta name="author" content="Caroline Louise Westergaard, VIVE Sundhed" />
+<meta name="author" content="Rasmus Højbjerg Jacobsen, VIVE Effekt" />
+<meta name="author" content="Jakob Kjellberg, VIVE Sundhed" />
 
 
-<meta name="date" content="2022-08-26" />
+<meta name="date" content="2022-09-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -152,8 +155,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#model-1"><i class="fa fa-check"></i><b>2.2</b> Model 1</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="data.html"><a href="data.html#diagnoseklassificering"><i class="fa fa-check"></i><b>2.2.1</b> Diagnoseklassificering</a></li>
-<li class="chapter" data-level="2.2.2" data-path="data.html"><a href="data.html#priserne-i-modellen"><i class="fa fa-check"></i><b>2.2.2</b> Priserne i Modellen</a></li>
-<li class="chapter" data-level="2.2.3" data-path="data.html"><a href="data.html#populationen"><i class="fa fa-check"></i><b>2.2.3</b> Populationen</a></li>
+<li class="chapter" data-level="2.2.2" data-path="data.html"><a href="data.html#klassificering-og-opgørelse-af-udfald"><i class="fa fa-check"></i><b>2.2.2</b> Klassificering og opgørelse af udfald</a></li>
+<li class="chapter" data-level="2.2.3" data-path="data.html"><a href="data.html#priserne-i-modellen"><i class="fa fa-check"></i><b>2.2.3</b> Priserne i Modellen</a></li>
+<li class="chapter" data-level="2.2.4" data-path="data.html"><a href="data.html#populationen"><i class="fa fa-check"></i><b>2.2.4</b> Populationen</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#model-2"><i class="fa fa-check"></i><b>2.3</b> Model 2</a></li>
 </ul></li>
@@ -186,7 +190,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Dokumentation</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Beregner til Investeringer i Sundhed (BIS)</a>
           </h1>
         </div>
 
@@ -209,34 +213,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Allocator (<code>model 1</code> og <code>model 2</code>)</li>
 </ol>
 <p>Alle <code>variabler</code> bør navngives efter brug og som <code>as.charcters</code> ved brug af <code>fcase</code> eller <code>case_when</code>. Dette vil sige at, eksempelvis, arbejdsmarkedsforhold bør navngives som <code>Arbejdsløs</code>, <code>Fleksjob</code> osv.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="for-udviklere.html#cb2-1" aria-hidden="true" tabindex="-1"></a>DT[</span>
-<span id="cb2-2"><a href="for-udviklere.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  ,</span>
-<span id="cb2-3"><a href="for-udviklere.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  arbejdsmarked <span class="sc">:</span><span class="er">=</span> <span class="fu">fcase</span>(</span>
-<span id="cb2-4"><a href="for-udviklere.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    tmp <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&#39;Fleksjob&#39;</span>,</span>
-<span id="cb2-5"><a href="for-udviklere.html#cb2-5" aria-hidden="true" tabindex="-1"></a>    default, <span class="st">&#39;Aktiv i Arbejdsmarkedet&#39;</span></span>
-<span id="cb2-6"><a href="for-udviklere.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-7"><a href="for-udviklere.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  ,</span>
-<span id="cb2-8"><a href="for-udviklere.html#cb2-8" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="for-udviklere.html#cb4-1" aria-hidden="true" tabindex="-1"></a>DT[</span>
+<span id="cb4-2"><a href="for-udviklere.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  ,</span>
+<span id="cb4-3"><a href="for-udviklere.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  arbejdsmarked <span class="sc">:</span><span class="er">=</span> <span class="fu">fcase</span>(</span>
+<span id="cb4-4"><a href="for-udviklere.html#cb4-4" aria-hidden="true" tabindex="-1"></a>    tmp <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&#39;Fleksjob&#39;</span>,</span>
+<span id="cb4-5"><a href="for-udviklere.html#cb4-5" aria-hidden="true" tabindex="-1"></a>    default, <span class="st">&#39;Aktiv i Arbejdsmarkedet&#39;</span></span>
+<span id="cb4-6"><a href="for-udviklere.html#cb4-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-7"><a href="for-udviklere.html#cb4-7" aria-hidden="true" tabindex="-1"></a>  ,</span>
+<span id="cb4-8"><a href="for-udviklere.html#cb4-8" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
 <div id="preload_data" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> preload_data<a href="for-udviklere.html#preload_data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><code>data</code> bør følge struktur foroven, med mindre det er tiltænkt at skrive <code>preload_data()</code> og størstedelen af de afhængige <code>scripts</code> om. Hvis eget <code>data</code> fødes i modellen, med <code>variabler</code> forskellige fra de, der allerede er indarbejdet i modellerne, skal argumenterne i <code>preload_data()</code> skrives om derefter.</p>
 <p>Hvis <code>data</code> inkluderer nye <code>variabler</code> som,</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="for-udviklere.html#cb3-1" aria-hidden="true" tabindex="-1"></a>DT[</span>
-<span id="cb3-2"><a href="for-udviklere.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  ,</span>
-<span id="cb3-3"><a href="for-udviklere.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">:=</span><span class="st">`</span>(</span>
-<span id="cb3-4"><a href="for-udviklere.html#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">statsborgerskab =</span> <span class="fu">fcase</span>(</span>
-<span id="cb3-5"><a href="for-udviklere.html#cb3-5" aria-hidden="true" tabindex="-1"></a>      tmp <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&#39;Udenlandsk&#39;</span>,</span>
-<span id="cb3-6"><a href="for-udviklere.html#cb3-6" aria-hidden="true" tabindex="-1"></a>      default, <span class="st">&#39;Dansk&#39;</span></span>
-<span id="cb3-7"><a href="for-udviklere.html#cb3-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb3-8"><a href="for-udviklere.html#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">indkomst_gruppe =</span> <span class="fu">fcase</span>(</span>
-<span id="cb3-9"><a href="for-udviklere.html#cb3-9" aria-hidden="true" tabindex="-1"></a>      indkomst <span class="sc">&gt;</span> <span class="dv">1000</span>, <span class="st">&#39;Høj&#39;</span>,</span>
-<span id="cb3-10"><a href="for-udviklere.html#cb3-10" aria-hidden="true" tabindex="-1"></a>      indkomest <span class="sc">&gt;</span> <span class="dv">500</span> <span class="sc">&amp;</span> indkomst <span class="sc">&lt;</span> <span class="dv">1000</span>, <span class="st">&#39;Mellem&#39;</span>,</span>
-<span id="cb3-11"><a href="for-udviklere.html#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">default =</span> <span class="st">&#39;Lav&#39;</span></span>
-<span id="cb3-12"><a href="for-udviklere.html#cb3-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-13"><a href="for-udviklere.html#cb3-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-14"><a href="for-udviklere.html#cb3-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-15"><a href="for-udviklere.html#cb3-15" aria-hidden="true" tabindex="-1"></a>  ,</span>
-<span id="cb3-16"><a href="for-udviklere.html#cb3-16" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="for-udviklere.html#cb5-1" aria-hidden="true" tabindex="-1"></a>DT[</span>
+<span id="cb5-2"><a href="for-udviklere.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  ,</span>
+<span id="cb5-3"><a href="for-udviklere.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">:=</span><span class="st">`</span>(</span>
+<span id="cb5-4"><a href="for-udviklere.html#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">statsborgerskab =</span> <span class="fu">fcase</span>(</span>
+<span id="cb5-5"><a href="for-udviklere.html#cb5-5" aria-hidden="true" tabindex="-1"></a>      tmp <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&#39;Udenlandsk&#39;</span>,</span>
+<span id="cb5-6"><a href="for-udviklere.html#cb5-6" aria-hidden="true" tabindex="-1"></a>      default, <span class="st">&#39;Dansk&#39;</span></span>
+<span id="cb5-7"><a href="for-udviklere.html#cb5-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-8"><a href="for-udviklere.html#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">indkomst_gruppe =</span> <span class="fu">fcase</span>(</span>
+<span id="cb5-9"><a href="for-udviklere.html#cb5-9" aria-hidden="true" tabindex="-1"></a>      indkomst <span class="sc">&gt;</span> <span class="dv">1000</span>, <span class="st">&#39;Høj&#39;</span>,</span>
+<span id="cb5-10"><a href="for-udviklere.html#cb5-10" aria-hidden="true" tabindex="-1"></a>      indkomest <span class="sc">&gt;</span> <span class="dv">500</span> <span class="sc">&amp;</span> indkomst <span class="sc">&lt;</span> <span class="dv">1000</span>, <span class="st">&#39;Mellem&#39;</span>,</span>
+<span id="cb5-11"><a href="for-udviklere.html#cb5-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">default =</span> <span class="st">&#39;Lav&#39;</span></span>
+<span id="cb5-12"><a href="for-udviklere.html#cb5-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-13"><a href="for-udviklere.html#cb5-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-14"><a href="for-udviklere.html#cb5-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-15"><a href="for-udviklere.html#cb5-15" aria-hidden="true" tabindex="-1"></a>  ,</span>
+<span id="cb5-16"><a href="for-udviklere.html#cb5-16" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
 <p>Så skal argumentet <code>char_vector</code> i <code>preload_data()</code> skrives om til <code>char_vector = c(..., 'statsborgerskab', 'indkomst_gruppe')</code> hvor <code>...</code> repræsenterer andre eksisterende karakteristika der er at finde i <code>data</code>.</p>
 <blockquote>
 <p>Det er ikke nødvendigt at angive
