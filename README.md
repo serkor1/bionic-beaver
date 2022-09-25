@@ -1,3 +1,7 @@
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+![Maintainer](https://img.shields.io/badge/maintainer-Serkan Korkmaz-blue)
+[![made-with-python](https://img.shields.io/badge/Made%20with-R-1f425f.svg)](https://www.python.org/)
+
 ## Beregner til Investeringer i Sundhed
 
 Modellen er udviklet af VIVE Sundhed og VIVE Effekt. Modellen er finansieret af Lægemiddelindustriforeningen.
