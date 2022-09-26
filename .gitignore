@@ -54,3 +54,4 @@ vignettes/*.pdf
 /www/documentation/*.Rproj
 /www/documentation/*.yml
 
+packrat/lib*/

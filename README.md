@@ -1,5 +1,5 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-![Maintainer](https://img.shields.io/badge/maintainer-Serkan_Korkmaz-blue)
+![Maintainer](https://img.shields.io/badge/Maintainer-Serkan_Korkmaz-blue)
 
 ## Beregner til Investeringer i Sundhed
 
