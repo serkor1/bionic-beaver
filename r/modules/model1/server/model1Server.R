@@ -94,7 +94,7 @@
         )[
           ,
           .(
-            total_N = unique(total_N, na.rm = TRUE)
+            total_N   = sum(unique(total_n), na.rm = TRUE)
           )
           ,
           by = .(
