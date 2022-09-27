@@ -518,16 +518,19 @@
           label = NULL,
           choices = c(`Graf <i class="fa-solid fa-chart-line"></i>` = "see_plot", ` Tabel <i class="fa-solid fa-table-columns"></i>` = "see_table"),
           justified = TRUE,
-          size = "sm"
+          size = "normal"
         )
       ),
     
     column(
       width = 12,
+      
+      
       downloadButton(
         outputId = ns('download_files'),
-        label = 'Download Materiale'
-
+        label = 'Download Materiale',
+        style = 'width: 100%;'
+        
       )
       # ,
       # 
@@ -545,6 +548,8 @@
     # Panels
    
       gen_panel
+    
+    
     
     
   )

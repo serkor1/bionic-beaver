@@ -43,6 +43,10 @@
       name_iterator <<- name_iterator + 1
       # 2) Expport data
       # to folder
+      
+      
+      
+      
       map(
         element,
         function(data) {
@@ -87,7 +91,7 @@
             colnames(data)
           )
           
-          
+          sheet <- unique(data$Allocator)
           
           write_ods(
             x = data[,Allocator := NULL,],
@@ -97,7 +101,7 @@
               '.ods'
             ),
             append = do_append,
-            sheet = unique(data$Allocator),
+            sheet = sheet,
             update = FALSE
           )
           
@@ -118,6 +122,7 @@ pack <- function(
     intervention_name,
     control_name,
     directory,
+    char,
     filename = 'output.zip'
 ) {
   
@@ -134,15 +139,52 @@ pack <- function(
   
   # 1) Generate temporary directory
   # for storage
-  if (!dir.exists('output')) {
-    
-    dir.create(
-      path = 'output'
-    )
-    
-  } 
   
   directory <- 'output'
+  
+  if (!dir.exists(directory)) {
+    
+    
+    dir.create(
+      path = directory
+    )
+    
+  } else {
+    
+    map(
+      list.files(
+        directory,pattern = '*.ods', full.names = TRUE
+      ),
+      file.remove
+    )
+    
+    
+  }
+  
+  
+  
+  if (!is.null(char)) {
+    
+    demographics <- data.table(
+      placeholder = char
+    )
+    
+    demographics[
+      ,
+      c('Variabel', 'Valgt') := tstrsplit(
+        placeholder, "_"
+      )
+      ,
+    ]
+    
+    write_ods(
+      demographics[,.(Variabel, Valgt),],
+      sheet = 'Demografi',
+      paste0(directory, '/demografi.ods')
+    )
+    
+  }
+  
   
 
   if (inherits(data_list, 'model1')) {

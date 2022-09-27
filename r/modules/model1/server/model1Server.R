@@ -429,46 +429,52 @@
     )
       
       
+
+        output$download_files <- downloadHandler(
+
+          filename = function() {
+
+            # WARNING: paste0 breaks the
+            # download process.
+            paste(
+              "output",
+              "zip",
+              sep="."
+            )
+
+          },
+
+          content = function(fname) {
+
+            
+            
+            
+
+            
+            # Download Tables
+
+            pack(
+              wrap(
+                flavored_data()
+              ),
+              intervention_name = input$pt_target,
+              control_name = input$pt_control,
+              filename     = fname,
+              char = input$pt_demographic
+            )
+
+
+
+
+
+
+          },
+          contentType = "application/zip"
+
+
+        )
       
-      # download files; ####
-      
-      
-      output$download_files <- downloadHandler(
-        
-        filename = function() {
-          # WARNING: paste0 breaks the
-          # download process.
-          paste(
-            "output",
-            "zip",
-            sep="."
-          )
-          
-        },
-        
-        content = function(fname) {
-          
-          message('Downloading Data')
-          
-          pack(
-            wrap(
-              flavored_data()
-            ),
-            intervention_name = input$pt_target,
-            control_name = input$pt_control,
-            filename     = fname
-          )
-          
-          
-          
-          
-          
-          
-        },
-        contentType = "application/zip"        
-        
-        
-      )
+     
       
       
       # Server End #####
