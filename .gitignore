@@ -43,6 +43,9 @@ vignettes/*.pdf
 /raw
 /rsconnect
 
+/output
+output.zip
+
 /input
 /www/documentation/*.Rmd
 

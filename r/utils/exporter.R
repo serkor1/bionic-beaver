@@ -6,19 +6,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 foo <- function(data_list) {
   
   message("Test")

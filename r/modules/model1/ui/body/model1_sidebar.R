@@ -524,11 +524,18 @@
     
     column(
       width = 12,
-      actionButton(
-        'placebo',
-        label = 'Download materiale',
-        icon = icon('download'),size = 'sm',width = '100%'
+      downloadButton(
+        outputId = ns('download_files'),
+        label = 'Download Materiale'
+
       )
+      # ,
+      # 
+      # actionButton(
+      #   inputId = ns('doswnload_files'),
+      #   label = 'Download materiale',
+      #   icon = icon('download'),size = 'sm',width = '100%'
+      # )
     ),
     
     hr(),
