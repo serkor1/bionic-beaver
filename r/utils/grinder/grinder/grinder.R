@@ -49,17 +49,24 @@
       
       iterator <<- iterator + 1
       
-      # WARNING:
+      # WARNING: If not specified
+      # this will break.
       data[
-        assignment %chin% 'matching',
+        #assignment %chin% 'matching',
+        str_detect(assignment, 'matched'),
         type := do_incidence
       ]
       
       
       # filter according to incidence
-      data <- data[
-        type == do_incidence
-      ]
+      if (do_incidence != 0) {
+        
+        data <- data[
+          type == do_incidence
+        ]
+        
+      }
+      
       
       
       # filter according to characteristics
@@ -87,7 +94,7 @@
       
       # classify data
       data <- data[
-        assignment %chin% c(intervention, control, 'matching') &
+        assignment %chin% c(intervention, control, paste0("matched_", intervention)) &
           allocator %chin% c(allocators) 
       ]
       
@@ -96,7 +103,7 @@
       data[
         ,
         assignment_factor := fcase(
-          assignment %chin% "matching", "population",
+          assignment %chin% paste0("matched_", intervention), "population",
           assignment %chin% intervention, "intervention",
           assignment %chin% control, "control"
         )

@@ -117,7 +117,9 @@
             # name.
             get_choice <-  unique(
               data[,.(tmp = eval(variable)),]
-            )
+            )[
+              !str_detect(tmp, 'matched')
+            ]
             
             
             
