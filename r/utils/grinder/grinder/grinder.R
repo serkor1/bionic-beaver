@@ -73,14 +73,14 @@
       if (do_char) {
         
         
-        extract_id <- .extract_id(
+        extract_ids <- extract_id(
           lookup = lookup[[1]][[iterator]],
           values = chars
         )
 
 
         data <- data[
-          id %in% extract_id
+          id %in% extract_ids
         ]
         
         
@@ -173,18 +173,22 @@
       
       if (do_char) {
         
-        extract_id <- .extract_id(
+        extract_ids <- extract_id(
           lookup = lookup[[2]],
           values = chars
         )
         
         
         data <- data[
-          id %in% extract_id
+          id %in% extract_ids
         ]
         
       }
       
+      #1) Extract Allocators
+      data <- data[
+        allocator %chin% allocators
+      ]
       
       data <- data[
         assignment %chin% c(intervention, control)
@@ -294,7 +298,8 @@ grind <- function(
       data_list,
       intervention = intervention,
       control = control,
-      chars = chars
+      chars = chars,
+      allocators = allocators
     )
     
   }

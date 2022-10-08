@@ -39,18 +39,11 @@
     
     cost_data <- .load_model1cost()
     
-  } else {
-    
-    # message
-    message(
-      "Loading Model2 Costs!"
-    )
-    
-  }
+  } 
   
   
   
-  seq_along(get_path) %>% map(
+  data <- seq_along(get_path) %>% map(
     .f = function(i) {
       
       data <- fread(
@@ -97,7 +90,14 @@
   ) %>% set_names(
     get_names
   )
+
   
+  return(
+    structure(
+      data,
+      class = c(class(data), str_extract(path, 'model[:digit:]'))
+    )
+  )  
   
 }
 
@@ -283,11 +283,6 @@
   
   
   
-  # TODO: Add id wise aggregator
-  # here.
-  
-  
-  
   class(data) <- c(
     class(data),
     get_class
@@ -309,7 +304,7 @@
 preload_data <- function(
     developper_mode = FALSE, 
     path = c('input/data/model1/', 'input/data/model2/'),
-    char_vector = c('x','køn', 'alder', 'arbejdsmarked', 'uddannelse', 'feduc', 'ftype')
+    char_vector = c('x','køn', 'alder', 'arbejdsmarked', 'uddannelse', 'educ')
 ) {
   
   #' function information

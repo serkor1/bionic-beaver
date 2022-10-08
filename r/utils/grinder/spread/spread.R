@@ -284,7 +284,7 @@
             )
           )
           ,
-          by = .(id, assignment_factor)
+          by = .(id, assignment,allocator)
         ][
           ,
           .(
@@ -292,17 +292,17 @@
           )
           ,
           by = .(
-            assignment_factor
+            assignment,allocator
           )
         ]
         
         
         
-        data <- dcast(
-          data,
-          value.var = 'outcome',
-          formula   = ... ~ assignment_factor
-        )
+        # data <- dcast(
+        #   data,
+        #   value.var = 'outcome',
+        #   formula   = ... ~ assignment_factor
+        # )
         
         
         # data[

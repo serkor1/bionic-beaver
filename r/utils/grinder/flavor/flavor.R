@@ -146,7 +146,7 @@
 
 
 
-.flavor_model2 <- function(data_list, effect) {
+.flavor_model2 <- function(data_list, effect, who) {
   
   #' function information
   #' 
@@ -192,11 +192,12 @@
       
       
       data[
+        str_detect(allocator, pattern = who)
         ,
         `:=`(
           
-          intervention = effect * intervention,
-          control      = effect * control
+         outcome = outcome * effect,
+         effect  = effect
           
         )
         ,
@@ -234,7 +235,7 @@
 
 
 
-flavor <- function(data_list, effect, do_match = FALSE) {
+flavor <- function(data_list, effect, do_match = FALSE, who = NULL) {
   
   #' function information
   #' 
@@ -276,7 +277,8 @@ flavor <- function(data_list, effect, do_match = FALSE) {
     
     data_list <- .flavor_model2(
       data_list,
-      effect
+      effect,
+      who = who
     )
     
     class(data_list) <- c(class(data_list), 'model2')

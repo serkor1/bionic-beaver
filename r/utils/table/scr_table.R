@@ -116,6 +116,50 @@
 
 
 
+.model2_tablebaselayer <- function(data_list) {
+  
+  
+  data <- map(
+    data_list,
+    function(element) {
+      
+      if (is.null(element)) {
+        
+        return(
+          NULL
+        )
+        
+      }
+      
+      element <- copy(element)
+      
+      element[
+        ,
+        `:=`(
+          effect = fifelse(test = is.na(effect), yes = 0, no = effect),
+          assignment = str_remove(assignment, '.+_'),
+          allocator  = str_remove(allocator, '[:alpha:]+_')
+        )
+        ,
+      ]
+      
+      setnames(
+        element,
+        old = c('assignment', 'allocator', 'outcome', 'effect'),
+        new = c('Aldersgruppe', 'Fordeling', 'Produktivitetstab', 'Sygedage')
+      )
+      
+    }
+  )
+  
+  
+  return(
+    data[[1]]
+  )
+  
+  
+}
+
 
 table_baselayer <- function(data_list) {
   

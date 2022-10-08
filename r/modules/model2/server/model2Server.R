@@ -227,3 +227,105 @@ second_dataserver <- function(id, data_list){
 
   
 }
+
+
+
+
+
+
+
+
+.model2server <- function(id, data_list) {
+  moduleServer(id, function(input, output, session) {
+    
+    # Server Start; #####
+    
+    # Generate data; #####
+    data <- reactive({
+      
+        spread(
+          grind(
+            data_list = data_list,
+            # Was: intervention = paste(input$pt_target),
+            intervention = unlist(assignment[[2]]$Aldersgruppe),
+            chars = paste(input$pt_demographic),
+            allocators = unlist(outcome[[2]]$Sygedage)
+            # was: allocators = paste(input$pt_outcome)
+          )
+        )
+      
+    })
+    
+    # Flavor the data; 
+    flavored_data <- reactive({
+      
+      
+      flavor(
+        data(),
+        effect = input$effect,
+        who    = input$pt_who
+        
+      )
+      
+    })
+    
+    # Generate Plots: #####
+    output$plot <- renderPlotly({
+      
+      plot_ly(
+        flavored_data()[[1]],
+        x = ~assignment,
+        y = ~outcome, 
+        type   = "bar",
+        color = ~allocator
+      )
+      
+      
+    })
+    
+    
+    
+    # Generate Table: #####
+    output$table <- renderUI({
+      
+      table_data <- copy(table_baselayer(flavored_data()))
+      
+      table_data <- dcast(
+        data = table_data,
+        formula = Fordeling + Sygedage ~ Aldersgruppe,
+        value.var = 'Produktivitetstab'
+      )
+      
+      
+      bs4Table(
+        table_data,
+        cardWrap = FALSE,
+        bordered = TRUE
+      )
+      
+    })
+    
+    
+    # Server end; ####
+    
+  }
+  
+  
+  )
+  
+  
+}
+
+
+
+
+      
+      
+      
+      
+      
+      
+
+
+
+

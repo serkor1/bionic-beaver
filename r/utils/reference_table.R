@@ -19,10 +19,11 @@
   #' the socioeconomic variables are equal in each nested list.
   
   
-  
   lookup <- map(
     data_list,
     function(element) {
+      
+      get_class <- class(element)[length(class(element))]
       
       counter <- 0
       
@@ -99,6 +100,11 @@
          tmp,
          is.null
          )
+       
+       structure(
+         tmp,
+         class = c(class(tmp),get_class)
+       )
      
      
       
@@ -109,7 +115,10 @@
   
   
   
-  return(lookup)
+  return(
+    lookup
+    
+  )
   
   
   
@@ -119,7 +128,7 @@
 
 # ID extractor; #####
 
-.extract_id <- function(
+.extract_id_model1 <- function(
   lookup = lookup,
   values = NULL
 ) {
@@ -175,3 +184,78 @@
 
   
 }
+
+
+
+.extract_id_model2 <- function(
+    lookup = lookup,
+    values = NULL
+) {
+  
+  
+  #' function information
+  #' 
+  #' @param values character vector of choices.
+  #' 
+  #' 
+  #' Returns the Intersection of the union to avoid 
+  #' duplicates.
+  #' 
+  #' NOTE: This function has been verified, and works 
+  #' as intended.
+  
+  if (is.null(chars)) {
+    
+    return(NULL)
+    
+  }
+  
+  
+  prefixes <- unique(str_split_fixed(values, '_', 2)[,1])
+  
+  reduce(map(
+    lookup,
+    function(element) {
+      element[
+        chars %chin% values
+      ]$id
+    }
+  ), unlist)
+  
+  
+  
+}
+
+
+
+
+
+
+extract_id <- function(
+  lookup = lookup,
+  values = NULL
+) {
+  
+  if (inherits(lookup, 'model1')) {
+    
+    id <- .extract_id_model1(
+      lookup = lookup,
+      values = values
+    )
+    
+  } else {
+    
+    id <- .extract_id_model2(
+      lookup = lookup,
+      values = values
+    )
+    
+  }
+  
+  return(
+    id
+  )
+  
+}
+
+

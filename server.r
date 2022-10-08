@@ -37,6 +37,23 @@ server <- function(input, output, session) {
     
   )
   
+  shinyjs::onclick(
+    id = 'tab-model_2',
+    function() {
+      
+      temp <- model2UI(
+        id = "model2"
+      )
+      
+      
+      showModal(
+        ui = temp$body
+      )
+      
+      
+    }
+    
+  )
   
   shinyjs::onclick(
     id = 'tab-documentation',
@@ -65,7 +82,7 @@ server <- function(input, output, session) {
     ignoreNULL = FALSE,
     {
       
-      if (input$tab %chin% c('front_page', 'model_1','model_2')){
+      if (input$tab %chin% c('front_page', 'model_1')){
         
         ui <- frontUI(
           id = "front"
@@ -80,15 +97,6 @@ server <- function(input, output, session) {
             )
             
           }
-          
-          if (input$tab == 'model_2'){
-            
-            ui <- model2UI(
-              id = "model2"
-            )
-            
-          }
-          
         }
         
         output$gen_body <- renderUI({
@@ -134,18 +142,19 @@ server <- function(input, output, session) {
     )
   
     
-  .model2server_choices(id = 'model2')
+  # .model2server_choices(id = 'model2')
+  # 
+  # 
+  # 
+  # 
+  # 
+  # .model2server_plot(
+  #   id = 'model2',
+  #   data_list = data_list[[2]]
+  # )
   
   
- 
-
-
-  .model2server_plot(
-    id = 'model2',
-    data_list = data_list[[2]]
-  )
-  
-  
+    .model2server(id = 'model2', data_list = data_list[[2]])
   
   
   
