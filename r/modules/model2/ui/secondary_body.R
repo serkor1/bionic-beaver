@@ -200,18 +200,18 @@ model2UI_body <- function(id, output) {
   
   tagList(
     modalDialog(
-      title = 'Børnemodellen',
+      title = span( icon('family', lib = 'font-awesome', verify_fa = FALSE), 'Forældremodellen'),
       size = 'xl',
       
       # Options
       bs4Card(
-        title = 'Parametre',
+        title = 'Parametre',icon = icon('cog', lib = 'font-awesome', verify_fa = FALSE),status = 'primary',solidHeader = TRUE,
         width = 12,
         column(
           width = 12,
-          
+
           fluidRow(
-            
+
             # vive_picker(
             #   id = ns("pt_target"),
             #   title = "Gruppe",
@@ -219,8 +219,8 @@ model2UI_body <- function(id, output) {
             #   multiple = TRUE,
             #   choices = assignment[[2]]
             # ),
-            # 
-            # 
+            #
+            #
             # vive_picker(
             #   id = ns("pt_outcome"),
             #   title = "Outcomes",
@@ -230,9 +230,9 @@ model2UI_body <- function(id, output) {
             #   selectAllText = "Vælg Alle",
             #   deselectAllText = "Nulstil"
             # ),
-            # 
-            # 
-            # 
+            #
+            #
+            #
             # vive_picker(
             #   id = ns("pt_demographic"),
             #   title = "Demografi",
@@ -242,9 +242,9 @@ model2UI_body <- function(id, output) {
             #   selectAllText = "Vælg Alle",
             #   deselectAllText = "Nulstil"
             # ),
-            
-            
-            
+
+
+
             checkboxGroupButtons(
               inputId = ns('pt_demographic'),
               label = "Uddannelse",
@@ -253,10 +253,10 @@ model2UI_body <- function(id, output) {
               size = 'sm',
               width = '100%',
               checkIcon = list(
-                yes = icon("ok", 
+                yes = icon("ok",
                            lib = "glyphicon"))
             ),
-            
+
             radioGroupButtons(
               inputId = ns('pt_who'),
               label = "Hvem tager Sygedagen?",
@@ -265,14 +265,14 @@ model2UI_body <- function(id, output) {
               size = 'sm',
               width = '100%',
               checkIcon = list(
-                yes = icon("ok", 
+                yes = icon("ok",
                            lib = "glyphicon"))
             )
-            
-            
-            
+
+
+
           ),
-          
+
           sliderInput(
             inputId = ns('effect'),
             label   = 'Sygedage',
@@ -280,26 +280,33 @@ model2UI_body <- function(id, output) {
             max = 14,
             value = 1,width = '100%'
           )
-          
+
         )
       ),
       
       accordion(
         id = ns('accordion_model2'),
+        
         accordionItem(
-          title = 'Plot',
+          title = span(
+            icon(name = 'chart-simple', lib = 'font-awesome', verify_fa = FALSE),
+            'Graf'
+            ),
           collapsed = FALSE,
-          status = 'indigo',
+          status = 'primary',
           solidHeader = TRUE,
           plotlyOutput(
             ns('plot')
           )
         ),
         accordionItem(
-          title = 'Tabel',
+          title = span(
+            icon(name = 'table', lib = 'font-awesome', verify_fa = FALSE),
+            'Tabel'
+          ),
           solidHeader = TRUE,
           collapsed = TRUE,
-          status = 'indigo',
+          status = 'primary',
           uiOutput(
             ns('table')
           )

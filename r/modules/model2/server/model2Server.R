@@ -272,12 +272,27 @@ second_dataserver <- function(id, data_list){
     # Generate Plots: #####
     output$plot <- renderPlotly({
       
+      
+      
+      
       plot_ly(
         flavored_data()[[1]],
         x = ~assignment,
         y = ~outcome, 
         type   = "bar",
-        color = ~allocator
+        color = ~allocator,alpha = 0.5,
+        marker = list(
+          line = list(
+            color = 'rgb(8,48,107)',
+            width = 1.5)
+          )
+      ) %>% layout(
+        title = 'Gennemsnitlig Produktivitetstab',
+        xaxis = list(title = ''),
+        yaxis = list(title = 'Produktivitetstab pr. forældre'),
+        legend = list(
+          orientation = 'h'
+        )
       )
       
       
@@ -290,11 +305,21 @@ second_dataserver <- function(id, data_list){
       
       table_data <- copy(table_baselayer(flavored_data()))
       
+      table_data[
+        ,
+        `:=`(
+          Produktivitetstab = round(Produktivitetstab, 2)
+        )
+        ,
+      ]
+      
       table_data <- dcast(
         data = table_data,
         formula = Fordeling + Sygedage ~ Aldersgruppe,
         value.var = 'Produktivitetstab'
       )
+      
+      
       
       
       bs4Table(

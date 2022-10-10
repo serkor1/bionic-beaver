@@ -276,25 +276,42 @@
         #   by = .(assignment_factor, allocator)
         # ]
         
+        
+        
         data <- data[
           ,
           .(
-            outcome = mean(
-              outcome, na.rm = TRUE
-            )
+            outcome = sum(
+              outcome * weight, na.rm = TRUE
+            )/sum(weight, na.rm = TRUE)
           )
-          ,
-          by = .(id, assignment,allocator)
-        ][
-          ,
-          .(
-            outcome = mean(outcome)
-          )
+          
           ,
           by = .(
-            assignment,allocator
+            assignment, allocator
           )
         ]
+        
+        
+        # data <- data[
+        #   ,
+        #   .(
+        #     outcome = mean(
+        #       outcome, na.rm = TRUE
+        #     )
+        #   )
+        #   ,
+        #   by = .(id, assignment,allocator)
+        # ][
+        #   ,
+        #   .(
+        #     outcome = mean(outcome)
+        #   )
+        #   ,
+        #   by = .(
+        #     assignment,allocator
+        #   )
+        # ]
         
         
         
