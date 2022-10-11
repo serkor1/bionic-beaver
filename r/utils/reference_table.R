@@ -82,6 +82,7 @@
           # )
           
           
+          class(data) <- c(class(data), get_class)
           
           
           
@@ -238,12 +239,14 @@ extract_id <- function(
   
   if (inherits(lookup, 'model1')) {
     
+    
     id <- .extract_id_model1(
       lookup = lookup,
       values = values
     )
     
   } else {
+    
     
     id <- .extract_id_model2(
       lookup = lookup,

@@ -117,11 +117,78 @@
 }
 
 
+.pack_model2 <- function(
+    data_list,
+    directory
+) {
+  
+  #' function information
+  #' 
+  #' @param data_list a list of wrapped data.tables
+  #' ready for storing locally in a zip file
+  #' 
+  #' @returns NULL
+  
+  map(
+    data_list,
+    function(element) {
+      
+      # 1) Copy data to avoid
+      # overwriting memory
+      data <- copy(element)
+      
+      # 2) Remove prefix
+      # from the data
+      idx <- which(sapply(data, is.character))
+      
+      data[
+        ,
+        (idx) := lapply(
+          .SD,
+          function(x) {
+            
+            str_split(x, pattern = '_', simplify = TRUE)[,2]
+            
+          }
+        )
+        ,
+        .SDcols = idx
+      ]
+      
+      
+      setnames(
+        data,
+        old = c('assignment', 'allocator', 'outcome', 'effect'),
+        new = c('Aldersgruppe', 'Hvem tager sygedagen?', 'Produktivitetstab', 'Sygedage')
+      )
+      
+      
+      write_ods(
+        x = data,
+        path = paste0(
+          directory,'/',
+          'børnemodel',
+          '.ods'
+        ),
+        append = TRUE,
+        sheet = 'Børnemodel',
+        update = FALSE
+      )
+      
+    }
+  )
+  
+}
+
+
+
+
+
 pack <- function(
     data_list,
-    intervention_name,
-    control_name,
-    directory,
+    intervention_name = NULL,
+    control_name = NULL,
+    directory = NULL,
     char,
     filename = 'output.zip'
 ) {
@@ -162,8 +229,10 @@ pack <- function(
   }
   
   
-  
   if (!is.null(char)) {
+    
+    
+    
     
     demographics <- data.table(
       placeholder = char
@@ -189,7 +258,7 @@ pack <- function(
 
   if (inherits(data_list, 'model1')) {
     
-    .pack_model1(
+    data_list <- .pack_model1(
       data_list         = data_list,
       intervention_name = intervention_name,
       control_name      = control_name,
@@ -199,11 +268,25 @@ pack <- function(
   }
   
   
+  if (inherits(data_list, 'model2')) {
+    
+    data_list <- .pack_model2(
+      data_list         = data_list,
+      directory         = directory
+    )
+    
+  }
+  
+  
+  
+  
   
   zip(
     zipfile = filename,
     files = directory
   )
   
+  
+  return(data_list)
   
 }

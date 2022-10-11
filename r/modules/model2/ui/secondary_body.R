@@ -202,11 +202,27 @@ model2UI_body <- function(id, output) {
     modalDialog(
       title = span( icon('family', lib = 'font-awesome', verify_fa = FALSE), 'Forældremodellen'),
       size = 'xl',
+      fade = TRUE,
+      easyClose = TRUE,
+      footer = span(
+        
+            downloadButton(
+              outputId = ns('download_files'),
+              label = 'Download Materiale'
+            ),
+            modalButton(label = 'Luk', icon = icon('close'))
+          
+          
+          
+        
+        
+      ),
       
       # Options
       bs4Card(
         title = 'Parametre',icon = icon('cog', lib = 'font-awesome', verify_fa = FALSE),status = 'primary',solidHeader = TRUE,
         width = 12,
+        
         column(
           width = 12,
 
@@ -257,10 +273,22 @@ model2UI_body <- function(id, output) {
                            lib = "glyphicon"))
             ),
 
-            radioGroupButtons(
+            checkboxGroupButtons(
               inputId = ns('pt_who'),
               label = "Hvem tager Sygedagen?",
               choices = c("Delt Sygedage" = 'Delt', "Højest Uddannede" = 'Højest', "Lavest Uddannede" = 'Lavest'),
+              justified = TRUE,
+              size = 'sm',
+              width = '100%',
+              checkIcon = list(
+                yes = icon("ok",
+                           lib = "glyphicon"))
+            ),
+            
+            checkboxGroupButtons(
+              inputId = ns('pt_group'),
+              label = "Aldersgruppen?",
+              choices = str_remove(names(unlist(assignment[[2]])),pattern = '.+\\.'),
               justified = TRUE,
               size = 'sm',
               width = '100%',

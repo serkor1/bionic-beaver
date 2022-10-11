@@ -192,10 +192,9 @@
       
       
       data[
-        str_detect(allocator, pattern = who)
+        str_detect(allocator, pattern = paste(who, collapse = '|'))
         ,
         `:=`(
-          
          outcome = outcome * effect,
          effect  = effect
           
@@ -203,23 +202,6 @@
         ,
       ]
       
-      
-      
-      
-      
-      # extract the class of the 
-      # data
-      #get_class <- class(data)[3]
-      
-      # Calculate effects
-      # data[
-      #   ,
-      #   `:=`(
-      #     cdifference = difference * effect/100,
-      #     cintervention = max(intervention - ((difference * (effect/100))),0)
-      #   )
-      #   ,
-      # ]
       
       
       #class(data) <- c(class(data), get_class)

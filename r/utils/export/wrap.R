@@ -108,7 +108,51 @@
 
 
 
-
+.wrap_model2 <- function(
+    data_list
+) {
+  
+  #' function information
+  #' 
+  #' @param data_list a list of data.tables
+  #' from model2
+  #' 
+  #' @returns a wrapped data_list of data.tables
+  #' ready for packing.
+  
+  
+  map(
+    data_list,
+    function(element) {
+      
+      # 1) Copy data
+      # to avoid overwriting
+      data <- copy(element)
+      
+      
+      # 2) Locate all numeric
+      # data an convert
+      
+      idx <- which(sapply(data, is.numeric))
+      
+      data[
+        ,
+        (idx) := lapply(
+          .SD,
+          round,
+          2
+        )
+        ,
+        .SDcols = idx
+      ]
+      
+      
+      
+    }
+  )
+  
+  
+}
 
 
 
@@ -146,6 +190,14 @@ wrap <- function(data_list) {
   if (inherits(data_list, 'model1')) {
     
     data_list <- .wrap_model1(
+      data_list = data_list
+    )
+    
+  }
+  
+  if (inherits(data_list, 'model2')) {
+    
+    data_list <- .wrap_model2(
       data_list = data_list
     )
     

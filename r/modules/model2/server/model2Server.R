@@ -243,13 +243,15 @@ second_dataserver <- function(id, data_list){
     # Generate data; #####
     data <- reactive({
       
+      message('Grinding')
         spread(
           grind(
             data_list = data_list,
             # Was: intervention = paste(input$pt_target),
-            intervention = unlist(assignment[[2]]$Aldersgruppe),
+            intervention = input$pt_group,
             chars = paste(input$pt_demographic),
-            allocators = unlist(outcome[[2]]$Sygedage)
+            allocators = paste(input$pt_who)
+            #allocators = unlist(outcome[[2]]$Sygedage)
             # was: allocators = paste(input$pt_outcome)
           )
         )
@@ -259,6 +261,7 @@ second_dataserver <- function(id, data_list){
     # Flavor the data; 
     flavored_data <- reactive({
       
+      message('Flavoring')
       
       flavor(
         data(),
@@ -280,6 +283,7 @@ second_dataserver <- function(id, data_list){
         x = ~assignment,
         y = ~outcome, 
         type   = "bar",
+        colors = "Set2",
         color = ~allocator,alpha = 0.5,
         marker = list(
           line = list(
@@ -329,6 +333,53 @@ second_dataserver <- function(id, data_list){
       )
       
     })
+    
+    
+    
+    
+    
+    
+    output$download_files <- downloadHandler(
+      
+      filename = function() {
+        
+        # WARNING: paste0 breaks the
+        # download process.
+        paste(
+          "output",
+          "zip",
+          sep="."
+        )
+        
+      },
+      
+      content = function(fname) {
+        
+        
+        
+        
+        
+        
+        # Download Tables
+        
+        pack(
+          wrap(
+            flavored_data()
+          ),
+          filename     = fname,
+          char = input$pt_demographic
+        )
+        
+        
+        
+        
+        
+        
+      },
+      contentType = "application/zip"
+      
+      
+    )
     
     
     # Server end; ####

@@ -135,7 +135,7 @@
             value <- group_size[
               assignment_factor %chin% c('control'),
               .(
-                value = total_N
+                value = total_n
               )
             ]$value
             

@@ -187,11 +187,12 @@
       
       #1) Extract Allocators
       data <- data[
-        allocator %chin% allocators
+        #allocator %chin% allocators
+        str_detect(allocator, pattern = paste(allocators, collapse = '|'))
       ]
       
       data <- data[
-        assignment %chin% c(intervention, control)
+        str_detect(assignment, pattern = paste(intervention, collapse = '|'))
       ]
       
       
