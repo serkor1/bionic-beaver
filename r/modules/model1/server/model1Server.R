@@ -213,9 +213,9 @@
         fcase(
           input$pt_outcome %chin% outcome[[1]]$Overførsel, 'Overførsler',
           input$pt_outcome %chin% outcome[[1]]$`Primær Sektor`, 'Primær sundhedssektor',
-          input$pt_outcome %chin% outcome[[1]]$Psykiatrien, 'Psykiatrisk hospitalskontakt',
-          input$pt_outcome %chin% outcome[[1]]$Somatikken, 'Somatisk hospitalskontakt',
-          input$pt_outcome %chin% outcome[[1]]$Lægemiddelforbrug, 'Præparatforbrug'
+          input$pt_outcome %chin% outcome[[1]]$psykiatrien, 'Psykiatrisk hospitalskontakt',
+          input$pt_outcome %chin% outcome[[1]]$somatikken, 'Somatisk hospitalskontakt',
+          default =  'Præparatforbrug'
           
           
           

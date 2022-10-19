@@ -29,9 +29,10 @@
   
   bs4TabCard(
     width = 12,
+    id = 'main_card', 
     status = "primary",
+    height = '1000px',
     collapsible = FALSE,
-    height = '100%',
     sidebar = .sidebar(id, input, output),
     # This has been moved to sidebar
     # title = span(
@@ -51,36 +52,42 @@
       seq_along(tabset_names),
       .f = function(i){
         
-        icon_name <- fcase(
-          tabset_names[i] %chin% c("primary_care"), "house-chimney-medical",
-          tabset_names[i] %chin% c("psychiatric_care"), "head-side-heart",
-          tabset_names[i] %chin% c("somatic_care"), "hospital",
-          tabset_names[i] %chin% c("transfers"), "money-bill-transfer",
-          default = 'prescription-bottle-medical'
+        # 1) Generate Tabset title
+        tab_title <- extract_name(data_list = data_list[[1]][[i]])
+        tab_icon  <- extract_name(data_list = data_list[[1]][[i]], get_icon = TRUE)
           
-        )
+          
+        #   fcase(
+        #   tabset_names[i] %chin% c("primary_care"), "house-chimney-medical",
+        #   tabset_names[i] %chin% c("psychiatric_care"), "head-side-heart",
+        #   tabset_names[i] %chin% c("somatic_care"), "hospital",
+        #   tabset_names[i] %chin% c("transfers"), "money-bill-transfer",
+        #   default = 'prescription-bottle-medical'
+        #   
+        # )
         
         
         tabPanel(
-          title = paste(
-            fcase(
-              tabset_names[i] %chin% c("primary_care"), "Primær Sundhedssektor",
-              tabset_names[i] %chin% c("psychiatric_care"), "Psykiatrisk Hospitalskontakt",
-              tabset_names[i] %chin% c("somatic_care"), "Somatisk Hospitalskontakt",
-              tabset_names[i] %chin% c("transfers"), "Overførsler",
-              default = 'Præparatforbrug'
-              
-            )
-          ),
+          # title = paste(
+          #   fcase(
+          #     tabset_names[i] %chin% c("primary_care"), "Primær Sundhedssektor",
+          #     tabset_names[i] %chin% c("psychiatric_care"), "Psykiatrisk Hospitalskontakt",
+          #     tabset_names[i] %chin% c("somatic_care"), "Somatisk Hospitalskontakt",
+          #     tabset_names[i] %chin% c("transfers"), "Overførsler",
+          #     default = 'Præparatforbrug'
+          #     
+          #   )
+          # ),
+          title = tab_title,
           value = ns(paste0("tab",i)),
-          icon = icon(icon_name),
+          icon = icon(tab_icon, verify_fa = FALSE),
           
           
           conditionalPanel(
             condition = "input.change_views == 'see_plot'",ns = ns,
             {
               
-              fluidRow(
+              fillPage(
                 
                 column(
                   width = 12,
@@ -89,12 +96,13 @@
                 
                 br(),
                 
+               
                 column(
                   width = 12,
                   withSpinner(
                      plotlyOutput(
                       outputId = ns(paste0("plot",i)),
-                      height = '1000px',
+                      height = '900px',
                       width = '100%',
                       inline = FALSE
                     ),
@@ -125,7 +133,7 @@
                   withSpinner(
                     DT::dataTableOutput(
                       outputId = ns(paste0("table",i)),
-                      height = '1000px',
+                      height = '900px',
                     ),
                     type = 7,
                     size = 2,hide.ui = FALSE
@@ -178,7 +186,7 @@
           width = 12,
           fill = TRUE,
           gradient = TRUE,
-          icon = icon("lungs-virus")
+          icon = icon("lungs-virus",verify_fa = FALSE)
         ),
         bs4InfoBox(
           title = strong("Valgt sammenligningsgruppe"),
@@ -187,7 +195,7 @@
           width = 12,
           fill = TRUE,
           gradient = TRUE,
-          icon = icon("lungs-virus")
+          icon = icon("lungs-virus",verify_fa = FALSE)
         )
       
     ),
@@ -210,7 +218,7 @@
         width = 12,
         fill = TRUE,
         gradient = TRUE,
-        icon = icon("car-building", verify_fa = TRUE)
+        icon = icon("car-building", verify_fa = FALSE)
       )
     ),
     
@@ -223,7 +231,7 @@
         width = 12,
         fill = TRUE,
         gradient = TRUE,
-        icon = icon("venus-mars")
+        icon = icon("venus-mars",verify_fa = FALSE)
       ),
       bs4InfoBox(
         title = strong("Alder"),
@@ -232,7 +240,7 @@
         width = 12,
         fill = TRUE,
         gradient = TRUE,
-        icon = icon("id-card")
+        icon = icon("id-card",verify_fa = FALSE)
       )
     )
     
@@ -402,28 +410,43 @@ model1UI_performance <- function(id, output, input, id_value) {
     div(id = ns("myalert"), style = "position: absolute; bottom: 0; right: 0;"),
     # Infobox
     
-    fluidRow(
-      style = "height:10%;",
-      column(
-        width = 12,
-        .model1UI_choices(id,output,input)
-      ),
-      br()
+    fillPage(
       
-    ),
-    
-    fluidRow(
-      style = "height:90%; position:relative;",
-      column(
-        width = 12,
-        .model1UI_output(
-          id,
-          output,
-          input
-        )
+      
+      
+      .model1UI_choices(id,output,input),
+      
+      .model1UI_output(
+        id,
+        output,
+        input
       )
       
+      # fluidRow(
+      #   style = "height:10%;",
+      #   column(
+      #     width = 12,
+      #     .model1UI_choices(id,output,input)
+      #   ),
+      #   br()
+      #   
+      # ),
+      # 
+      # fluidRow(
+      #   style = "height:90%; position:relative;",
+      #   column(
+      #     width = 12,
+      #     .model1UI_output(
+      #       id,
+      #       output,
+      #       input
+      #     )
+      #   )
+      #   
+      # )
     )
+    
+    
     
     
     

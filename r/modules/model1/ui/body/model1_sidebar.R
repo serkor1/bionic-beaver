@@ -488,7 +488,7 @@
           width = 6,
           descriptionBlock(
             number = textOutput(ns("n_treatment"),inline = TRUE),
-            numberIcon = icon('people'),
+            numberIcon = icon('people',verify_fa = FALSE),
             header = 'Sygdomsgruppe',
             rightBorder = FALSE
           )
@@ -497,7 +497,7 @@
           width = 6,
           descriptionBlock(
             number = textOutput(ns("n_control"),inline = TRUE),
-            numberIcon = icon('people'),
+            numberIcon = icon('people',verify_fa = FALSE),
             header = 'Sammenligningsgruppen',
             rightBorder = FALSE
           )

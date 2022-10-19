@@ -20,35 +20,39 @@
       }
       
       
-      yaxis_text <- fcase(
-        inherits(element, c("primary_care")),
-        fifelse(
-          alternate,
-          no = "Gennemsnitlig besøg pr. person",
-          yes ="Gennemsnitlig omkostninger pr. person"
-        ),
-        inherits(element, c(
-          "psychiatric_care", "somatic_care"
-        )),
-        fifelse(
-          alternate,
-          no = "Gennemsnitlig sengedage pr. person",
-          yes ="Gennemsnitlig omkostninger pr. person"
-        )
-        ,
-        inherits(element, c("transfers")),
-        fifelse(
-          alternate,
-          no = "Gennemsnitlig antal uger pr. person",
-          yes ="Gennemsnitlig omkostninger pr. person"
-        ),
-        default = fifelse(
-          alternate,
-          no = "Gennemsnitlig antal recepter pr. person",
-          yes ="Gennemsnitlig omkostninger pr. person"
-        )
-      )
+      # yaxis_text <- fcase(
+      #   inherits(element, c("primary_care")),
+      #   fifelse(
+      #     alternate,
+      #     no = "Gennemsnitlig besøg pr. person",
+      #     yes ="Gennemsnitlig omkostninger pr. person"
+      #   ),
+      #   inherits(element, c(
+      #     "psychiatric_care", "somatic_care"
+      #   )),
+      #   fifelse(
+      #     alternate,
+      #     no = "Gennemsnitlig sengedage pr. person",
+      #     yes ="Gennemsnitlig omkostninger pr. person"
+      #   )
+      #   ,
+      #   inherits(element, c("transfers")),
+      #   fifelse(
+      #     alternate,
+      #     no = "Gennemsnitlig antal uger pr. person",
+      #     yes ="Gennemsnitlig omkostninger pr. person"
+      #   ),
+      #   default = fifelse(
+      #     alternate,
+      #     no = "Gennemsnitlig antal recepter pr. person",
+      #     yes ="Gennemsnitlig omkostninger pr. person"
+      #   )
+      # )
       
+      yaxis_text <- extract_name(
+        element,
+        alternate = alternate
+      )
       
       
       element <- DT::datatable(

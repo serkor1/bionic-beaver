@@ -49,3 +49,102 @@
 
 
 
+extract_name <- function(
+    data_list,
+    alternate = NULL,
+    get_icon      = FALSE
+){
+  
+  #' function information
+  #' 
+  #' @param data_list a list of data.table
+  #' of either model1 or model2. Can be a single 
+  #' data.table.
+  #' 
+  #' @param alternate a logical value of alternated outcomes
+  #' can be NULL.
+  #' 
+  #' @returns a character vector of lenght 1.
+  #' to use in the remainder of model
+  
+  if (inherits(data_list, 'list')) {
+    
+    
+  } else {
+    
+    if (!is.null(alternate)) {
+      
+      alternate <- isTRUE(alternate)
+      
+      
+      output <- fcase(
+        inherits(data_list, c("primary_care")),
+        fifelse(
+          alternate,
+          no = "Gennemsnitlig ydelser pr. person",
+          yes ="Gennemsnitlig omkostninger pr. person"
+        ),
+        inherits(data_list, c(
+          "psychiatric_care", "somatic_care"
+        )),
+        fifelse(
+          alternate,
+          no = "Gennemsnitlig sengedage pr. person",
+          yes ="Gennemsnitlig omkostninger pr. person"
+        )
+        ,
+        inherits(data_list, c("transfers")),
+        fifelse(
+          alternate,
+          no = "Gennemsnitlig antal uger pr. person",
+          yes ="Gennemsnitlig omkostninger pr. person"
+        ),
+        default = fifelse(
+          alternate,
+          no = "Gennemsnitlig antal recepter pr. person",
+          yes ="Gennemsnitlig omkostninger pr. person"
+        )
+      )
+      
+      
+      
+      
+      
+    } else {
+      
+      if (get_icon) {
+        
+        output <- fcase(
+          inherits(data_list, c("primary_care")), 'house-chimney-medical',
+          inherits(data_list, c("psychiatric_care")), 'head-side-heart',
+          inherits(data_list, c("somatic_care")), 'hospital',
+          inherits(data_list, c("transfers")),'money-bill-transfer',
+          default = 'prescription-bottle-medical'
+        )
+        
+      } else {
+        
+        output <- fcase(
+          inherits(data_list, c("primary_care")), 'Primær Sundhedssektor',
+          inherits(data_list, c("psychiatric_care")), 'Psykiatrisk Hospitalskontakt',
+          inherits(data_list, c("somatic_care")), 'Somatisk Hospitalskontakt',
+          inherits(data_list, c("transfers")),'Overførsler',
+          default = 'Præparatforbrug'
+        )
+      }
+      
+      
+      
+      
+    }
+    
+  }
+  
+  
+  return(
+    output
+  )
+  
+}
+
+

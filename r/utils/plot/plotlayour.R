@@ -38,35 +38,40 @@
               
               
 
-              yaxis_text <- fcase(
-                inherits(get_data, c("primary_care")),
-                fifelse(
-                  alternate,
-                  no = "Gennemsnitlig besøg pr. person",
-                  yes ="Gennemsnitlig omkostninger pr. person"
-                  ),
-                inherits(get_data, c(
-                  "psychiatric_care", "somatic_care"
-                )),
-                fifelse(
-                  alternate,
-                  no = "Gennemsnitlig sengedage pr. person",
-                  yes ="Gennemsnitlig omkostninger pr. person"
-                )
-                ,
-                inherits(get_data, c("transfers")),
-                fifelse(
-                  alternate,
-                  no = "Gennemsnitlig antal uger pr. person",
-                  yes ="Gennemsnitlig omkostninger pr. person"
-                ),
-                default = fifelse(
-                  alternate,
-                  no = "Gennemsnitlig antal recepter pr. person",
-                  yes ="Gennemsnitlig omkostninger pr. person"
-                )
+              # yaxis_text <- fcase(
+              #   inherits(get_data, c("primary_care")),
+              #   fifelse(
+              #     alternate,
+              #     no = "Gennemsnitlig besøg pr. person",
+              #     yes ="Gennemsnitlig omkostninger pr. person"
+              #     ),
+              #   inherits(get_data, c(
+              #     "psychiatric_care", "somatic_care"
+              #   )),
+              #   fifelse(
+              #     alternate,
+              #     no = "Gennemsnitlig sengedage pr. person",
+              #     yes ="Gennemsnitlig omkostninger pr. person"
+              #   )
+              #   ,
+              #   inherits(get_data, c("transfers")),
+              #   fifelse(
+              #     alternate,
+              #     no = "Gennemsnitlig antal uger pr. person",
+              #     yes ="Gennemsnitlig omkostninger pr. person"
+              #   ),
+              #   default = fifelse(
+              #     alternate,
+              #     no = "Gennemsnitlig antal recepter pr. person",
+              #     yes ="Gennemsnitlig omkostninger pr. person"
+              #   )
+              # )
+              
+              yaxis_text <- extract_name(
+                get_data,
+                alternate = alternate
               )
-
+              
               yaxis_text <- paste(yaxis_text, '\n',
                                   get_allocator)
               
