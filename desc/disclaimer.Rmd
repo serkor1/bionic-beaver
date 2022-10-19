@@ -1,0 +1,1 @@
+Det forventes at brugeren af modellen er bekendt med modellens begrænsninger jf. den tekniske dokumentation, samt at brugeren er tilnærmelsesvis bekendt med statistisk modellering.

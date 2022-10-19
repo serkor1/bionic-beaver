@@ -88,13 +88,7 @@ bs4DashPage(
       compact = FALSE,
       flat = TRUE,
       childIndent = TRUE,
-      menuItem(
-        text = "Forsiden",
-        icon = icon('home', verify_fa = FALSE,lib = 'font-awesome'),
-        startExpanded = TRUE,
-        tabName = "front_page",
-        selected = TRUE
-      ),
+
       menuItem(
         text = "Vælg Model",
         startExpanded = TRUE,

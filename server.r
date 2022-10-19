@@ -1,5 +1,24 @@
 server <- function(input, output, session) {
   
+  # On server start; ####
+  
+  # Load the front page as a modal
+  frontUI()
+  
+  # Load the main model
+  # for the user
+  ui <- model1UI(
+    id = "model1"
+  )
+  
+  output$gen_body <- renderUI({
+    ui$body
+  })
+  
+  
+  
+  
+  
   
   removeCssClass(
     selector = '.brand-image',
@@ -73,44 +92,62 @@ server <- function(input, output, session) {
   
   
   
-  
-  
-  # UI rendering; #####
-  observeEvent(
-    input$tab,
-    ignoreInit = FALSE,
-    ignoreNULL = FALSE,
-    {
+  shinyjs::onclick(
+    id = 'tab-model_1',
+    function() {
       
-      if (input$tab %chin% c('front_page', 'model_1')){
-        
-        ui <- frontUI(
-          id = "front"
-        )
-        
-        if (input$tab != 'front_page') {
-          
-          if (input$tab == 'model_1'){
-            
-            ui <- model1UI(
-              id = "model1"
-            )
-            
-          }
-        }
-        
-        output$gen_body <- renderUI({
-          ui$body
-        })
-        
-      }
+      ui <- model1UI(
+        id = "model1"
+      )
       
-      
-      
-      
+      output$gen_body <- renderUI({
+        ui$body
+      })
       
     }
   )
+  
+  
+  
+  
+  
+  
+  # UI rendering; #####
+  # observeEvent(
+  #   input$tab,
+  #   ignoreInit = FALSE,
+  #   ignoreNULL = FALSE,
+  #   {
+  #     
+  #     if (input$tab %chin% c('front_page', 'model_1')){
+  #       
+  #       ui <- frontUI(
+  #         id = "front"
+  #       )
+  #       
+  #       if (input$tab != 'front_page') {
+  #         
+  #         if (input$tab == 'model_1'){
+  #           
+  #           ui <- model1UI(
+  #             id = "model1"
+  #           )
+  #           
+  #         }
+  #       }
+  #       
+  #       output$gen_body <- renderUI({
+  #         ui$body
+  #       })
+  #       
+  #     }
+  #     
+  #     
+  #     
+  #     
+  #     
+  #   }
+  # )
   
  
   
