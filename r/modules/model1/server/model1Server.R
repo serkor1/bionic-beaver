@@ -252,8 +252,7 @@
         
         # TODO: Create wrapper
         flavored_data() %>% 
-          table_baselayer() %>% 
-          .model1_table(alternate = input$do_cost)
+          table_baselayer()
         
         
       }
@@ -266,51 +265,81 @@
     map(
       1:5,
       .f = function(i) {
-
-
-        output[[paste0("table",i)]] <- DT::renderDataTable({
-
-
-          validate_input()
-
-
-          tryCatch(
-            {
-
-              table_data()[[i]]
-
-            },
-
-            error = function(condition) {
-
-              validate(
-                need(
-                  is.null(input$pt_outcome),
-                  message = paste(condition))
-              )
-
-            },
-            warning = function(condition) {
-
-              validate(
-                need(
-                  is.null(input$pt_outcome),
-                  message = paste(
-                    'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ",")
+        
+        output[[paste0("table",i)]] <- renderUI(
+          {
+            
+            validate_input()
+            
+            tryCatch(
+              {
+                
+                bs4Carousel(
+                  id = paste0('car_model', i),
+                  width = 12,
+                  indicators = TRUE,
+                  .list = lapply(
+                    unique(table_data()[[i]]$Outcome),
+                    function(x) {
+                      
+                      
+                      
+                      
+                      
+                      carouselItem(
+                        caption = NULL,
+                        h5(x),
+                        bs4Table(
+                          table_data()[[i]][Outcome %chin% x],
+                          bordered = TRUE,
+                          width = 12
+                        )
+                        
+                        
+                      )
+                      
+                      
+                      
+                    }
                   )
                 )
-              )
-
-            }
-          )
-
-
-
-
-        })
-
-
-
+                
+              },
+              
+              error = function(condition) {
+                
+                validate(
+                  need(
+                    is.null(input$pt_outcome),
+                    message = paste(condition))
+                )
+                
+              },
+              warning = function(condition) {
+                
+                validate(
+                  need(
+                    is.null(input$pt_outcome),
+                    message = paste(
+                      'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ",")
+                    )
+                  )
+                )
+                
+              }
+            )
+            
+            
+            
+            
+            
+            
+           
+            
+          }
+        )
+        
+        
 
 
 

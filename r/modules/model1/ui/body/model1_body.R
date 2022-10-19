@@ -87,31 +87,22 @@
             condition = "input.change_views == 'see_plot'",ns = ns,
             {
               
-              fillPage(
-                
-                column(
-                  width = 12,
-                  h5('Grafisk præsentation')
+              
+              column(
+                width = 12,
+                withSpinner(
+                  plotlyOutput(
+                    outputId = ns(paste0("plot",i)),
+                    height = '650px',
+                    width = '100%',
+                    inline = FALSE
                   ),
-                
-                br(),
-                
-               
-                column(
-                  width = 12,
-                  withSpinner(
-                     plotlyOutput(
-                      outputId = ns(paste0("plot",i)),
-                      height = '900px',
-                      width = '100%',
-                      inline = FALSE
-                    ),
-                    type = 7,
-                    size = 2,hide.ui = FALSE
-                  )
+                  type = 7,
+                  size = 2,hide.ui = FALSE
                 )
-                
               )
+              
+              
               
 
             }
@@ -120,27 +111,24 @@
           conditionalPanel(
             condition = "input.change_views == 'see_table'",ns = ns,
             {
-              fluidRow(
-                column(
-                  width = 12,
-                  h5('Tabel Output')
-                  ),
-                
-                br(),
-                
+              
                 column(
                   width = 12,
                   withSpinner(
-                    DT::dataTableOutput(
-                      outputId = ns(paste0("table",i)),
-                      height = '900px',
+                    # DT::dataTableOutput(
+                    #   outputId = ns(paste0("table",i)),
+                    #   height = '900px',
+                    # ),
+                    uiOutput(
+                      ns(paste0("table",i))
                     ),
                     type = 7,
-                    size = 2,hide.ui = FALSE
+                    size = 2,
+                    hide.ui = FALSE
                   )
                 )
                 
-              )
+              
             }
           )
           

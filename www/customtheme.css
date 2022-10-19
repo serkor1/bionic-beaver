@@ -46,7 +46,91 @@ div {
 }
 */
 
+th {
+    background-color: #5E81AC;
+    color: white;
+    text-align: center;
+} 
 
+tr {
+  text-align: center;
+}
+
+.carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+
+
+.carousel-indicators {
+    bottom: -50px;
+}
+
+
+.carousel-indicators li {
+    background-color: gray;
+}
+
+.dark-mode .carousel-indicators li {
+    background-color: white;
+}
+
+/*
+.carousel-control-prev,
+.carousel-control-next{
+      bottom: -100%;
+}
+*/
+
+
+.carousel-control-prev,
+.carousel-control-next{
+    align-items: flex-end; /* Aligns it at the bottom */
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 0px;
+  width: 100px;
+  outline: black;
+  background-size: 0%, 0%;
+  border-radius: 0%;
+  border: 0px solid black;
+  background-image: none;
+  top: calc(-20% -25%);
+}
+
+
+.carousel-control-next-icon:after
+{
+  content: 'Næste >';
+  font-size: 25px;
+  color: gray;
+  bottom: -50px;
+}
+
+.carousel-control-prev-icon:after {
+  content: '< Forrige';
+  font-size: 25px;
+  color: gray;
+}
+
+
+.dark-mode .carousel-control-next-icon:after
+{
+  content: 'Næste >';
+  font-size: 25px;
+  color: white;
+  bottom: -50px;
+}
+
+.dark-mode .carousel-control-prev-icon:after {
+  content: '< Forrige';
+  font-size: 25px;
+  color: white;
+}
 
 
 /*
