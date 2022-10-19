@@ -130,7 +130,7 @@
                               orientation = 'h'),
                 
                 annotations = list(
-                  text = "Intervention start",
+                  text = "Baselineår",
                   yref = "paper",
                   x = 0,
                   y = 1,
@@ -148,7 +148,7 @@
                       dash  = "dot"
                       ),
                     y0 = 0,
-                    y1 = 1,
+                    y1 = 0.975,
                     yref = "paper",
                     # i.e. y as a proportion of visible region
                     x0 = 0,

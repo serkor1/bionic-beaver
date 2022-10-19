@@ -89,8 +89,8 @@
     
     vive_picker(
       id = ns("pt_target"),
-      title = "Gruppe",
-      header = "Vælg Gruppe",
+      title = "Sygdomsgruppe",
+      header = "Vælg Sygdomsgruppe",
       choices = assignment[[1]],
       multiple = FALSE
     ),
