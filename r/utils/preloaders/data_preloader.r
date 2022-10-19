@@ -71,6 +71,19 @@
           ,
         ]
 
+      } else {
+        
+        data[
+          ,
+          assignment := factor(
+            assignment,
+            levels = c('Aldersgruppe_0-2 år', 'Aldersgruppe_3-6 år', 'Aldersgruppe_7-11 år', 'Aldersgruppe_12-17 år'),
+            labels = c('Aldersgruppe_0-2 år', 'Aldersgruppe_3-6 år', 'Aldersgruppe_7-11 år', 'Aldersgruppe_12-17 år')
+          )
+          ,
+        ]
+        
+        
       }
       
       

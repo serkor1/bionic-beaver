@@ -192,7 +192,7 @@
       ]
       
       data <- data[
-        str_detect(assignment, pattern = paste(intervention, collapse = '|'))
+        str_detect(as.character(assignment), pattern = paste(intervention, collapse = '|'))
       ]
       
       
@@ -200,8 +200,8 @@
       data[
         ,
         assignment_factor := fcase(
-          assignment %chin% intervention, "intervention",
-          assignment %chin% control, "control"
+          as.character(assignment) %chin% intervention, "intervention",
+          as.character(assignment) %chin% control, "control"
         )
         ,
       ]

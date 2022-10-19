@@ -280,20 +280,24 @@ second_dataserver <- function(id, data_list){
       
       plot_ly(
         flavored_data()[[1]],
-        x = ~assignment,
+        x = ~factor(
+          str_remove(
+            assignment, 'Aldersgruppe_'),
+          levels = c('0-2 år', '3-6 år', '7-11 år', '12-17 år')
+        ),
         y = ~outcome, 
         type   = "bar",
         colors = "Set2",
-        color = ~allocator,alpha = 0.5,
+        color = ~ str_remove(allocator, 'Sygedage_'),alpha = 0.5,
         marker = list(
           line = list(
             color = 'rgb(8,48,107)',
             width = 1.5)
           )
       ) %>% layout(
-        title = 'Gennemsnitlig Produktivitetstab',
+        title = 'Gennemsnitlig Produktionstab',
         xaxis = list(title = ''),
-        yaxis = list(title = 'Produktivitetstab pr. forældre'),
+        yaxis = list(title = 'Produktionstab pr. barn'),
         legend = list(
           orientation = 'h'
         )
