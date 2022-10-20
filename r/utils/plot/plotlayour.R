@@ -127,7 +127,7 @@
                   showgrid = FALSE,
                   zeroline = FALSE,
                   range = list(-2, 5),
-                  title = 'Tid'
+                  title = 'År'
                 ),
                 
                 
@@ -153,7 +153,7 @@
                       dash  = "dot"
                       ),
                     y0 = 0,
-                    y1 = 0.975,
+                    y1 = 0.97,
                     yref = "paper",
                     # i.e. y as a proportion of visible region
                     x0 = 0,

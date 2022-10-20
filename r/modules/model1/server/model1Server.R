@@ -281,6 +281,44 @@
                     unique(table_data()[[i]]$Outcome),
                     function(x) {
                       
+                      # grab data
+                      data <- table_data()[[i]][Outcome %chin% x]
+                      
+                      
+                      pretty_table <- lapply(
+                        split(data, 1:nrow(data)),
+                        function(x) {
+                          
+                          
+                          
+                          
+                          x[
+                            !is.na(Effekt)
+                            ,
+                            Effekt := HTML(
+                              paste(
+                                progressBar(
+                                  id = 's',
+                                  value = Effekt * 100, 
+                                  status = "pink", 
+                                  size = "l",display_pct = TRUE,
+                                  total = 100)
+                                )
+                              )
+                            ,
+                          ]
+                          
+                          
+                          x[is.na(x)] <- ''
+
+                          
+                          return(
+                            x
+                          )
+                                                    
+                        }
+                      )
+                      
                       
                       
                       
@@ -288,11 +326,20 @@
                       tabPanel(
                         title = x,
                         # h5(x),
-                        bs4Table(
-                          table_data()[[i]][Outcome %chin% x],
-                          bordered = TRUE,striped = TRUE,
-                          width = 12
+                        
+                        column(
+                          width = 12,
+                          fluidRow(
+                            bs4Table(
+                              #table_data()[[i]][Outcome %chin% x],
+                              pretty_table,
+                              bordered = TRUE,striped = TRUE,
+                              width = 12
+                            )
+                          )
                         )
+                        
+                       
                         
                         
                       )

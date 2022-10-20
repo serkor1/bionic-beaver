@@ -42,6 +42,10 @@
       ]
       
       
+      
+      
+      
+      
       idx <- which(
         sapply(element, is.numeric)
       )
@@ -58,6 +62,17 @@
         .SDcols = idx
       ]
       
+      
+      # # Add progress bar
+      # element[
+      #   ,
+      #   effect := progressBar(id = 's',value = 50, status = "pink", size = "xxs",display_pct = TRUE)
+      #   ,
+      #   by = .(
+      #     allocator,
+      #     x
+      #   )
+      # ]
       
       setorder(
         element, 
@@ -93,7 +108,7 @@
                 'cintervention',
                 'cdifference'
         ),
-        new = c("Tid",
+        new = c("År",
                 "Outcome",
                 "Befolkningen",
                 'Sygdomsgruppe',
@@ -105,6 +120,7 @@
         ),
         skip_absent = TRUE
       )
+      
       
       
     }
