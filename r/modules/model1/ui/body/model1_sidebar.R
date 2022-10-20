@@ -155,7 +155,7 @@
     
     fluidRow(
       column(
-        width = 5,
+        width = 4,
         offset = 1,
         materialSwitch(
           inputId = ns("do_incident"),
@@ -170,7 +170,7 @@
       ),
       column(
         offset = 1,
-        width = 5,
+        width = 4,
         materialSwitch(
           inputId = ns("do_cost"),
           label = "Omkostninger?",
@@ -181,7 +181,23 @@
           placement = "right",
           content = "Klik for at vælge Omkostning pr. patient."
         )
+      ),
+      
+      column(
+        offset = 1,
+        width = 4,
+        materialSwitch(
+          inputId = ns("do_decay"),
+          label = "Extrapoler",
+          value = FALSE,
+          status = "primary"
+        ) %>% popover(
+          title = "Klik for at ekstrapolering.",
+          placement = "right",
+          content = "Klik for at ekstrapolering."
+        )
       )
+      
       
     )
     

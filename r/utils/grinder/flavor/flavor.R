@@ -1,7 +1,7 @@
 
 
 
-.flavor_model1 <- function(data_list, effect, do_match = FALSE) {
+.flavor_model1 <- function(data_list, effect, do_match = FALSE, extrapolate = FALSE) {
   
   #' function information
   #' 
@@ -107,11 +107,18 @@
       ][
         ,
         `:=`(
-          cdifference   = difference * effect,
+          #cdifference   = difference * effect,
           cintervention = pmax(
             intervention - ((difference * effect))
             ,0
           )
+        )
+        ,
+        by = .(allocator)
+      ][
+        ,
+        cdifference := rowSums(
+          cbind(-control, cintervention)
         )
         ,
         by = .(allocator)
@@ -121,6 +128,47 @@
       ]
       
       
+      if (extrapolate) {
+        
+        # Extrapolate the data
+        # such that it extends T+10
+        
+        # 1) Extend data by
+        # outcome
+        data <- rbindlist(
+          fill = TRUE,
+          use.names = TRUE,
+          list(data,
+          
+            data.table(
+              allocator = unique(data$allocator)
+            )[
+              ,
+              .(
+                x = 6:15
+              )
+              ,
+              by = allocator
+            ]
+          
+          )
+          
+        )
+        
+        data[
+          ,
+          `:=`(
+            cdifference = nafill(type = 'locf', x = cdifference)  * 1/(1+0.1)^(x-6)
+          )
+          ,
+          by = allocator
+        ]
+        
+        
+        
+        
+        
+      }
       
       
       
@@ -217,7 +265,7 @@
 
 
 
-flavor <- function(data_list, effect, do_match = FALSE, who = NULL) {
+flavor <- function(data_list, effect, do_match = FALSE, who = NULL, extrapolate = FALSE) {
   
   #' function information
   #' 
@@ -248,7 +296,8 @@ flavor <- function(data_list, effect, do_match = FALSE, who = NULL) {
     data_list <- .flavor_model1(
       data_list,
       effect,
-      do_match
+      do_match,
+      extrapolate = extrapolate
     )
     
     class(data_list) <- c(class(data_list), 'model1')

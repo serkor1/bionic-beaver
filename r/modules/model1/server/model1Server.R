@@ -197,7 +197,7 @@
       {
         flavor(
           data(),
-          effect = intervention_effect()
+          effect = intervention_effect(),extrapolate = input$do_decay
         )
       }
     )
