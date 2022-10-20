@@ -13,7 +13,6 @@ suppressPackageStartupMessages(
     library(shinyFeedback)
     library(fresh)
     library(waiter)
-    library(DT)
     library(markdown)
     
     
@@ -22,9 +21,7 @@ suppressPackageStartupMessages(
     library(data.table)
     library(plotly)
     library(purrr)
-    library(rhandsontable)
     library(readODS)
-    library(formattable)
   }
 )
 
@@ -81,7 +78,7 @@ system.time(
 
 
 # version;
-version <- c("v0.8.0")
+version <- c("v0.9.0")
 
 
 
