@@ -82,11 +82,18 @@ tr {
       bottom: -100%;
 }
 */
-
-
+/*
+.carousel({
+  interval: 1000;
+});
+*/
 .carousel-control-prev,
 .carousel-control-next{
     align-items: flex-end; /* Aligns it at the bottom */
+}
+
+.carousel-slide {
+  data-bs-interval: "false";
 }
 
 

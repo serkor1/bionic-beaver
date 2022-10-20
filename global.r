@@ -14,6 +14,8 @@ suppressPackageStartupMessages(
     library(fresh)
     library(waiter)
     library(DT)
+    library(markdown)
+    
     
     # Essential Backend libraries
     library(stringr)

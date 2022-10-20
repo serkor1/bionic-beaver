@@ -274,10 +274,9 @@
             tryCatch(
               {
                 
-                bs4Carousel(
-                  id = paste0('car_model', i),
-                  width = 12,
-                  indicators = TRUE,
+                
+                tabsetPanel(
+                  vertical = FALSE,
                   .list = lapply(
                     unique(table_data()[[i]]$Outcome),
                     function(x) {
@@ -286,12 +285,12 @@
                       
                       
                       
-                      carouselItem(
-                        caption = NULL,
-                        h5(x),
+                      tabPanel(
+                        title = x,
+                        # h5(x),
                         bs4Table(
                           table_data()[[i]][Outcome %chin% x],
-                          bordered = TRUE,
+                          bordered = TRUE,striped = TRUE,
                           width = 12
                         )
                         
@@ -303,6 +302,36 @@
                     }
                   )
                 )
+                
+                # bs4Carousel(
+                #   id = paste0('car_model', i),
+                #   width = 12,
+                #   indicators = TRUE,
+                #   .list = lapply(
+                #     unique(table_data()[[i]]$Outcome),
+                #     function(x) {
+                #       
+                #       
+                #       
+                #       
+                #       
+                #       carouselItem(
+                #         caption = NULL,
+                #         h5(x),
+                #         bs4Table(
+                #           table_data()[[i]][Outcome %chin% x],
+                #           bordered = TRUE,
+                #           width = 12
+                #         )
+                #         
+                #         
+                #       )
+                #       
+                #       
+                #       
+                #     }
+                #   )
+                # )
                 
               },
               

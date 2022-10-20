@@ -6564,6 +6564,9 @@ fieldset:disabled .btn {
   transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
 }
 
+/* Was 0.6 */
+
+
 @media (prefers-reduced-motion: reduce) {
   .carousel-item {
     transition: none;

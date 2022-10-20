@@ -143,6 +143,10 @@ bs4DashPage(
     useShinyjs(),
     useShinyFeedback(),
     
+    
+    
+    
+    
     use_waiter(),
         uiOutput("gen_body")
       
