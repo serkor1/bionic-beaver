@@ -31,7 +31,7 @@
     width = 12,
     id = 'main_card', 
     status = "primary",
-    height = '1000px',
+    height = '1000px', # Was 1000px
     collapsible = FALSE,
     sidebar = .sidebar(id, input, output),
     # This has been moved to sidebar
@@ -398,41 +398,31 @@ model1UI_performance <- function(id, output, input, id_value) {
     div(id = ns("myalert"), style = "position: absolute; bottom: 0; right: 0;"),
     # Infobox
     
-    fillPage(
+    
       
-      
-      
-      .model1UI_choices(id,output,input),
-      
-      .model1UI_output(
-        id,
-        output,
-        input
+      fluidRow(
+        style = "height:10%;",
+        column(
+          width = 12,
+          .model1UI_choices(id,output,input)
+        ),
+        br()
+
+      ),
+
+      fluidRow(
+        style = "height:90%; position:relative;",
+        column(
+          width = 12,
+          .model1UI_output(
+            id,
+            output,
+            input
+          )
+        )
+
       )
-      
-      # fluidRow(
-      #   style = "height:10%;",
-      #   column(
-      #     width = 12,
-      #     .model1UI_choices(id,output,input)
-      #   ),
-      #   br()
-      #   
-      # ),
-      # 
-      # fluidRow(
-      #   style = "height:90%; position:relative;",
-      #   column(
-      #     width = 12,
-      #     .model1UI_output(
-      #       id,
-      #       output,
-      #       input
-      #     )
-      #   )
-      #   
-      # )
-    )
+    
     
     
     
