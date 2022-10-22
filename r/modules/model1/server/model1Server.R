@@ -69,20 +69,23 @@
         # Require that at least
         # pt_target and pt_outcome is chosen.
         req(input$pt_target)
-        req(input$pt_outcome)
+        
+      
         
         # Verbose:
         # This is mainly to debug, and see how many times 
         # this expression is called
         message('Grinding data for model1:\n')
         
-        grinded_data <- grind(
+        grinded_data <- pick(
           data_list        = data_list,
           intervention     = paste(input$pt_target),
-          control          = paste(input$pt_control),
-          allocators       = paste(input$pt_outcome),
-          chars            = paste(input$pt_demographic),
-          do_incidence     = input$do_incident
+          control          = paste(input$pt_control)
+          
+          # ,
+          # allocators       = paste(input$pt_outcome),
+          # chars            = paste(input$pt_demographic),
+          # do_incidence     = input$do_incident
         )
         
         
@@ -154,15 +157,15 @@
         })
         
         
-        # Spread the data and 
-        # and return it as a list.
-        grinded_data <- spread(
-          data_list = grinded_data,
-          
-          # Should the data be in qty, or cost.
-          alternate = input$do_cost
-          
-        )
+        # # Spread the data and 
+        # # and return it as a list.
+        # grinded_data <- spread(
+        #   data_list = grinded_data,
+        #   
+        #   # Should the data be in qty, or cost.
+        #   alternate = input$do_cost
+        #   
+        # )
         
         
         return(
@@ -191,16 +194,52 @@
     )
     
     
+    spreaded_data <- reactive({
+      
+      message('Inside Spreading')
+      
+      # 1) Grind data
+      out <- spread(grind(
+        data(),
+        recipe = list(
+          outcome_measure = fifelse(isTRUE(input$do_cost), 'cost', 'qty'),
+          incidence = fifelse(isTRUE(input$do_incident), 1, 0)
+        )
+      ),
+      values            = paste(input$pt_demographic))
+      
+      # data <- spread(
+      #   data()
+      # )
+      
+      return(
+        out
+      )
+      
+    })
+    
+   
+    
     # Flavor the data
     # with counterfactuals
     flavored_data <- reactive(
       {
+        message('Inside Falvoring')
+        
+        # data <- spread(
+        #   spreaded_data()
+        # )
+        
         flavor(
-          data(),
-          effect = intervention_effect(),extrapolate = input$do_decay
+          spreaded_data(),
+          effect = intervention_effect(),
+          extrapolate = input$do_decay,
+          allocators = paste(input$pt_outcome)
         )
       }
     )
+    
+    
     
     # generate chosen outcome classes
     # for the model.
@@ -278,11 +317,11 @@
                 tabsetPanel(
                   vertical = FALSE,
                   .list = lapply(
-                    unique(table_data()[[i]]$Outcome),
+                    unique(table_data()[[i]]$Kategori),
                     function(x) {
                       
                       # grab data
-                      data <- table_data()[[i]][Outcome %chin% x]
+                      data <- table_data()[[i]][Kategori %chin% x]
                       
                       
                       pretty_table <- lapply(
@@ -293,13 +332,13 @@
                           
                           
                           x[
-                            !is.na(Effekt)
+                            !is.na(`Forventet effekt (%)`)
                             ,
-                            Effekt := HTML(
+                            `Forventet effekt (%)` := HTML(
                               paste(
                                 progressBar(
                                   id = 's',
-                                  value = Effekt * 100, 
+                                  value = `Forventet effekt (%)` * 100, 
                                   status = "pink", 
                                   size = "l",display_pct = TRUE,
                                   total = 100)
@@ -495,7 +534,7 @@
                   validate(
                     need(
                       is.null(condition),
-                      message = 'Sammenligningen er problematisk.'
+                      message = paste('Sammenligningen er problematisk.', '\n', condition)
                     )
                   )
 

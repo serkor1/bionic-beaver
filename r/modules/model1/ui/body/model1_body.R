@@ -31,7 +31,7 @@
     width = 12,
     id = 'main_card', 
     status = "primary",
-    height = '1000px', # Was 1000px
+    height = 'auto', # Was 1000px
     collapsible = FALSE,
     sidebar = .sidebar(id, input, output),
     # This has been moved to sidebar
@@ -93,12 +93,13 @@
                 withSpinner(
                   plotlyOutput(
                     outputId = ns(paste0("plot",i)),
-                    height = '650px',
+                    height = '800px',
                     width = '100%',
                     inline = FALSE
                   ),
                   type = 7,
-                  size = 2,hide.ui = FALSE
+                  size = 2,
+                  hide.ui = FALSE
                 )
               )
               
@@ -115,13 +116,13 @@
                 column(
                   width = 12,
                   withSpinner(
-                    # DT::dataTableOutput(
-                    #   outputId = ns(paste0("table",i)),
-                    #   height = '900px',
-                    # ),
-                    uiOutput(
-                      ns(paste0("table",i))
-                    ),
+                    div(style = "height: 800px;",
+                        uiOutput(
+                          ns(paste0("table",i))
+                        )
+                        )
+                      
+                    ,
                     type = 7,
                     size = 2,
                     hide.ui = FALSE
@@ -422,19 +423,7 @@ model1UI_performance <- function(id, output, input, id_value) {
         )
 
       )
-    
-    
-    
-    
-    
-    
-    
-    
-    
   )
-  
-  
-  
-  
-  
 }
+    
+    

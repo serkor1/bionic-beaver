@@ -1,7 +1,18 @@
+# script: scr_flavor
+# date: Sat Oct 22 21:02:23 2022
+# author: Serkan Korkmaz
+# objective: Generate a class of functions that
+# flavers the data according according to the
+# choice of the user.
+# prelims; #####
 
 
-
-.flavor_model1 <- function(data_list, effect, do_match = FALSE, extrapolate = FALSE) {
+.model1_flavor <- function(
+    data_list, 
+    effect,
+    extrapolate = FALSE,
+    allocators = NULL
+    ) {
   
   #' function information
   #' 
@@ -15,6 +26,11 @@
   #' 5.
   #' @param match a logical value. Defaults to FALSE. If TRUE
   #' then the comparision is the population based on matching.
+  
+  
+  
+  
+  
   
   # Handle errors; ####
   if (length(effect) < 5) {
@@ -33,15 +49,6 @@
   list_names <- names(data_list)
   
   
-  
-  # At app startup, the inputs
-  # arent, necessarily, rendered
-  # first. Using fcase mitigates this
-  # potential issue.
-  do_match <- fcase(
-    isTRUE(do_match), TRUE,
-    default = FALSE
-  )
   
   # function logic; #####
   counter <- 0
@@ -69,45 +76,84 @@
         data_list[[i]]
       )
       
-      if (is.null(data)) {
-        return(NULL)
+      
+      
+      data <- data[
+        allocator %chin% allocators
+      ]
+      
+      
+      if (nrow(data) == 0) {
+        
+        return(
+          NULL
+        )
+        
       }
       
       
       
-      # Recalculate difference
-      # if matching is chosen.
-      if (do_match) {
-        
-        # 1) Replace Control
-        # with matching population
-        data[
-          ,
-          control := population
-          ,
-        ]
-        
-        
-        data[
-          ,
-          difference := rowSums(
-            cbind(-control, intervention)
+      
+      # 1) locate relevant 
+      # columns
+      idx <- which(
+        sapply(
+          colnames(data),
+          str_detect,
+          'control|intervention|population'
+        )
+      )
+      
+      data <- data[
+        ,
+  
+          lapply(
+            .SD,
+            sum,
+            na.rm =TRUE
           )
-          ,
-        ]
         
-      }
+        
+        ,
+        by = .(
+          x, allocator
+        ),
+        .SDcols = idx
+      ]
+      
+      
+      # If control exists
+      counter_factual <- fifelse(
+        c('control') %chin%  colnames(data),
+        yes = 'control',
+        no = 'population'
+      )
+      
+      
+      data[
+        ,
+        `:=`(
+          difference = rowSums(
+            cbind(
+              -get(counter_factual), intervention
+            )
+          )
+        )
+        ,
+      ]
       
       
       data[
         x > 0,
-        effect := (effect/100)
+        `:=`(
+          effect = (effect/100)
+        )
         ,
         by = .(allocator)
       ][
         ,
         `:=`(
-          #cdifference   = difference * effect,
+          
           cintervention = pmax(
             intervention - ((difference * effect))
             ,0
@@ -118,7 +164,7 @@
       ][
         ,
         cdifference := rowSums(
-          cbind(-control, cintervention)
+          cbind(-get(counter_factual), cintervention)
         )
         ,
         by = .(allocator)
@@ -126,20 +172,20 @@
         x == 0,
         cintervention := intervention
       ]
-      
-      
+
+
       if (extrapolate) {
-        
+
         # Extrapolate the data
         # such that it extends T+10
-        
+
         # 1) Extend data by
         # outcome
         data <- rbindlist(
           fill = TRUE,
           use.names = TRUE,
           list(data,
-          
+
             data.table(
               allocator = unique(data$allocator)
             )[
@@ -150,11 +196,11 @@
               ,
               by = allocator
             ]
-          
+
           )
-          
+
         )
-        
+
         data[
           ,
           `:=`(
@@ -163,11 +209,11 @@
           ,
           by = allocator
         ]
-        
-        
-        
-        
-        
+
+
+
+
+
       }
       
       
@@ -194,7 +240,7 @@
 
 
 
-.flavor_model2 <- function(data_list, effect, who) {
+.model2_flavor <- function(data_list, effect, who) {
   
   #' function information
   #' 
@@ -265,7 +311,15 @@
 
 
 
-flavor <- function(data_list, effect, do_match = FALSE, who = NULL, extrapolate = FALSE) {
+flavor <- function(
+    data_list, 
+    effect, 
+    do_match = FALSE, 
+    who = NULL, 
+    extrapolate = FALSE,
+    chars = NULL,
+    allocators = NULL
+    ) {
   
   #' function information
   #' 
@@ -293,11 +347,11 @@ flavor <- function(data_list, effect, do_match = FALSE, who = NULL, extrapolate 
   
   if (inherits(data_list, 'model1')) {
     
-    data_list <- .flavor_model1(
+    data_list <- .model1_flavor(
       data_list,
       effect,
-      do_match,
-      extrapolate = extrapolate
+      extrapolate = extrapolate,
+      allocators = allocators
     )
     
     class(data_list) <- c(class(data_list), 'model1')
@@ -306,7 +360,7 @@ flavor <- function(data_list, effect, do_match = FALSE, who = NULL, extrapolate 
   
   if (inherits(data_list, 'model2')) {
     
-    data_list <- .flavor_model2(
+    data_list <- .model2_flavor(
       data_list,
       effect,
       who = who

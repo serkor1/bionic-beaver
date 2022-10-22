@@ -5,131 +5,77 @@
 # author: Serkan Korkmaz
 
 
-.grind_model1 <- function(
+.model1_grind <- function(
     data_list,
-    intervention = NULL,
-    control = NULL,
-    allocators = NULL,
-    chars = NULL,
-    do_incidence = NULL
+    recipe = list(
+      outcome_measure = 'qty', 
+      incidence = 1
+    )
+    
+    # ,
+    # options = NULL,
+    # allocators = NULL,
+    # chars = NULL,
+    # do_incidence = NULL
 ) {
   
   
-  #' function information;
+  #' function information
   #' 
+  #' @param data_list a list of data.tables from
+  #' model 1.
   #' 
-  #' @param data_list a list of data.tables
-  #' from model1.
-  
-  char_logical <- isTRUE(
-    str_detect(
-      string = paste(chars, collapse = "|"),
-      pattern = "[:alpha:]"
-    )
-  )
-
-  do_char <- fcase(
-    char_logical, TRUE,
-    default = FALSE
-  )
-  
-  
-  
-  chars_ <- chars
-  iterator <- 0
-  
-  
+  #' @param recipe a named list of chosen
+  #' filtering parameters
   
   
   # function logic; ####
   data_list <- map(
     data_list,
-    .f = function(data) {
+    .f = function(element) {
       
+      # NOTE: Had class function innit
+      element <- copy(element)
       
-      iterator <<- iterator + 1
+      # 1) Fill NA values
+      # in the type variables
+      element[str_detect(assignment, 'matched_'), type := recipe$incidence]
       
-      # WARNING: If not specified
-      # this will break.
-      data[
-        #assignment %chin% 'matching',
-        str_detect(assignment, 'matched'),
-        type := do_incidence
+      # 2) Filter data according
+      # to the recipe
+      element <- element[
+        outcome_type %chin% recipe$outcome_measure 
       ]
       
-      
-      # filter according to incidence
-      if (do_incidence != 0) {
+      if (recipe$incidence != 0) {
         
-        data <- data[
-          type == do_incidence
+        element <- element[
+          type == recipe$incidence
         ]
         
       }
       
       
-      
-      # filter according to characteristics
-      if (do_char) {
-        
-        
-        extract_ids <- extract_id(
-          lookup = lookup[[1]][[iterator]],
-          values = chars
-        )
-
-
-        data <- data[
-          id %in% extract_ids
-        ]
-        
-        
-        
-        # data <- data[
-        #   chars %chin% chars_
-        # ]
-        
-      }
-      
-      
-      # classify data
-      data <- data[
-        assignment %chin% c(intervention, control, paste0("matched_", intervention)) &
-          allocator %chin% c(allocators) 
-      ]
-      
-      
-      # 2) classify accordingly
-      data[
-        ,
-        assignment_factor := fcase(
-          assignment %chin% paste0("matched_", intervention), "population",
-          assignment %chin% intervention, "intervention",
-          assignment %chin% control, "control"
-        )
-        ,
-      ]
-      
-      
-      setnames(
-        data,
-        old = c("year"),
-        new = c("x"),
-        skip_absent = TRUE
-      )
+      # 3) Set year to x
+      # for normalized approach
+      setnames(element, old = 'year', new = 'x', skip_absent = TRUE)
       
       return(
-        data
+        element
       )
       
     }
+  )
+  
+  return(
+    data_list
   )
   
 }
 
 
 
-.grind_model2 <- function(
+.model2_grind <- function(
     data_list,
     intervention = NULL,
     control = NULL,
@@ -223,6 +169,10 @@
 
 grind <- function(
     data_list,
+    recipe = list(
+      outcome_measure = 'qty', 
+      incidence = 1
+    ),
     intervention = NULL,
     control = NULL,
     allocators = NULL,
@@ -279,23 +229,15 @@ grind <- function(
   
   if (inherits(data_list, 'model1')) {
     
-   
-    
-    data_list <- .grind_model1(
+    data_list <- .model1_grind(
       data_list,
-      intervention = intervention,
-      control = control,
-      allocators = allocators,
-      chars = chars,
-      do_incidence = do_incidence
+      recipe = recipe
     )
     
     
-  }
-  
-  if (inherits(data_list, 'model2')) {
+  } else {
     
-    data_list <- .grind_model2(
+    data_list <- .model2_grind(
       data_list,
       intervention = intervention,
       control = control,
@@ -304,6 +246,7 @@ grind <- function(
     )
     
   }
+  
 
   
   
@@ -315,20 +258,9 @@ grind <- function(
         )
     )
   )
-  
-  
-  
-  
-  return(
-    data_list
-  )
-  
+    
+    return(
+      data_list
+    )
 }
-
-
-
-
-
-
-
-
+   
