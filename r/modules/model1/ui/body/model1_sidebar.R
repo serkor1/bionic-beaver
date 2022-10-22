@@ -155,11 +155,11 @@
     
     fluidRow(
       column(
-        width = 4,
+        width = 3,
         offset = 1,
         materialSwitch(
           inputId = ns("do_incident"),
-          label = "Incidente Patienter?",
+          label = "Incident",inline = TRUE,
           value = FALSE,
           status = "primary"
         ) %>% popover(
@@ -170,10 +170,10 @@
       ),
       column(
         offset = 1,
-        width = 4,
+        width = 3,
         materialSwitch(
-          inputId = ns("do_cost"),
-          label = "Omkostninger?",
+          inputId = ns("do_cost"),inline = TRUE,
+          label = "Omkostninger",
           value = FALSE,
           status = "primary"
         ) %>% popover(
@@ -185,9 +185,9 @@
       
       column(
         offset = 1,
-        width = 4,
+        width = 3,
         materialSwitch(
-          inputId = ns("do_decay"),
+          inputId = ns("do_decay"),inline = TRUE,
           label = "Extrapoler",
           value = FALSE,
           status = "primary"

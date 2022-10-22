@@ -137,30 +137,30 @@
       # overwriting memory
       data <- copy(element)
       
-      # 2) Remove prefix
-      # from the data
-      idx <- which(sapply(data, is.character))
-      
-      data[
-        ,
-        (idx) := lapply(
-          .SD,
-          function(x) {
-            
-            str_split(x, pattern = '_', simplify = TRUE)[,2]
-            
-          }
-        )
-        ,
-        .SDcols = idx
-      ]
-      
-      
-      setnames(
-        data,
-        old = c('assignment', 'allocator', 'outcome', 'effect'),
-        new = c('Aldersgruppe', 'Hvem tager sygedagen?', 'Produktivitetstab', 'Sygedage')
-      )
+      # # 2) Remove prefix
+      # # from the data
+      # idx <- which(sapply(data, is.character))
+      # 
+      # data[
+      #   ,
+      #   (idx) := lapply(
+      #     .SD,
+      #     function(x) {
+      #       
+      #       str_split(x, pattern = '_', simplify = TRUE)[,2]
+      #       
+      #     }
+      #   )
+      #   ,
+      #   .SDcols = idx
+      # ]
+      # 
+      # 
+      # setnames(
+      #   data,
+      #   old = c('assignment', 'allocator', 'outcome', 'effect'),
+      #   new = c('Aldersgruppe', 'Hvem tager sygedagen?', 'Produktivitetstab', 'Sygedage')
+      # )
       
       
       write_ods(

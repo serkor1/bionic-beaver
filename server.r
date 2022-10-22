@@ -191,7 +191,7 @@ server <- function(input, output, session) {
   # )
   
   
-    .model2server(id = 'model2', data_list = data_list[[2]])
+    .model2server(id = 'model2', data_list = data_list[[2]],get_switch = reactive(input$customSwitch1))
   
   
   

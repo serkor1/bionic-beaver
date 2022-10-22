@@ -127,24 +127,58 @@
       
       # 1) Copy data
       # to avoid overwriting
-      data <- copy(element)
+      element <- copy(element)
       
-      
-      # 2) Locate all numeric
-      # data an convert
-      
-      idx <- which(sapply(data, is.numeric))
-      
-      data[
+      element[
         ,
-        (idx) := lapply(
-          .SD,
-          round,
-          2
+        `:=`(
+          effect = fifelse(test = is.na(effect), yes = 0, no = effect),
+          assignment = str_remove(assignment, '.+_'),
+          allocator  = str_remove(allocator, '[:alpha:]+_')
         )
         ,
-        .SDcols = idx
       ]
+      
+      setnames(
+        element,
+        old = c('assignment', 'allocator', 'outcome', 'effect'),
+        new = c('Aldersgruppe', 'Fordeling', 'Produktivitetstab', 'Sygedage')
+      )
+      
+      
+      # 1) Copy the data;
+      element <- copy(
+        element
+      )
+      
+      # 2) Round the data;
+      element[
+        ,
+        `:=`(
+          Produktivitetstab = round(Produktivitetstab, 2)
+        )
+        ,
+      ]
+      
+      # 3) Cast data;
+      # and set colorder
+      element <- dcast(
+        data = element,
+        formula = Fordeling + Sygedage ~ factor(
+          Aldersgruppe, 
+          levels = c('0-2 år', '3-6 år', '7-11 år', '12-17 år')
+        ),
+        value.var = 'Produktivitetstab'
+      )
+      
+      
+      # 4) Set names
+      setnames(
+        element,
+        old = c('Fordeling'),
+        new = c('Hvem tager sygedagen?'),
+        skip_absent = TRUE
+      )
       
       
       
