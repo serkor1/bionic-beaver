@@ -165,6 +165,41 @@
         new = c('Aldersgruppe', 'Fordeling', 'Produktivitetstab', 'Sygedage')
       )
       
+      
+      # 1) Copy the data;
+      element <- copy(
+        element
+      )
+      
+      # 2) Round the data;
+      element[
+        ,
+        `:=`(
+          Produktivitetstab = round(Produktivitetstab, 2)
+        )
+        ,
+      ]
+      
+      # 3) Cast data;
+      # and set colorder
+      element <- dcast(
+        data = element,
+        formula = Fordeling + Sygedage ~ factor(
+          Aldersgruppe, 
+          levels = c('0-2 år', '3-6 år', '7-11 år', '12-17 år')
+        ),
+        value.var = 'Produktivitetstab'
+      )
+      
+      
+      # 4) Set names
+      setnames(
+        element,
+        old = c('Fordeling'),
+        new = c('Hvem tager sygedagen?'),
+        skip_absent = TRUE
+      )
+      
     }
   )
   

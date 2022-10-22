@@ -235,7 +235,7 @@ second_dataserver <- function(id, data_list){
 
 
 
-.model2server <- function(id, data_list) {
+.model2server <- function(id, data_list, get_switch) {
   moduleServer(id, function(input, output, session) {
     
     # Server Start; #####
@@ -287,7 +287,7 @@ second_dataserver <- function(id, data_list){
         ),
         y = ~outcome, 
         type   = "bar",
-        colors = "Set2",
+        colors = "Blues",
         color = ~ str_remove(allocator, 'Sygedage_'),alpha = 0.5,
         marker = list(
           line = list(
@@ -299,8 +299,15 @@ second_dataserver <- function(id, data_list){
         xaxis = list(title = ''),
         yaxis = list(title = 'Produktionstab pr. barn'),
         legend = list(
+          title = list(text = '<b> Hvem tager sygedagen? </b>'),
           orientation = 'h'
-        )
+        ),
+        font = list(
+          size = 14,
+          color = fifelse(get_switch(), 'white', 'black')
+        ),
+        paper_bgcolor = '#ffffff00',
+        plot_bgcolor='#ffffff00'
       )
       
       
@@ -311,24 +318,44 @@ second_dataserver <- function(id, data_list){
     # Generate Table: #####
     output$table <- renderUI({
       
-      table_data <- copy(table_baselayer(flavored_data()))
+      # # 1) Copy the data;
+      # table_data <- copy(
+      #   table_baselayer(flavored_data())
+      #   )
+      # 
+      # # 2) Round the data;
+      # table_data[
+      #   ,
+      #   `:=`(
+      #     Produktivitetstab = round(Produktivitetstab, 2)
+      #   )
+      #   ,
+      # ]
+      # 
+      # # 3) Cast data;
+      # # and set colorder
+      # table_data <- dcast(
+      #   data = table_data,
+      #   formula = Fordeling + Sygedage ~ factor(
+      #     Aldersgruppe, 
+      #     levels = c('0-2 år', '3-6 år', '7-11 år', '12-17 år')
+      #     ),
+      #   value.var = 'Produktivitetstab'
+      # )
+      # 
+      # 
+      # # 4) Set names
+      # setnames(
+      #   table_data,
+      #   old = c('Fordeling'),
+      #   new = c('Hvem tager sygedagen?'),
+      #   skip_absent = TRUE
+      # )
       
-      table_data[
-        ,
-        `:=`(
-          Produktivitetstab = round(Produktivitetstab, 2)
-        )
-        ,
-      ]
       
-      table_data <- dcast(
-        data = table_data,
-        formula = Fordeling + Sygedage ~ Aldersgruppe,
-        value.var = 'Produktivitetstab'
+      table_data <- copy(
+        table_baselayer(flavored_data())
       )
-      
-      
-      
       
       bs4Table(
         table_data,

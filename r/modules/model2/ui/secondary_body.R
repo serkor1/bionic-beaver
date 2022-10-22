@@ -276,7 +276,7 @@ model2UI_body <- function(id, output) {
             checkboxGroupButtons(
               inputId = ns('pt_who'),
               label = "Hvem tager Sygedagen?",
-              choices = c("Delt Sygedage" = 'Delt', "Højest Uddannede" = 'Højest', "Lavest Uddannede" = 'Lavest'),
+              choices = c("Delte sygedage" = 'Delt', "Højest uddannede" = 'Højest', "Lavest uddannede" = 'Lavest'),
               justified = TRUE,
               size = 'sm',
               width = '100%',
@@ -337,6 +337,9 @@ model2UI_body <- function(id, output) {
           status = 'primary',
           uiOutput(
             ns('table')
+          ),
+          markdown(
+            '__Tabel:__ Ugentlig produktionstab pr. `forældre` i kroner.'
           )
           
         )
