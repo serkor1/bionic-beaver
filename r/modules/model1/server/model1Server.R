@@ -125,26 +125,33 @@
         output$n_control <- renderText({
           
           
-          if (as.logical(input$do_match)){
-            
-            value <- group_size[
-              assignment_factor %chin% c('population'),
-              .(
-                value = total_N
-              )
-            ]$value
-            
-          } else {
-            
-            value <- group_size[
-              assignment_factor %chin% c('control'),
-              .(
-                value = total_N
-              )
-            ]$value
-            
-            
-          }
+          value <- group_size[
+            assignment_factor %chin% c('control'),
+            .(
+              value = total_N
+            )
+          ]$value
+          
+          # if (as.logical(input$do_match)){
+          #   
+          #   value <- group_size[
+          #     assignment_factor %chin% c('population'),
+          #     .(
+          #       value = total_N
+          #     )
+          #   ]$value
+          #   
+          # } else {
+          #   
+          #   value <- group_size[
+          #     assignment_factor %chin% c('control'),
+          #     .(
+          #       value = total_N
+          #     )
+          #   ]$value
+          #   
+          #   
+          # }
           
           
           formatC(
