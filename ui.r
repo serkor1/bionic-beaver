@@ -90,7 +90,7 @@ bs4DashPage(
       childIndent = TRUE,
 
       menuItem(
-        text = "Vælg Model",
+        text = "Vælg model",
         startExpanded = TRUE,
         icon = icon("calculator", verify_fa = FALSE,lib = 'font-awesome'),
         menuSubItem(
@@ -110,20 +110,22 @@ bs4DashPage(
         startExpanded = TRUE,
         icon = icon("sitemap", verify_fa = FALSE,lib = 'font-awesome'),
         menuSubItem(
-          text = "Model Dokumentation",
+          text = "Model dokumentation",
           tabName = 'documentation',
           icon = icon('book-heart', verify_fa = FALSE)
         ),
         menuSubItem(
-          text = "VIVEs Dokumentation",
+          text = "VIVEs dokumentation",
           tabName = "report",
           icon    = icon('books', verify_fa = FALSE)
-        ),
-        menuSubItem(
-          text = "Download Data",
-          tabName = "export_data",
-          icon = icon('download', verify_fa = FALSE)
         )
+        
+        # ,
+        # menuSubItem(
+        #   text = "Download Data",
+        #   tabName = "export_data",
+        #   icon = icon('download', verify_fa = FALSE)
+        # )
       )
     )
     
@@ -175,13 +177,13 @@ bs4DashPage(
     right = span(
       a(
         icon("r-project"),
-        "Backend",
+        "R",
         href = "https://cran.r-project.org/",
         target = "_blank"
       ),
       HTML("&nbsp"),
       a(icon("github"),
-        "Repository",
+        "Github",
         href = "https://github.com/serkor1/bionic-beaver",
         target = "_blank",
         id     = 'github'),

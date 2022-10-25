@@ -128,7 +128,7 @@
                 'Sammenligningsgruppe',
                 'Faktisk forskel',
                 'Forventet effekt (%)',
-                'Kontrafaktisk Sygdomsgruppe',
+                'Kontrafaktisk sygdomsgruppe',
                 'Forventet forskel'
         ),
         skip_absent = TRUE

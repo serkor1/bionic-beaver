@@ -202,9 +202,10 @@
         )
 
         data[
+          x > 5
           ,
           `:=`(
-            cdifference = nafill(type = 'locf', x = cdifference)  * 1/(1+0.1)^(x-6)
+            cdifference = nafill(type = 'locf', x = cdifference)  * 1/(1+0.1)^(x-5)
           )
           ,
           by = allocator

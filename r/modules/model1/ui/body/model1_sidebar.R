@@ -14,7 +14,7 @@
     column(
       width = 12,
       br(),
-      h5('Valg af Parametre'),
+      h5('Valg af parametre'),
       
       hr(),
       
@@ -32,7 +32,7 @@
   column(
     width = 12,
     br(),
-    h5('Valg af Effekt'),
+    h5('Valg af effekt'),
     
     hr(),
     
@@ -52,7 +52,7 @@
   column(
     width = 12,
     br(),
-    h5('Visuelle Indstillinger'),
+    h5('Visuelle indstillinger'),
     
     hr(),
     
@@ -90,7 +90,7 @@
     vive_picker(
       id = ns("pt_target"),
       title = "Sygdomsgruppe",
-      header = "Vælg Sygdomsgruppe",
+      header = "Vælg sygdomsgruppe",
       choices = assignment[[1]],
       multiple = FALSE
     ),
@@ -118,7 +118,7 @@
         vive_picker(
           id = ns("pt_control"),
           title = "Sammenligningsgruppe",
-          header = "Vælg Sammenligningsgruppe",
+          header = "Vælg sammenligningsgruppe",
           choices = assignment[[1]],
           multiple = FALSE
         ) 
@@ -133,10 +133,10 @@
     vive_picker(
       id = ns("pt_outcome"),
       title = "Outcomes",
-      header = "Vælg Outcomes",
+      header = "Vælg outcomes",
       choices = outcome[[1]],
       multiple = TRUE,
-      selectAllText = "Vælg Alle",
+      selectAllText = "Vælg alle",
       deselectAllText = "Nulstil"
     ),
     
@@ -145,10 +145,10 @@
     vive_picker(
       id = ns("pt_demographic"),
       title = "Demografi",
-      header = "Vælg Demografiske",
+      header = "Vælg demografi",
       choices = chars[[1]],
       multiple = TRUE,
-      selectAllText = "Vælg Alle",
+      selectAllText = "Vælg alle",
       deselectAllText = "Nulstil"
     ),
     br(),
@@ -310,7 +310,7 @@
     
     actionButton(
       inputId = ns("col_reset"),
-      label = "Nulstil Farver"
+      label = "Nulstil farver"
     )
     
     
@@ -434,7 +434,7 @@
     
     
     tabPanel(
-      title = "Visuelle Indstillinger",
+      title = "Visuelle indstillinger",
       conditionalPanel(
         condition = "input.change_views == 'see_plot'",ns = ns,
         {
@@ -484,15 +484,105 @@
   
   # generate sidebar
   
-  bs4CardSidebar(
-    width = 30,
-    icon = h6(
-      span(
-        "Vælg parametre og indstillinger",
-        icon("bars")
-        )
-      ),
-    startOpen = TRUE,
+  # bs4CardSidebar(
+  #   width = 30,
+  #   icon = h5(
+  #     span(
+  #       "Vælg parametre og indstillinger",
+  #       icon("bars")
+  #       )
+  #     ),
+  #   startOpen = TRUE,
+  #   id = "id_placeholder",
+  #   
+  #   
+  #   column(
+  #     width = 12,
+  #     p(strong('Gruppestørrelse')),
+  #     fluidRow(
+  #       column(
+  #         width = 6,
+  #         descriptionBlock(
+  #           number = textOutput(ns("n_treatment"),inline = TRUE),
+  #           numberIcon = icon('people',verify_fa = FALSE),
+  #           header = 'Sygdomsgruppe',
+  #           rightBorder = FALSE
+  #         )
+  #       ),
+  #       column(
+  #         width = 6,
+  #         descriptionBlock(
+  #           number = textOutput(ns("n_control"),inline = TRUE),
+  #           numberIcon = icon('people',verify_fa = FALSE),
+  #           header = 'Sammenligningsgruppen',
+  #           rightBorder = FALSE
+  #         )
+  #       )
+  #     )
+  #     
+  #     
+  #     
+  #   ),
+  #   
+  #   hr(),
+  #   # Chose Type of view;
+  #     column(
+  #       width = 12,
+  #       radioGroupButtons(
+  #         inputId = ns(paste0("change_views")),
+  #         width = "100%",
+  #         label = NULL,
+  #         choices = c(`Graf <i class="fa-solid fa-chart-line"></i>` = "see_plot", ` Tabel <i class="fa-solid fa-table-columns"></i>` = "see_table"),
+  #         justified = TRUE,
+  #         size = "normal"
+  #       )
+  #     ),
+  #   
+  #   column(
+  #     width = 12,
+  #     
+  #     
+  #     downloadButton(
+  #       outputId = ns('download_files'),
+  #       label = 'Download Materiale',
+  #       style = 'width: 100%;'
+  #       
+  #     )
+  #     # ,
+  #     # 
+  #     # actionButton(
+  #     #   inputId = ns('doswnload_files'),
+  #     #   label = 'Download materiale',
+  #     #   icon = icon('download'),size = 'sm',width = '100%'
+  #     # )
+  #   ),
+  #   
+  #   hr(),
+  #   
+  #  
+  #   
+  #   # Panels
+  #  
+  #     gen_panel
+  #   
+  #   
+  #   
+  #   
+  # )
+  
+  bs4Card(
+    width = 12,
+    title = 'Parametre og indstillinger',
+    collapsible = FALSE,
+    headerBorder = FALSE,
+    status = 'primary',
+    icon = icon('bars', verify_fa = FALSE),
+    # icon = h5(
+    #   span(
+    #     "Vælg parametre og indstillinger",
+    #     icon("bars")
+    #   )
+    # ),
     id = "id_placeholder",
     
     
@@ -526,17 +616,17 @@
     
     hr(),
     # Chose Type of view;
-      column(
-        width = 12,
-        radioGroupButtons(
-          inputId = ns(paste0("change_views")),
-          width = "100%",
-          label = NULL,
-          choices = c(`Graf <i class="fa-solid fa-chart-line"></i>` = "see_plot", ` Tabel <i class="fa-solid fa-table-columns"></i>` = "see_table"),
-          justified = TRUE,
-          size = "normal"
-        )
-      ),
+    column(
+      width = 12,
+      radioGroupButtons(
+        inputId = ns(paste0("change_views")),
+        width = "100%",
+        label = NULL,
+        choices = c(`Graf <i class="fa-solid fa-chart-line"></i>` = "see_plot", ` Tabel <i class="fa-solid fa-table-columns"></i>` = "see_table"),
+        justified = TRUE,
+        size = "normal"
+      )
+    ),
     
     column(
       width = 12,
@@ -544,7 +634,7 @@
       
       downloadButton(
         outputId = ns('download_files'),
-        label = 'Download Materiale',
+        label = 'Download materiale',
         style = 'width: 100%;'
         
       )
@@ -559,17 +649,17 @@
     
     hr(),
     
-   
+    
     
     # Panels
-   
-      gen_panel
+    
+    gen_panel
     
     
     
     
   )
-  
-  
-  
 }
+  
+  
+ 

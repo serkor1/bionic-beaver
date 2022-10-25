@@ -31,9 +31,10 @@
     width = 12,
     id = 'main_card', 
     status = "primary",
+    headerBorder = TRUE,
     height = 'auto', # Was 1000px
     collapsible = FALSE,
-    sidebar = .sidebar(id, input, output),
+    #sidebar = .sidebar(id, input, output),
     # This has been moved to sidebar
     # title = span(
     #   
@@ -91,12 +92,19 @@
               column(
                 width = 12,
                 withSpinner(
-                  plotlyOutput(
-                    outputId = ns(paste0("plot",i)),
-                    height = '800px',
-                    width = '100%',
-                    inline = FALSE
+                  
+                  # plotlyOutput(
+                  #   outputId = ns(paste0("plot",i)),
+                  #   height = '800px',
+                  #   width = '100%',
+                  #   inline = FALSE
+                  # ),
+                  uiOutput(
+                    ns(paste0("plot",i))
                   ),
+                  
+                  
+                  
                   type = 7,
                   size = 2,
                   hide.ui = FALSE
@@ -116,11 +124,13 @@
                 column(
                   width = 12,
                   withSpinner(
-                    div(style = "height: 800px;",
+                    # div(style = "height: 800px;",
+                        
                         uiOutput(
                           ns(paste0("table",i))
                         )
-                        )
+                        
+                        # )
                       
                     ,
                     type = 7,
@@ -414,8 +424,16 @@ model1UI_performance <- function(id, output, input, id_value) {
       fluidRow(
         style = "height:90%; position:relative;",
         column(
-          width = 12,
+          width = 9,
           .model1UI_output(
+            id,
+            output,
+            input
+          )
+        ),
+        column(
+          width = 3,
+          .sidebar(
             id,
             output,
             input

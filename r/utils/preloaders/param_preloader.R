@@ -221,12 +221,34 @@
 # visible to the user.
 .gen_option <- function(data_list) {
   
+  # Set Names of first model
+  chars <- .get_outcomes(data_list,variable = "chars")
+  
+  
+  chars[[1]] <- map(
+    chars[[1]],
+    function(x) {
+      
+      setNames(
+        x, str_to_sentence(names(x))
+      )
+      
+    }
+  )
+  
+  names(chars[[1]]) <- str_to_sentence(
+    names(chars[[1]])
+  )
+  
   list(
-    chars      = .get_outcomes(data_list,variable = "chars"),
+    chars      = chars,
     assignment = .get_outcomes(data_list, variable = "assignment"),
     outcome    = .get_outcomes(data_list, variable = "allocator")
   )
   
   
 }
+
+
+
 

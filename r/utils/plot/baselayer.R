@@ -25,7 +25,7 @@
      
       tryCatch(
         {
-          iterator <- 0
+          # iterator <- 0
           
           
           data %>% 
@@ -33,16 +33,17 @@
             map(
               .f = function(unique_data) {
                 
-                iterator <<- iterator + 1 
+                # iterator <<- iterator + 1 
                 
                 
                 plot_ly(
                   data   = unique_data,
                   type   = "scatter",
                   mode   = "lines+markers",
-                  showlegend = fifelse(
-                    iterator == 1, TRUE, FALSE
-                  )
+                  # showlegend = fifelse(
+                  #   iterator == 1, TRUE, FALSE
+                  # )
+                  mode   = TRUE
                 )
                 
               }

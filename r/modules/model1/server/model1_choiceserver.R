@@ -23,8 +23,12 @@
       fifelse(
         test = length(demographic) == 0 | length(demographic) == get_len,
         yes  = 'Alle valgt',
+        # no   = paste(
+        #   str_extract_all(input$pt_demographic, pattern = '(?<=_).+'),
+        #   collapse = ", "
+        # )
         no   = paste(
-          str_extract_all(input$pt_demographic, pattern = '(?<=_).+'),
+          str_extract_all(demographic, pattern = '(?<=_).+'),
           collapse = ", "
         )
       )
@@ -33,28 +37,30 @@
     }
     
     
+    
+    
     output$chosen_gender <- renderText({
       
-      internal_foo(chars[[1]]$køn)
+      internal_foo(chars[[1]]$Køn)
       
     })
     
     output$chosen_educ <- renderText({
       
-      internal_foo(chars[[1]]$uddannelse)
+      str_to_sentence(internal_foo(chars[[1]]$Uddannelse))
       
     })
     
     
     output$chosen_labor <- renderText({
       
-      internal_foo(chars[[1]]$arbejdsmarked)
+      internal_foo(chars[[1]]$Arbejdsmarked)
       
     })
     
     output$chosen_age <- renderText({
       
-      internal_foo(chars[[1]]$alder)
+      internal_foo(chars[[1]]$Alder)
       
     })
     

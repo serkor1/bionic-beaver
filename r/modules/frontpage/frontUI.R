@@ -36,7 +36,7 @@ frontUI <- function(
           
         ),
         accordionItem(
-          title = span(icon(name = 'heart', verify_fa = FALSE), 'Open Source'),
+          title = span(icon(name = 'heart', verify_fa = FALSE), 'Open source'),
           collapsed = TRUE,
           status = 'primary',
           includeMarkdown(

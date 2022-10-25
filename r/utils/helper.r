@@ -125,10 +125,10 @@ extract_name <- function(
       } else {
         
         output <- fcase(
-          inherits(data_list, c("primary_care")), 'Primær Sundhedssektor',
-          inherits(data_list, c("psychiatric_care")), 'Psykiatrisk Hospitalskontakt',
-          inherits(data_list, c("somatic_care")), 'Somatisk Hospitalskontakt',
-          inherits(data_list, c("transfers")),'Overførsler',
+          inherits(data_list, c("primary_care")), 'Primær sundhedssektor',
+          inherits(data_list, c("psychiatric_care")), 'Psykiatrisk hospitalskontakt',
+          inherits(data_list, c("somatic_care")), 'Somatisk hospitalskontakt',
+          inherits(data_list, c("transfers")), 'Indkomst',
           default = 'Præparatforbrug'
         )
       }
