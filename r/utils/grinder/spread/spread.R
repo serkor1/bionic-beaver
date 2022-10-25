@@ -1,218 +1,88 @@
+# script: scr_spread
+# date: Sat Oct 22 21:01:45 2022
+# author: Serkan Korkmaz
+# objective: Generate a class of functions
+# that filters data by characteristics and spreads
+# it for further flavoring
+# prelims; #####
+
 .spread_model1 <- function(
   data_list,
-  export = FALSE,
-  alternate = FALSE
+  values = NULL
 ) {
   
   
   #' function information; 
   
   
-  # # global options
-  # export <- fcase(
-  #   isTRUE(export), TRUE,
-  #   default = FALSE
-  # )
-  # 
-  alternate <-  fcase(
-    isTRUE(alternate), 'cost',
-    default = "qty"
-  )
-  
-  if (inherits(data_list, 'aggregate')) {
-    
-    is_aggregated <- TRUE
-    
-  } else {
-    
-    is_aggregated <- FALSE
-    
-    
-  }
+
+  # }
  
   
   # function logic; ####
 
-  if (export) {
-    
-    data_list <- .export_model1(
-      data_list
-    )
-    
-  } else {
-    
-    data_list <- map(
-      data_list,
-      .f = function(data) {
+  i <- 0
+  
+  data_list <- map(
+    data_list,
+    .f = function(element) {
+      
+      if (nrow(element) == 0) {
         
-        if (nrow(data) == 0) {
-          
-          return(
-            NULL
-          )
-          
-        }
-        
-        
-        get_class <- class(data)
-        
-        
-        data <- data[
-          outcome_type %chin% alternate
-        ]
-
-
-
-        group_cols <- .find_cols(
-          cols = colnames(data),
-          pattern = c("x", "year", "assignment", "allocator", "allocator"),
-          negate = FALSE
-        )
-        
-        
-        data <- data[
-          ,
-          .(
-            outcome = sum(
-              outcome * weight, na.rm = TRUE
-            )/sum(weight, na.rm = TRUE)
-          )
-          ,
-          by = c(group_cols)
-        ]
-        
-        
-        # # TODO: At a later point perhaps
-        # 
-        # 
-        # if (is_aggregated) {
-        #   
-        #   message('In Aggregated')
-        #   
-        #   data <- data[
-        #     ,
-        #     .(
-        #       outcome = sum(
-        #         outcome * weight, na.rm = TRUE
-        #       )/sum(weight, na.rm = TRUE)
-        #     )
-        #     ,
-        #     by = c(group_cols)
-        #   ]
-        #   
-        # } else {
-        #   
-        #   message('Not in Aggregated')
-        #   
-        #   # data <- data[
-        #   #   ,
-        #   #   .(
-        #   #     outcome = mean(
-        #   #       outcome, na.rm = TRUE
-        #   #     )
-        #   #   )
-        #   #   ,
-        #   #   by = c(group_cols)
-        #   # ]
-        #   
-        #   data <- data[
-        #     ,
-        #     .(
-        #       outcome = sum(
-        #         outcome * weight, na.rm = TRUE
-        #       )/sum(weight, na.rm = TRUE)
-        #     )
-        #     ,
-        #     by = c(group_cols)
-        #   ]
-        #   
-        #   
-        # }
-        
-        
-        
-        
-        
-        # if (inherits(data_list, 'TRUE')) {
-        #   
-        #   
-        #   
-        #   
-        # } else {
-        #   
-          # data <- data[
-          #   ,
-          #   .(
-          #     outcome = sum(
-          #       outcome * weight, na.rm = TRUE
-          #     )
-          #   )
-          #   ,
-          #   by = c(group_cols)
-          # ]
-        #   
-        #   
-        #   
-        # }
-        
-        
-        
-        data <- dcast(data,
-          x + allocator ~ assignment_factor,
-          value.var = "outcome"
-        )
-        
-        
-        
-        # check if control group is
-        # chosen
-        control <- str_detect(
-          string  = 'control',
-          pattern = paste(
-            colnames(data),
-            collapse = "|"
-          )
-        )
-
-
-        if (!control) {
-
-          data[
-            ,
-            control := population
-            ,
-          ]
-
-        }
-
-         data <- data[
-          x >= 0
-          ,
-             `:=`(
-               cintervention = 0,
-               difference = rowSums(cbind(-control, intervention)),
-               cdifference = 0
-             )
-
-             ,
-         ]
-        
-        
-        class(data) <- c(class(data), get_class[length(get_class)])
-
         return(
-          data
+          NULL
         )
-        
         
       }
-    )
-    
-  }
-  
-  
-  
-  
+      
+      i <<- i + 1
+      
+      
+      
+      # 1) Filter the data
+      # according to chosen characteristics
+      if (isTruthy(values)) {
+        
+        element <- element[
+          id %in% extract_id(
+            lookup = lookup[[1]][[i]],
+            values = values
+          )
+        ]
+        
+      }
+      
+      # 2) Calculate the
+      # weighed outcomes
+      element <- element[
+        ,
+        .(
+          outcome = sum(
+            outcome * weight, na.rm = TRUE
+          )/sum(weight, na.rm = TRUE)
+          )
+        ,
+        by = .(
+          x, allocator, assignment,assignment_factor
+        )
+      ]
+      # 
+      # 2) Cast the data with the 
+      # id in the data.
+      element <- dcast(
+        element,
+        formula = x + allocator ~ assignment_factor,
+        value.var = 'outcome'
+        #,fun.aggregate = mean
+      )
+      
+      return(
+        element
+      )
+      
+    }
+  )
+
   
   return(
     data_list
@@ -363,8 +233,13 @@
 
 spread <- function(
     data_list,
-    export = FALSE,
-    alternate = FALSE
+    export    = FALSE,
+    alternate = FALSE,
+    values   = NULL,
+    options   = list(
+      outcome_measure = 'qty', 
+      incidence = 1
+    )
     ) {
   
   #' function information; #####
@@ -405,8 +280,7 @@ spread <- function(
     
     data_list <- .spread_model1(
       data_list = data_list,
-      export    = export,
-      alternate = alternate
+      values = values
     )
     
     

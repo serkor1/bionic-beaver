@@ -63,6 +63,22 @@
       ]
       
       
+      element <- element[
+        ,
+        .(
+          x,
+          allocator,
+          intervention,
+          control,
+          difference,
+          effect,
+          cintervention,
+          cdifference
+        )
+        ,
+      ]
+      
+      
       # # Add progress bar
       # element[
       #   ,
@@ -81,10 +97,9 @@
       
       
       setcolorder(
-        element, 
+        element,
         c("x",
           "allocator",
-          "population",
           'intervention',
           'control',
           'difference',
@@ -100,7 +115,6 @@
         element,
         old = c("x",
                 "allocator",
-                "population",
                 'intervention',
                 'control',
                 'difference',
@@ -109,16 +123,20 @@
                 'cdifference'
         ),
         new = c("År",
-                "Outcome",
-                "Befolkningen",
-                'Sygdomsgruppe',
+                "Kategori",
+                "Sygdomsgruppe",
                 'Sammenligningsgruppe',
                 'Faktisk forskel',
-                'Effekt',
+                'Forventet effekt (%)',
                 'Kontrafaktisk Sygdomsgruppe',
                 'Forventet forskel'
         ),
         skip_absent = TRUE
+      )
+      
+      
+      return(
+        element
       )
       
       

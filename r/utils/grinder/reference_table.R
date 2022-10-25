@@ -148,6 +148,7 @@
   
   if (is.null(chars)) {
     
+    
     return(NULL)
     
   }
