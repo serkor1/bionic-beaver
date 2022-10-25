@@ -255,20 +255,38 @@
     # correspond to the chosen tab.
     chose_outcomes <- reactive(
       {
-        
-        fcase(
-          input$pt_outcome %chin% outcome[[1]]$Overførsel, 'Overførsler',
-          input$pt_outcome %chin% outcome[[1]]$`Primær Sektor`, 'Primær sundhedssektor',
-          input$pt_outcome %chin% outcome[[1]]$psykiatrien, 'Psykiatrisk hospitalskontakt',
-          input$pt_outcome %chin% outcome[[1]]$somatikken, 'Somatisk hospitalskontakt',
-          default =  'Præparatforbrug'
-          
-          
-          
+        unique(
+          fcase(
+            input$pt_outcome %chin% outcome[[1]]$Overførsel, 'Indkomst',
+            input$pt_outcome %chin% outcome[[1]]$`Primær sektor`, 'Primær sundhedssektor',
+            input$pt_outcome %chin% outcome[[1]]$Psykiatrien, 'Psykiatrisk hospitalskontakt',
+            input$pt_outcome %chin% outcome[[1]]$Somatikken, 'Somatisk hospitalskontakt',
+            default =  'Præparatforbrug'
+            
+            
+            
+          )
         )
+        
         
       }
     )
+    
+    
+    
+    # Add data counter
+    # if the given element 
+    # has 0 rows, then the relevant outcome havent
+    # been chosen
+    available_row <- reactive(
+      {
+        map(
+          flavored_data(),
+          nrow
+        )
+      }
+    )
+    
     
     
     validate_input <- function() {
@@ -317,139 +335,243 @@
             
             validate_input()
             
-            tryCatch(
-              {
-                
-                
-                tabsetPanel(
-                  vertical = FALSE,
-                  .list = lapply(
-                    unique(table_data()[[i]]$Kategori),
+            
+            
+            validate(
+              need(
+                available_row()[[i]] == 0,
+                message = paste(
+                  'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ", ")
+                )
+                )
+              
+            )
+            
+            
+            
+            
+            tabsetPanel(
+              vertical = FALSE,
+              .list = lapply(
+                unique(table_data()[[i]]$Kategori),
+                function(x) {
+                  
+                  # grab data
+                  data <- table_data()[[i]][Kategori %chin% x]
+                  
+                  
+                  
+                  
+                  pretty_table <- lapply(
+                    split(data, 1:nrow(data)),
                     function(x) {
                       
-                      # grab data
-                      data <- table_data()[[i]][Kategori %chin% x]
-                      
-                      
-                      pretty_table <- lapply(
-                        split(data, 1:nrow(data)),
-                        function(x) {
-                          
-                          
-                          
-                          
-                          x[
-                            !is.na(`Forventet effekt (%)`)
-                            ,
-                            `Forventet effekt (%)` := HTML(
-                              paste(
-                                progressBar(
-                                  id = 's',
-                                  value = `Forventet effekt (%)` * 100, 
-                                  status = "pink", 
-                                  size = "l",display_pct = TRUE,
-                                  total = 100)
-                                )
-                              )
-                            ,
-                          ]
-                          
-                          
-                          x[is.na(x)] <- ''
-
-                          
-                          return(
-                            x
-                          )
-                                                    
-                        }
-                      )
                       
                       
                       
                       
-                      
-                      tabPanel(
-                        title = x,
-                        # h5(x),
-                        
-                        column(
-                          width = 12,
-                          fluidRow(
-                            bs4Table(
-                              #table_data()[[i]][Outcome %chin% x],
-                              pretty_table,
-                              bordered = TRUE,striped = TRUE,
-                              width = 12
-                            )
+                      x[
+                        !is.na(`Forventet effekt (%)`)
+                        ,
+                        `Forventet effekt (%)` := HTML(
+                          paste(
+                            progressBar(
+                              id = 's',
+                              value = `Forventet effekt (%)` * 100, 
+                              status = "pink", 
+                              size = "l",display_pct = TRUE,
+                              total = 100)
                           )
                         )
-                        
-                       
-                        
-                        
+                        ,
+                      ]
+                      
+                      
+                      x[is.na(x)] <- ''
+                      
+                      
+                      return(
+                        x
                       )
-                      
-                      
                       
                     }
                   )
-                )
-                
-                # bs4Carousel(
-                #   id = paste0('car_model', i),
-                #   width = 12,
-                #   indicators = TRUE,
-                #   .list = lapply(
-                #     unique(table_data()[[i]]$Outcome),
-                #     function(x) {
-                #       
-                #       
-                #       
-                #       
-                #       
-                #       carouselItem(
-                #         caption = NULL,
-                #         h5(x),
-                #         bs4Table(
-                #           table_data()[[i]][Outcome %chin% x],
-                #           bordered = TRUE,
-                #           width = 12
-                #         )
-                #         
-                #         
-                #       )
-                #       
-                #       
-                #       
-                #     }
-                #   )
-                # )
-                
-              },
-              
-              error = function(condition) {
-                
-                validate(
-                  need(
-                    is.null(input$pt_outcome),
-                    message = paste(condition))
-                )
-                
-              },
-              warning = function(condition) {
-                
-                validate(
-                  need(
-                    is.null(input$pt_outcome),
-                    message = paste(
-                      'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ",")
+                  
+                  
+                  
+                  
+                  
+                  tabPanel(
+                    title = x,
+                    # h5(x),
+                    
+                    column(
+                      width = 12,
+                      fluidRow(
+                        bs4Table(
+                          pretty_table,
+                          bordered = TRUE,
+                          striped = TRUE,
+                          width = 12
+                        )
+                      )
                     )
+                    
+                    
+                    
+                    
                   )
-                )
-                
-              }
+                  
+                  
+                  
+                  
+                  
+                }
+              )
             )
+            
+            
+            
+            
+            
+            # tryCatch(
+            #   {
+            #     
+            #     
+            #     tabsetPanel(
+            #       vertical = FALSE,
+            #       .list = lapply(
+            #         unique(table_data()[[i]]$Kategori),
+            #         function(x) {
+            #           
+            #           # grab data
+            #           data <- table_data()[[i]][Kategori %chin% x]
+            #           
+            #         
+            #           
+            #           
+            #           pretty_table <- lapply(
+            #             split(data, 1:nrow(data)),
+            #             function(x) {
+            #               
+            #               
+            #               
+            #               
+            #               
+            #               x[
+            #                 !is.na(`Forventet effekt (%)`)
+            #                 ,
+            #                 `Forventet effekt (%)` := HTML(
+            #                   paste(
+            #                     progressBar(
+            #                       id = 's',
+            #                       value = `Forventet effekt (%)` * 100, 
+            #                       status = "pink", 
+            #                       size = "l",display_pct = TRUE,
+            #                       total = 100)
+            #                     )
+            #                   )
+            #                 ,
+            #               ]
+            #               
+            #               
+            #               x[is.na(x)] <- ''
+            # 
+            #               
+            #               return(
+            #                 x
+            #               )
+            #                                         
+            #             }
+            #           )
+            #           
+            #           
+            #           
+            #           
+            #           
+            #           tabPanel(
+            #             title = x,
+            #             # h5(x),
+            #             
+            #             column(
+            #               width = 12,
+            #               fluidRow(
+            #                 bs4Table(
+            #                   pretty_table,
+            #                   bordered = TRUE,
+            #                   striped = TRUE,
+            #                   width = 12
+            #                 )
+            #               )
+            #             )
+            #             
+            #            
+            #             
+            #             
+            #           )
+            #           
+            #          
+            #           
+            #           
+            #           
+            #         }
+            #       )
+            #     )
+            #     
+            #     # bs4Carousel(
+            #     #   id = paste0('car_model', i),
+            #     #   width = 12,
+            #     #   indicators = TRUE,
+            #     #   .list = lapply(
+            #     #     unique(table_data()[[i]]$Outcome),
+            #     #     function(x) {
+            #     #       
+            #     #       
+            #     #       
+            #     #       
+            #     #       
+            #     #       carouselItem(
+            #     #         caption = NULL,
+            #     #         h5(x),
+            #     #         bs4Table(
+            #     #           table_data()[[i]][Outcome %chin% x],
+            #     #           bordered = TRUE,
+            #     #           width = 12
+            #     #         )
+            #     #         
+            #     #         
+            #     #       )
+            #     #       
+            #     #       
+            #     #       
+            #     #     }
+            #     #   )
+            #     # )
+            #     
+            #   },
+            #   
+            #   error = function(condition) {
+            #     
+            #     validate(
+            #       need(
+            #         is.null(input$pt_outcome),
+            #         message = paste(condition))
+            #     )
+            #     
+            #   },
+            #   warning = function(condition) {
+            #     
+            #     validate(
+            #       need(
+            #         is.null(input$pt_outcome),
+            #         message = paste(
+            #           'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ",")
+            #         )
+            #       )
+            #     )
+            #     
+            #   }
+            # )
             
             
             
@@ -594,85 +716,50 @@
 
 
             validate_input()
-
-
-
-
-
-            tryCatch(
-              {
-
-
-
-                tabsetPanel(
-                  vertical = FALSE,
-                  .list = lapply(
-                    seq_along(plot_data()[[i]]),
-                    function(x) {
-
-
-
-                      tabPanel(
-                        title = str_split(
-                          names(plot_data()[[i]][x]),
-                          pattern =  '_',
-                          simplify = TRUE
-                        )[,2],
-                        # h5(x),
-
-                        column(
-                          width = 12,
-                          fluidRow(
-                            plot_data()[[i]][x]
-                          )
-                        )
-
-
-
-
-                      )
-
-
-
-                    }
-                  )
+            
+            validate(
+              need(
+                available_row()[[i]] == 0,
+                message = paste(
+                  'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ", ")
                 )
-
-
-
-                # %>%
-                #   subplot(
-                #     titleX = TRUE,
-                #     titleY = TRUE,
-                #     shareX = TRUE
-                #   )
-              },
-
-              error = function(condition) {
-
-
-                validate(
-                  need(
-                    is.null(condition),
-                    message = paste('Sammenligningen er problematisk.', '\n', condition)
-                  )
-                )
-
-              },
-              warning = function(condition) {
-
-
-                validate(
-                  need(
-                    is.null(input$pt_outcome),
-                    message = paste(
-                      'Ingen relevante outcome(s) valgt. Se:', paste(unique(chose_outcomes()), collapse = ",")
-                    )
-                  )
-                )
-              }
+              )
+              
             )
-
+            
+            tabsetPanel(
+              vertical = FALSE,
+              .list = lapply(
+                seq_along(plot_data()[[i]]),
+                function(x) {
+                  
+                  
+                  
+                  tabPanel(
+                    title = str_split(
+                      names(plot_data()[[i]][x]),
+                      pattern =  '_',
+                      simplify = TRUE
+                    )[,2],
+                    # h5(x),
+                    
+                    column(
+                      width = 12,
+                      fluidRow(
+                        plot_data()[[i]][x]
+                      )
+                    )
+                    
+                    
+                    
+                    
+                  )
+                  
+                  
+                  
+                }
+              )
+            )
 
           }
         )

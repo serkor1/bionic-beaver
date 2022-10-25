@@ -166,13 +166,26 @@ bs4DashPage(
     fixed = TRUE,
     left = span(
       "Beregner til Investeringer i Sundhed (BIS)",
-      bs4Badge(
-        color = "info",rounded = TRUE,fifelse(isTRUE(developper_mode), "Developper Mode", "Live Mode")),
+      
       bs4Badge(
         color = "info",
         rounded = TRUE,
-        paste("Version", version)
-        )
+        fifelse(
+          isTRUE(developper_mode), 
+          "Beta",
+          "Live")
+        ),
+      
+      bs4Badge(
+        color = "info",
+        rounded = TRUE,
+        paste(
+          "Version",
+          version
+          )
+        ),
+      
+      HTML('<small hidden>Alayina Isyan - En büyük Besiktas!</small>')
     ),
     right = span(
       a(

@@ -124,13 +124,13 @@
                 column(
                   width = 12,
                   withSpinner(
-                    # div(style = "height: 800px;",
-                        
+                   # div(style = "height: 800px;",
+
                         uiOutput(
                           ns(paste0("table",i))
                         )
                         
-                        # )
+                     #)
                       
                     ,
                     type = 7,
