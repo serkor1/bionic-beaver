@@ -339,7 +339,7 @@
             
             validate(
               need(
-                available_row()[[i]] == 0,
+                available_row()[[i]] != 0,
                 message = paste(
                   'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ", ")
                 )
@@ -719,7 +719,7 @@
             
             validate(
               need(
-                available_row()[[i]] == 0,
+                available_row()[[i]] != 0,
                 message = paste(
                   'Ingen relevante outcome(s) valgt. Se under:', paste(chose_outcomes(), collapse = ", ")
                 )
