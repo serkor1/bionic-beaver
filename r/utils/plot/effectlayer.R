@@ -34,7 +34,7 @@
             marker = list(
               color = color_intervention
             ),
-            name = 'Kontrafaktisk Værdi'
+            name = 'Kontrafaktisk værdi'
           ) 
           
           

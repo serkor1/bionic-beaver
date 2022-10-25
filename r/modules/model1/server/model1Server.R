@@ -506,63 +506,176 @@
     })
     
 
-      map(
-        1:5,
+    #   map(
+    #     1:5,
+    #   .f = function(i) {
+    # 
+    # 
+    # 
+    # 
+    # 
+    #       output[[paste0("plot", i)]] <- renderPlotly(
+    #         {
+    # 
+    # 
+    # 
+    #           validate_input()
+    #           
+    #           
+    #             
+    # 
+    # 
+    #           tryCatch(
+    #             {
+    #               plot_data()[[i]] %>%
+    #                 subplot(
+    #                   titleX = TRUE,
+    #                   titleY = TRUE,
+    #                   shareX = TRUE
+    #                 )
+    #             },
+    # 
+    #             error = function(condition) {
+    #               
+    #               
+    #               validate(
+    #                 need(
+    #                   is.null(condition),
+    #                   message = paste('Sammenligningen er problematisk.', '\n', condition)
+    #                 )
+    #               )
+    # 
+    #             },
+    #             warning = function(condition) {
+    #               
+    # 
+    #               validate(
+    #                 need(
+    #                   is.null(input$pt_outcome),
+    #                   message = paste(
+    #                     'Ingen relevante outcome(s) valgt. Se:', paste(unique(chose_outcomes()), collapse = ",")
+    #                   )
+    #                 )
+    #               )
+    #             }
+    #           )
+    # 
+    # 
+    #         }
+    #       )
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    # 
+    #   }
+    # )
+      
+    map(
+      1:5,
       .f = function(i) {
 
 
 
 
 
-          output[[paste0("plot", i)]] <- renderPlotly(
-            {
+        output[[paste0("plot", i)]] <- renderUI(
+          {
 
 
 
-              validate_input()
-              
-              
-                
+            validate_input()
 
 
-              tryCatch(
-                {
-                  plot_data()[[i]] %>%
-                    subplot(
-                      titleX = TRUE,
-                      titleY = TRUE,
-                      shareX = TRUE
-                    )
-                },
 
-                error = function(condition) {
-                  
-                  
-                  validate(
-                    need(
-                      is.null(condition),
-                      message = paste('Sammenligningen er problematisk.', '\n', condition)
-                    )
-                  )
 
-                },
-                warning = function(condition) {
-                  
 
-                  validate(
-                    need(
-                      is.null(input$pt_outcome),
-                      message = paste(
-                        'Ingen relevante outcome(s) valgt. Se:', paste(unique(chose_outcomes()), collapse = ",")
+            tryCatch(
+              {
+
+
+
+                tabsetPanel(
+                  vertical = FALSE,
+                  .list = lapply(
+                    seq_along(plot_data()[[i]]),
+                    function(x) {
+
+
+
+                      tabPanel(
+                        title = str_split(
+                          names(plot_data()[[i]][x]),
+                          pattern =  '_',
+                          simplify = TRUE
+                        )[,2],
+                        # h5(x),
+
+                        column(
+                          width = 12,
+                          fluidRow(
+                            plot_data()[[i]][x]
+                          )
+                        )
+
+
+
+
                       )
+
+
+
+                    }
+                  )
+                )
+
+
+
+                # %>%
+                #   subplot(
+                #     titleX = TRUE,
+                #     titleY = TRUE,
+                #     shareX = TRUE
+                #   )
+              },
+
+              error = function(condition) {
+
+
+                validate(
+                  need(
+                    is.null(condition),
+                    message = paste('Sammenligningen er problematisk.', '\n', condition)
+                  )
+                )
+
+              },
+              warning = function(condition) {
+
+
+                validate(
+                  need(
+                    is.null(input$pt_outcome),
+                    message = paste(
+                      'Ingen relevante outcome(s) valgt. Se:', paste(unique(chose_outcomes()), collapse = ",")
                     )
                   )
-                }
-              )
+                )
+              }
+            )
 
 
-            }
-          )
+          }
+        )
 
 
 
@@ -579,8 +692,6 @@
 
       }
     )
-      
-      
 
         output$download_files <- downloadHandler(
 

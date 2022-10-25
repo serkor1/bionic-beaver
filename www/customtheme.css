@@ -96,6 +96,13 @@ tr {
   data-bs-interval: "false";
 }
 
+#id_placeholder {
+  color: #6c757d;
+}
+
+.dark-mode #id_placeholder {
+  color: white;
+}
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
@@ -175,3 +182,5 @@ tr {
 .dropdown-header {
     font-size: 18px;
 }
+
+

@@ -46,7 +46,7 @@
             marker = list(
               color = intervention_color
             ),
-            name = 'Valgt Gruppe'
+            name = 'Valgt sygdomsgruppe'
           ) %>% 
             # Add control gorup
             # trace.
