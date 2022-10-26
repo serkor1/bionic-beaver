@@ -1,5 +1,7 @@
+[![](https://img.shields.io/badge/Shiny-shinyapps.io-blue?style=flat&labelColor=white&logo=RStudio&logoColor=blue)](https://vive.shinyapps.io/BISundhed/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 ![Maintainer](https://img.shields.io/badge/Maintainer-Serkan_Korkmaz-blue)
+
 
 ### Beregner til Investeringer i Sundhed
 
@@ -29,7 +31,7 @@ install.packages('devtools')
 install.packages('renv')
 ```
 
-Når du har installeret `devtools` og `packrat`, kan du installere alle biblioteker ved at,
+Når du har installeret `devtools` og `renv`, kan du installere alle biblioteker ved at,
 
 ```R
 renv::restore()

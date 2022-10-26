@@ -58,3 +58,6 @@ output.zip
 /www/documentation/*.yml
 
 packrat/lib*/
+
+
+README.html
