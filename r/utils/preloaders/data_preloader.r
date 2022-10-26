@@ -341,7 +341,17 @@ preload_data <- function(
     
     message("Preloaded Data (Developper Mode)")
     
-    data_list <- generate_data()
+    data_list <- list(
+      
+      # model 1 data;
+      model1 = .load_data(
+        path = str_replace(path[1],pattern = 'input', replacement = 'sample')
+      ),
+      # model 2 data;
+      model2 = .load_data(
+        path = str_replace(path[1],pattern = 'input', replacement = 'sample')
+      )
+    )
     
   } else {
     
@@ -363,32 +373,32 @@ preload_data <- function(
       )
     )
     
-    # check for empty lists
-    # and replace with synthetic data
-    increment <- 0
-    data_list <- map(
-      data_list,
-      function(element) {
-        
-        increment <<- increment + 1
-        
-        
-        if (is_empty(element)) {
-          
-          
-          
-          generate_data()[[increment]]
-          
-          
-        } else {
-          
-          element
-          
-        }
-        
-        
-      }
-    )
+    # # check for empty lists
+    # # and replace with synthetic data
+    # increment <- 0
+    # data_list <- map(
+    #   data_list,
+    #   function(element) {
+    #     
+    #     increment <<- increment + 1
+    #     
+    #     
+    #     if (is_empty(element)) {
+    #       
+    #       
+    #       
+    #       generate_data()[[increment]]
+    #       
+    #       
+    #     } else {
+    #       
+    #       element
+    #       
+    #     }
+    #     
+    #     
+    #   }
+    # )
     
     
     

@@ -27,7 +27,9 @@ suppressPackageStartupMessages(
 
 
 # Developper Mode;
-developper_mode = FALSE
+developper_mode = as.logical(
+  length(list.files(pattern = 'input')) == 0
+)
 
 # Setup script; ####
 # 

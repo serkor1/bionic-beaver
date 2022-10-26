@@ -1,0 +1,10 @@
+weight,assignment,uddannelse,allocator,outcome
+0.122658191666142,Aldersgruppe_3-6 år,Ufaglært,Sygedage_Delt,194.63
+0.246430665032387,Aldersgruppe_3-6 år,Faglært,Sygedage_Delt,552.4
+0.630911143301471,Aldersgruppe_3-6 år,Videregående uddannelse,Sygedage_Delt,852.41
+0.122658191666142,Aldersgruppe_3-6 år,Ufaglært,Sygedage_Lavest uddannede,89.78
+0.246430665032387,Aldersgruppe_3-6 år,Faglært,Sygedage_Lavest uddannede,350.56
+0.630911143301471,Aldersgruppe_3-6 år,Videregående uddannelse,Sygedage_Lavest uddannede,581.97
+0.122658191666142,Aldersgruppe_3-6 år,Ufaglært,Sygedage_Højest uddannede,299.48
+0.246430665032387,Aldersgruppe_3-6 år,Faglært,Sygedage_Højest uddannede,754.23
+0.630911143301471,Aldersgruppe_3-6 år,Videregående uddannelse,Sygedage_Højest uddannede,1122.86

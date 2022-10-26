@@ -1,0 +1,12 @@
+class;subclass;price
+Primær Sektor;Almen Praksis;140
+Primær Sektor;Anden Speciale;162
+Primær Sektor;Fysioterapi;304
+Primær Sektor;Psykiater;830
+Primær Sektor;Psykolog;596
+psykiatrien;Ambulant;1987
+psykiatrien;Indlæggelse;3970
+psykiatrien;Skadestue;1987
+somatikken;Ambulant;2891
+somatikken;Indlæggelse;12201
+somatikken;Skadestue;2288
