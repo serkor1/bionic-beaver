@@ -8,11 +8,19 @@
 
 .load_model1cost <- function() {
   
+  
+  # conditional path
+  path <- fifelse(
+    developper_mode,"sample/parameters/model1/", "input/parameters/model1/"
+  )
+  
+  
   # load data
   data <- rbindlist(
     map(
       list.files(
-        "input/parameters/model1/",
+        #"input/parameters/model1/",
+        path = path,
         full.names = TRUE
       ),
       fread
