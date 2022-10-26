@@ -15,9 +15,12 @@
     ) {
   
   
-  
-  
-  
+  value <- fifelse(
+    alternate,
+    '(omkostninger)',
+    '(antal)'
+    
+  )
   
   map(plot_list,
       function(plot) {
@@ -28,7 +31,20 @@
               
               # Generate Y axis Text; #####
               get_data <- plotly_data(plot)
-
+              
+              
+              # 1) Get allocator
+              
+              get_allocator <- unique(get_data$allocator)
+              
+              
+              yaxis_text <- fcase(
+                get_allocator %chin% outcome[[1]]$`Primær sektor`, 'Gennemsnitlige ydelser pr. person',
+                get_allocator %chin% outcome[[1]]$Psykiatrien, 'Gennemsnitlige sengedage pr. person',
+                get_allocator %chin% outcome[[1]]$Somatikken, 'Gennemsnitlige sengedage pr. person',
+                get_allocator %chin% outcome[[1]]$`Receptpligtig medicin`, 'Gennemsnitlige recepter pr. person',
+                default = 'Gennemsnitlige uger pr. person'
+              )
 
               get_allocator <- str_to_sentence(str_remove(
                 unique(get_data$allocator),
@@ -36,7 +52,7 @@
               ))
               
               
-              
+               
 
               # yaxis_text <- fcase(
               #   inherits(get_data, c("primary_care")),
@@ -67,13 +83,17 @@
               #   )
               # )
               
-              yaxis_text <- extract_name(
-                get_data,
-                alternate = alternate
-              )
+              # yaxis_text <- extract_name(
+              #   get_data,
+              #   alternate = alternate
+              # )
               
-              yaxis_text <- paste(yaxis_text, '\n',
-                                  get_allocator)
+              yaxis_text <- paste(
+                yaxis_text, '\n',
+                get_allocator,
+                value
+                )
+              
               
               
               
@@ -160,6 +180,12 @@
                     x1 = 0,
                     layer = "above"
                   )
+                ),
+                
+                modebar= list(
+                  bgcolor='transparent',
+                  color='gray',
+                  activecolor='darkgray'
                 )
                 
               )

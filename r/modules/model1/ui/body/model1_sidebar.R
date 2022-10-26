@@ -19,7 +19,7 @@
       hr(),
       
       
-      p('For at starte modellen, skal der vælges en sygdomsgruppe og en, eller flere, outcomes. Denne gruppe kan sammenlignes med den generelle befolkningeller en specifik sygdomsgruppe'),
+      p('For at starte modellen skal der vælges en sygdomsgruppe og en eller flere outcomes. Denne gruppe kan sammenlignes med den generelle befolkningeller en specifik sygdomsgruppe'),
       
       p(strong('Bemærk:'), 'Det er muligt at vælge demografiske karakteristika.')
     )
@@ -138,6 +138,11 @@
       multiple = TRUE,
       selectAllText = "Vælg alle",
       deselectAllText = "Nulstil"
+    ) %>% popover(
+      content = 'Vælg én, eller flere, outcome efter behov.',
+      title = 'Valg af outcome(s)',
+      placement = 'bottom'
+      
     ),
     
     
@@ -282,7 +287,7 @@
     colorPickr(
       inputId = ns("col_intervention"),
       preview = TRUE,
-      label = 'Intevention',
+      label = 'Sygdomsgruppe',
       selected = '#4682B4',
       update = 'changestop'
     ),
@@ -290,7 +295,7 @@
     colorPickr(
       inputId = ns("col_control"),
       preview = TRUE,
-      label = 'Control',
+      label = 'Sammenligningsgruppe',
       selected = '#FFA500',
       update = 'changestop'
     ),

@@ -295,8 +295,9 @@ second_dataserver <- function(id, data_list){
             width = 1.5)
           )
       ) %>% layout(
-        title = 'Gennemsnitlig Produktionstab',
+        title = list(text = 'Gennemsnitlig produktionstab', y = 0.95),
         xaxis = list(title = ''),
+        autosize = TRUE,
         yaxis = list(title = 'Produktionstab pr. barn'),
         legend = list(
           title = list(text = '<b> Hvem tager sygedagen? </b>'),
@@ -307,7 +308,12 @@ second_dataserver <- function(id, data_list){
           color = fifelse(get_switch(), 'white', 'black')
         ),
         paper_bgcolor = '#ffffff00',
-        plot_bgcolor='#ffffff00'
+        plot_bgcolor='#ffffff00',
+        modebar= list(
+          bgcolor='transparent',
+          color='gray',
+          activecolor='darkgray'
+          )
       )
       
       

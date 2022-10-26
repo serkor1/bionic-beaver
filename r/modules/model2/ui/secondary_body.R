@@ -18,7 +18,7 @@
   # genereate sidebar; #####
   gen_sidebar <- bs4CardSidebar(
     width       = 30,
-    icon        = span("Parametre og Indstillinger", icon("cog")),
+    icon        = span("Parametre og indstillinger", icon("cog")),
     #background  = "#bfc9d1",
     startOpen   = TRUE,
     easyClose   = TRUE,
@@ -208,7 +208,7 @@ model2UI_body <- function(id, output) {
         
             downloadButton(
               outputId = ns('download_files'),
-              label = 'Download Materiale'
+              label = 'Download materiale'
             ),
             modalButton(label = 'Luk', icon = icon('close'))
           
@@ -275,7 +275,7 @@ model2UI_body <- function(id, output) {
 
             checkboxGroupButtons(
               inputId = ns('pt_who'),
-              label = "Hvem tager Sygedagen?",
+              label = "Hvem tager sygedagen?",
               choices = c("Delte sygedage" = 'Delt', "Højest uddannede" = 'Højest', "Lavest uddannede" = 'Lavest'),
               justified = TRUE,
               size = 'sm',

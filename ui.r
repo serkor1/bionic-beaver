@@ -5,7 +5,7 @@
 
 
 bs4DashPage(
-  help = TRUE,
+  help = FALSE,
   freshTheme = create_theme(
     # bs4dash_vars(
     #   navbar_light_color = '#343a40'
@@ -44,6 +44,7 @@ bs4DashPage(
   # title on Navigation bar
   # on browser
   title = "Beregner til Investeringer i Sundhed",
+  scrollToTop = TRUE,
   
   # header; ####
   header = bs4DashNavbar(
@@ -55,18 +56,6 @@ bs4DashPage(
       opacity = 1,
       image = 'heart-pulse-thin.svg',
       title = 'Dashboard'
-      # title = column(
-      #   width = 12,
-      #   offset = 2,
-      #   tags$div(
-      #     
-      #     span(
-      #       icon("dashboard", verify_fa = FALSE),
-      #       strong("Dashboard")
-      #     )
-      #   )
-      #   
-      #   )
       )
   ),
   
@@ -94,7 +83,7 @@ bs4DashPage(
         startExpanded = TRUE,
         icon = icon("calculator", verify_fa = FALSE,lib = 'font-awesome'),
         menuSubItem(
-          text = "Målgruppemodel",
+          text = "Målgruppemodellen",
           tabName = "model_1",
           icon = icon('angles-right', verify_fa = FALSE)
         ),
@@ -106,19 +95,22 @@ bs4DashPage(
       ),
       
       bs4SidebarMenuItem(
-        text = "Data",
+        text = "Dokumentation",
         startExpanded = TRUE,
         icon = icon("sitemap", verify_fa = FALSE,lib = 'font-awesome'),
-        menuSubItem(
-          text = "Model dokumentation",
-          tabName = 'documentation',
-          icon = icon('book-heart', verify_fa = FALSE)
-        ),
+        
+        # menuSubItem(
+        #   text = "Model dokumentation",
+        #   tabName = 'documentation',
+        #   icon = icon('book-heart', verify_fa = FALSE)
+        # ),
+        
         menuSubItem(
           text = "VIVEs dokumentation",
           tabName = "report",
           icon    = icon('books', verify_fa = FALSE)
         )
+        
         
         # ,
         # menuSubItem(
@@ -210,8 +202,9 @@ bs4DashPage(
         target = "_blank"
       ),
       a(
-        img(src = "vive.png",height = "25px", width = "50px"),
+        img(src = "VIVE_CLEAN_WHITE.png",height = "25px", width = "50px"),
         href = "https://www.vive.dk/da/",
+        id    = 'vive_id',
         target = "_blank"
       )
     )

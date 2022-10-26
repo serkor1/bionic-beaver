@@ -16,9 +16,11 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
-  
+  # On start up:
+  # 
+  # Click help_switch otherwsie 
+  # its bugged.
+  shinyjs::click(id = 'help_switch')
   
   removeCssClass(
     selector = '.brand-image',

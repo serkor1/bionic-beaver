@@ -4,7 +4,7 @@ BIS er en webbaseret applikation, der giver brugerne mulighed for at foretage sa
 >Beregner for Investeringer i Sundhed (BIS) er udviklet til at kunne give et bud på de økonomiske konsekvenser ved sundhedsrettede tiltag.
 >BIS følger dermed i kølvandet på tidligere beregnere som Den Socialøkonomiske Investeringsmodel (SØM) og Regnemodel for Uddannelsesinvesteringer (REFUD).
 >
->Michael Bech, VIVE Sundhed
+>Mickael Bech, VIVE Sundhed
 
 Beregneren kan anvendes af brugere med interesse for, hvad sundhedsrettede tiltag kan betyde økonomisk i form af potentielt sparede udgifter til behandling i sundhedsvæsenet og potentielt forbedrede arbejdsmarkedsmuligheder.
 

@@ -138,6 +138,9 @@
               c("class", "subclass") := tstrsplit(tmp, "_", fixed = TRUE)
               ,
             ][,.(class, subclass),])
+            
+            
+            
 
             
           }
@@ -154,6 +157,7 @@
       choices <- unique(
         choices
         )
+      
       
       
       # The actual value of choice
@@ -237,9 +241,11 @@
     chars[[1]],
     function(x) {
       
-      setNames(
+      x <- setNames(
         x, str_to_sentence(names(x))
       )
+      
+      sort(x)
       
     }
   )
@@ -248,9 +254,25 @@
     names(chars[[1]])
   )
   
+  assignment <- .get_outcomes(data_list, variable = "assignment")
+  
+  
+  assignment[[1]] <- map(
+    assignment[[1]],
+    function(x) {
+      
+      # x <- setNames(
+      #   x, str_to_sentence(names(x))
+      # )
+      
+      sort(x)
+      
+    }
+  )
+  
   list(
     chars      = chars,
-    assignment = .get_outcomes(data_list, variable = "assignment"),
+    assignment = assignment,
     outcome    = .get_outcomes(data_list, variable = "allocator")
   )
   

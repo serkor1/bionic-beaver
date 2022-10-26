@@ -76,7 +76,6 @@ extract_name <- function(
       
       alternate <- isTRUE(alternate)
       
-      
       output <- fcase(
         inherits(data_list, c("primary_care")),
         fifelse(
@@ -129,7 +128,7 @@ extract_name <- function(
           inherits(data_list, c("psychiatric_care")), 'Psykiatrisk hospitalskontakt',
           inherits(data_list, c("somatic_care")), 'Somatisk hospitalskontakt',
           inherits(data_list, c("transfers")), 'Indkomst',
-          default = 'Præparatforbrug'
+          default = 'Receptpligtig medicin'
         )
       }
       

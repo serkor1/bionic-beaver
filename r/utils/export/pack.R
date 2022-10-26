@@ -28,7 +28,6 @@
   # for storing data uniquely
   get_name <- names(data_list)
   
-  
   name_iterator <- 0
   
   map(
@@ -72,29 +71,53 @@
           
           # 3) Rename columns
           # by reference
+          setcolorder(
+            data,
+            c("x",
+              "allocator",
+              'intervention',
+              'control',
+              'difference',
+              'effect',
+              'cintervention',
+              'cdifference'
+            )
+          )
+          
           setnames(
             data,
-            old = c('x', 'intervention', 'control', 'cintervention', 'difference', 'cdifference', 'effect'),
+            old = c("x",
+                    "allocator",
+                    'intervention',
+                    'control',
+                    'difference',
+                    'effect',
+                    'cintervention',
+                    'cdifference'
+            ),
             new = c(
-              'tid',
+              'År',
+              'Kategori',
               intervention_name,
-              fifelse(str_detect(control_name, pattern = '[:alpha:]+'), control_name, 'Population'),
-              paste(intervention_name, '(Kontrafaktisk)'),
-              'forskel',
-              'forskel (Kontrafaktisk)',
-              'Forventet Effekt'
-              )
+              fifelse(str_detect(control_name, pattern = '[:alpha:]+'), control_name, 'Den generelle befolkning'),
+              'Faktisk forskel',
+              'Forventet effekt (%)',
+              paste(intervention_name, '(kontrafaktisk)'),
+              'Forventet forskel'
+              
+              ),
+            skip_absent = TRUE
           )
           
           # 4) String to title
-          colnames(data) <- str_to_title(
-            colnames(data)
-          )
+          # colnames(data) <- str_to_title(
+          #   colnames(data)
+          # )
           
-          sheet <- unique(data$Allocator)
+          sheet <- unique(data$Kategori)
           
           write_ods(
-            x = data[,Allocator := NULL,],
+            x = data,
             path = paste0(
               directory,'/',
               get_name[name_iterator],
