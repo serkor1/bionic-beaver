@@ -73,18 +73,39 @@ healthcare_price <- rbind(
 )
 
 
+if (developper_mode) {
+  
+  fwrite(
+    healthcare_price,
+    file = "sample/parameters/model1/healtcare_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+  
+  fwrite(
+    healthcare_price,
+    file = "www/documentation/resources/healtcare_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+} else {
+  
+  fwrite(
+    healthcare_price,
+    file = "input/parameters/model1/healtcare_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+  
+  fwrite(
+    healthcare_price,
+    file = "www/documentation/resources/healtcare_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+}
 
-fwrite(
-  healthcare_price,
-  file = "input/parameters/model1/healtcare_price.csv",
-  sep = ";",
-  row.names = FALSE
-)
-
-
-fwrite(
-  healthcare_price,
-  file = "www/documentation/resources/healtcare_price.csv",
-  sep = ";",
-  row.names = FALSE
-)

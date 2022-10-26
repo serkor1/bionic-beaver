@@ -27,18 +27,47 @@ transfer_price <- data.table(
 
 
 
-fwrite(
-  transfer_price,
-  file = "input/parameters/model1/transfer_price.csv",
-  sep = ";",
-  row.names = FALSE
-)
 
 
 
-fwrite(
-  transfer_price,
-  file = "www/documentation/resources/transfer_price.csv",
-  sep = ";",
-  row.names = FALSE
-)
+
+
+if (developper_mode) {
+  
+  
+  fwrite(
+    transfer_price,
+    file = "sample/parameters/model1/transfer_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+  
+  
+  fwrite(
+    transfer_price,
+    file = "www/documentation/resources/transfer_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+} else {
+  
+  fwrite(
+    transfer_price,
+    file = "input/parameters/model1/transfer_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+  
+  
+  fwrite(
+    transfer_price,
+    file = "www/documentation/resources/transfer_price.csv",
+    sep = ";",
+    row.names = FALSE
+  )
+  
+}
+

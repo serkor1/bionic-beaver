@@ -26,13 +26,13 @@ git clone https://github.com/serkor1/bionic-beaver.git
 
 ```R
 install.packages('devtools')
-install.packages('packrat')
+install.packages('renv')
 ```
 
 Når du har installeret `devtools` og `packrat`, kan du installere alle biblioteker ved at,
 
 ```R
-packrat::restore()
+renv::restore()
 ```
 
 
