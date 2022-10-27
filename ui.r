@@ -194,13 +194,13 @@ bs4DashPage(
         id     = 'github'),
       # add horizontal space between
       # the links.
-      HTML("&nbsp"),
-      a(
-        icon('book-heart', verify_fa = FALSE),
-        "Dokumentation",
-        href = "documentation/_book/index.html",
-        target = "_blank"
-      ),
+      # HTML("&nbsp"),
+      # a(
+      #   icon('book-heart', verify_fa = FALSE),
+      #   "Dokumentation",
+      #   href = "documentation/_book/index.html",
+      #   target = "_blank"
+      # ),
       a(
         img(src = "VIVE_CLEAN_WHITE.png",height = "25px", width = "50px"),
         href = "https://www.vive.dk/da/",

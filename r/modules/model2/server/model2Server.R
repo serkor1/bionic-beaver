@@ -305,7 +305,7 @@ second_dataserver <- function(id, data_list){
         ),
         font = list(
           size = 14,
-          color = fifelse(get_switch(), 'white', 'black')
+          color = fifelse(get_switch(), '#ffffff','#6c757d')
         ),
         paper_bgcolor = '#ffffff00',
         plot_bgcolor='#ffffff00',

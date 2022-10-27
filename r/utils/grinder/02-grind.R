@@ -1,22 +1,18 @@
-# script: Grinder
-# objective: Create a wrapper function for all related grinder
-# functions.
-# date: 2022-07-29
+# script: 02-grind
+# date: Thu Oct 27 09:02:41 2022
 # author: Serkan Korkmaz
+# objective: Create a class of functions
+# that grinds the picked data for further 
+# manipulation.
 
 
+# model1 grinder; #####
 .model1_grind <- function(
     data_list,
     recipe = list(
       outcome_measure = 'qty', 
       incidence = 1
     )
-    
-    # ,
-    # options = NULL,
-    # allocators = NULL,
-    # chars = NULL,
-    # do_incidence = NULL
 ) {
   
   
@@ -26,28 +22,51 @@
   #' model 1.
   #' 
   #' @param recipe a named list of chosen
-  #' filtering parameters
+  #' filtering parameters on the form:
+  #' @param outcome_measure a chacter vector of length 1, either
+  #' qty or cost.
+  #' @param incidence a numeric vector of length 1, either 1 (Incidence). 
   
   
   # function logic; ####
+  
+  # 1) Generate incidence
+  # indicator according the the 
+  # recipe
+  indicator <- recipe$incidence == 1 # Was recipe$incidence != 0
+  
   data_list <- map(
     data_list,
     .f = function(element) {
       
-      # NOTE: Had class function innit
-      element <- copy(element)
+      # 1) copy the data to avoid
+      # overwriting data in memory.
+      # TODO: This might not necessary be an issue
+      # test this at a later point in time.
+      element <- copy(
+        element
+        )
       
-      # 1) Fill NA values
+      # 2) Fill NA values
       # in the type variables
-      element[str_detect(assignment, 'matched_'), type := recipe$incidence]
+      # NOTE: The function breaks if this
+      # step is missed.
+      # 
+      # Has to be for the assignment variable
+      # containing the matched_ prefix.
+      element[
+        str_detect(assignment, 'matched_'),
+        type := recipe$incidence
+        ]
       
-      # 2) Filter data according
-      # to the recipe
+      # 3) Follow the recipe
+      # by chosing outcome measure, and
+      # if needed be incidence.
       element <- element[
         outcome_type %chin% recipe$outcome_measure 
       ]
       
-      if (recipe$incidence != 0) {
+      if (indicator) {
         
         element <- element[
           type == recipe$incidence
@@ -56,9 +75,14 @@
       }
       
       
-      # 3) Set year to x
+      # 4) Set year to x
       # for normalized approach
-      setnames(element, old = 'year', new = 'x', skip_absent = TRUE)
+      setnames(
+        element,
+        old = 'year',
+        new = 'x',
+        skip_absent = TRUE
+        )
       
       return(
         element
@@ -67,6 +91,8 @@
     }
   )
   
+  
+  # return; ####
   return(
     data_list
   )
@@ -84,11 +110,7 @@
 ) {
   
   
-  #' function information
-  #'
-  #'
-  #'
-  #'
+  # NOTE: This 
   
   
   # global options
@@ -198,11 +220,11 @@ grind <- function(
   
   
   # global function options; #####
-  
+  message('Grinding data')
   
   
   get_char <- chars
-  
+
   has_char <- str_detect(
     paste(get_char, collapse = ""),
     pattern = '[:alpha:]'
@@ -211,7 +233,7 @@ grind <- function(
     isFALSE(alternate), "qty",
     default = "cost"
   )
-  
+
   do_incidence <- fcase(
     isTRUE(do_incidence), 1,
     default = 0
@@ -253,9 +275,10 @@ grind <- function(
   data_list <- structure(
     data_list,
     class = c(
-      master_class, fifelse(
-        !has_char, 'aggregate', 'no_aggregate'
-        )
+      master_class
+      # , fifelse(
+      #   !has_char, 'aggregate', 'no_aggregate'
+      #   )
     )
   )
     

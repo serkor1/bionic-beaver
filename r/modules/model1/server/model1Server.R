@@ -20,34 +20,74 @@
     observeEvent(
       get_switch(),
       {
-        
-        if (isFALSE(get_switch())) {
-          
-          # Dark Mode:
-          updateColorPickr(
-            inputId = 'col_background',
-            value = '#000000',
-            session = session,
-            action = 'enable'
-          )
-          
-          
-          
-        } else {
+        if (get_switch()) {
           
           # Light Mode:
           updateColorPickr(
             inputId = 'col_background',
-            value = '#FFFFFF',
+            value = '#ffffff',
             session = session,
             action = 'enable'
           )
           
+        } else {
+
+          # Dark Mode:
+          updateColorPickr(
+            inputId = 'col_background',
+            value = '#6c757d',
+            session = session,
+            action = 'enable'
+          )
+
         }
+      }
+    )
+    
+    
+    
+    
+    shinyjs::onclick(
+      id = 'col_reset',
+      expr = function(){
+        
+        # 1) define list
+        color_list <- list(
+          c('col_control', '#FFA500'),
+          c('col_background', fifelse(get_switch(), '#ffffff','#6c757d')),
+          c('col_intervention', '#4682B4')
+          
+        )
+        
+        
+        
+        # update colorpickr
+        lapply(
+          color_list,
+          function(x) {
+            
+            message(
+              paste(
+                'id:', x[1], 'col:', x[2]
+              )
+            )
+            
+            updateColorPickr(
+              inputId = x[1],
+              session = session,
+              action  = 'enable',
+              value   = x[2]
+            )
+            
+          }
+        )
         
         
       }
+
     )
+    
+    
     
     
    # reset the value of chosen
@@ -72,10 +112,10 @@
         
       
         
-        # Verbose:
-        # This is mainly to debug, and see how many times 
-        # this expression is called
-        message('Grinding data for model1:\n')
+        # # Verbose:
+        # # This is mainly to debug, and see how many times 
+        # # this expression is called
+        # message('Grinding data for model1:\n')
         
         grinded_data <- pick(
           data_list        = data_list,
@@ -203,7 +243,7 @@
     
     spreaded_data <- reactive({
       
-      message('Inside Spreading')
+      
       
       # 1) Grind data
       out <- spread(grind(
@@ -231,7 +271,6 @@
     # with counterfactuals
     flavored_data <- reactive(
       {
-        message('Inside Falvoring')
         
         # data <- spread(
         #   spreaded_data()
@@ -261,7 +300,7 @@
             input$pt_outcome %chin% outcome[[1]]$`Primær sektor`, 'Primær sundhedssektor',
             input$pt_outcome %chin% outcome[[1]]$Psykiatrien, 'Psykiatrisk hospitalskontakt',
             input$pt_outcome %chin% outcome[[1]]$Somatikken, 'Somatisk hospitalskontakt',
-            default =  'Præparatforbrug'
+            default =  'Receptpligtig medicin'
             
             
             
@@ -295,7 +334,7 @@
       validate(
         need(
           input$pt_target,
-          message = 'Vælg en sygdomsgruppe!'
+          message = 'Vælg en sygdomsgruppe.'
         ),
         need(
           input$pt_outcome,
@@ -622,7 +661,8 @@
           background_color = input$col_background,
           intervention_color = input$col_intervention,
           control_color = input$col_control,
-          alternate = input$do_cost,plot_list = baseline_plot() 
+          alternate = input$do_cost,
+          plot_list = baseline_plot() 
         )
 
     })

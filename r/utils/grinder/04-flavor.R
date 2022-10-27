@@ -19,13 +19,16 @@
   #' This function adds effects to the spreaded data
   #' of model 1.
   #' 
-  #' @param data_list a list of data.tables from the spread
-  #' funtion.
+  #' @param data_list a list of data.tables from model 1.
+  #' has to be spreaded data.
   #' 
   #' @param effect a vector of effects as numerics of length
   #' 5.
-  #' @param match a logical value. Defaults to FALSE. If TRUE
-  #' then the comparision is the population based on matching.
+  #' @param extrapolate logical. FALSE by default. Set to TRUE
+  #' if extrapolation is needed for T+10
+  #' 
+  #' @param allocators A vector of characters of lenght >= 1. The allocators
+  #' are the outcomes desired for analysis.
   
   
   
@@ -51,39 +54,32 @@
   
   
   # function logic; #####
-  counter <- 0
   
+  # 1) Elementwise operations
+  # on the data_list.
   data_list <- map(
-    seq_along(data_list),
-    .f = function(i) {
+    data_list,
+    .f = function(element) {
       
-      counter <<- counter + 1
-      
-      # Set counter to avoid
-      # redundant verbosing
-      if (counter == 1) {
-        
-        message(
-          'Adding flavors!'
-        )
-        
-      }
-      
-      # Copy data to avoid, overwriting
-      # data in memory
-      # TODO: Test with and without
-      data <- copy(
-        data_list[[i]]
+      # 1) Copy the data to avoid
+      # overwriting data in the memory.
+      element <- copy(
+        element
       )
       
       
       
-      data <- data[
+      # 2) Filter data according
+      # to chosen allocators.
+      element <- element[
         allocator %chin% allocators
       ]
       
       
-      if (nrow(data) == 0) {
+      # 3) Check for existing
+      # data.tables with nrow == 0
+      # End the function if TRUE
+      if (nrow(element) == 0) {
         
         return(
           NULL
@@ -91,29 +87,24 @@
         
       }
       
-      
-      
-      
-      # 1) locate relevant 
-      # columns
+      # 4) Locate columns based
+      # on existance and sum
+      # the values
       idx <- which(
         sapply(
-          colnames(data),
+          colnames(element),
           str_detect,
           'control|intervention|population'
         )
       )
       
-      data <- data[
+      element <- element[
         ,
-  
-          lapply(
-            .SD,
-            sum,
-            na.rm =TRUE
-          )
-        
-        
+        lapply(
+          X = .SD,
+          FUN = sum,
+          na.rm = TRUE
+        )
         ,
         by = .(
           x, allocator
@@ -122,15 +113,17 @@
       ]
       
       
-      # If control exists
+      # 5) Check the existance of
+      # control colums - if it exists
+      # then set counter_factual to control.
+      # population otherwise.
       counter_factual <- fifelse(
-        c('control') %chin%  colnames(data),
+        c('control') %chin%  colnames(element),
         yes = 'control',
         no = 'population'
       )
       
-      
-      data[
+      element[
         ,
         `:=`(
           difference = rowSums(
@@ -142,11 +135,17 @@
         ,
       ]
       
-      
-      data[
-        x > 0,
+      # 6) Add effects to the data
+      # by reference and calculate
+      # counterfactual values
+      # setting the max value to 0.
+      element[
+        x > 0
+        ,
         `:=`(
-          effect = (effect/100)
+          effect = (
+            effect/100
+            )
         )
         ,
         by = .(allocator)
@@ -164,30 +163,38 @@
       ][
         ,
         cdifference := rowSums(
-          cbind(-get(counter_factual), cintervention)
+          cbind(
+            -get(counter_factual),
+            cintervention
+            )
         )
         ,
         by = .(allocator)
       ][
-        x == 0,
+        x == 0
+        ,
         cintervention := intervention
       ]
-
-
+      
+      # 7) Determine wether extrapolation
+      # is chosen and implement if TRUE
       if (extrapolate) {
 
-        # Extrapolate the data
-        # such that it extends T+10
-
         # 1) Extend data by
-        # outcome
-        data <- rbindlist(
+        # outcome and do rbindlist
+        # as it is faster than rbind.
+        element <- rbindlist(
           fill = TRUE,
           use.names = TRUE,
-          list(data,
-
+          list(
+            # Full element
+            element,
+            
+            # Generate data based on chosen
+            # allocators and extend
+            # x to 15.
             data.table(
-              allocator = unique(data$allocator)
+              allocator = unique(element$allocator)
             )[
               ,
               .(
@@ -196,21 +203,25 @@
               ,
               by = allocator
             ]
-
           )
-
         )
         
-        
-        data[
+        # 2) Carry the last observed value
+        # forward which is T = 5.
+        element[
           ,
           `:=`(
-            cdifference = nafill(type = 'locf', x = cdifference) 
+            cdifference = nafill(
+              type = 'locf',
+              x = cdifference
+            ) 
           )
           ,
         ]
 
-        data[
+        # 3) Discount all values
+        # according to x setting T = 6 to 1.
+        element[
           x > 5
           ,
           `:=`(
@@ -228,23 +239,22 @@
       
       
       
-      return(data)
+      return(element)
       
       
       
     }
   )
   
+  # set names of the list
+  # to retain the names for
+  # packing and wrapping the data
   names(data_list) <- list_names
+  
   # return; ####
-  
-  
-  
   return(
     data_list
   )
-  
-  
 }
 
 
@@ -336,22 +346,23 @@ flavor <- function(
   #' Wrapper function of added effects (flavors)
   #' depends on the class of the @param data_list
   
-  is_export <- inherits(data_list, 'export')
+  # is_export <- inherits(data_list, 'export')
+  # 
+  # message(
+  #   paste('Is Export:', is_export)
+  # )
+  # 
+  # if (is_export) {
+  #   
+  #   message("in export")
+  #   
+  #   id_data   <- data_list[[2]]
+  #   data_list <- data_list[[1]]
+  #   
+  #   
+  # }
   
-  message(
-    paste('Is Export:', is_export)
-  )
-  
-  if (is_export) {
-    
-    message("in export")
-    
-    id_data   <- data_list[[2]]
-    data_list <- data_list[[1]]
-    
-    
-  }
-  
+  message('Flavoring data')
   
   
   
@@ -380,16 +391,16 @@ flavor <- function(
     
   }
   
-  if (is_export) {
-    
-    
-    
-    data_list <- list(
-      data_list,
-      id_data
-    )
-    
-  }
+  # if (is_export) {
+  #   
+  #   
+  #   
+  #   data_list <- list(
+  #     data_list,
+  #     id_data
+  #   )
+  #   
+  # }
   
   
   

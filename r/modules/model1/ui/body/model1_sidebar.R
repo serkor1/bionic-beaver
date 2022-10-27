@@ -289,7 +289,7 @@
       preview = TRUE,
       label = 'Sygdomsgruppe',
       selected = '#4682B4',
-      update = 'changestop'
+      update = 'save'
     ),
     
     colorPickr(
@@ -297,7 +297,7 @@
       preview = TRUE,
       label = 'Sammenligningsgruppe',
       selected = '#FFA500',
-      update = 'changestop'
+      update = 'save'
     ),
     
     
@@ -308,7 +308,7 @@
       inputId = ns("col_background"),
       preview = TRUE,
       label = 'Baggrundsfarve',
-      selected = '#FFFFFF',
+      selected = '#ffffff',
       update = c('save'),
     ),
    

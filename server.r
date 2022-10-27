@@ -1,206 +1,16 @@
-server <- function(input, output, session) {
-  
-  # On server start; ####
-  
-  # Load the front page as a modal
-  frontUI()
-  
-  # Load the main model
-  # for the user
-  ui <- model1UI(
-    id = "model1"
-  )
-  
-  output$gen_body <- renderUI({
-    ui$body
-  })
-  
-  
-  # On start up:
-  # 
-  # Click help_switch otherwsie 
-  # its bugged.
-  shinyjs::click(id = 'help_switch')
-  
-  removeCssClass(
-    selector = '.brand-image',
-    class = 'img-circle elevation-3'
-  )
-  
-  # Start of Server Logic;
-  
-  observe({
-    
-    message(
-      paste(
-        "Chosen Tab:", paste(input$tab)
-      )
-    )
-    
-  })
-  
-  
-  shinyjs::onclick(
-    id = 'tab-export_data',
-    function() {
-      
-      temp <- exportUI(
-        id = 'exporter'
-      )
-      
-      
-      showModal(
-        ui = temp$body
-      )
-      
-      
-    }
-    
-  )
-  
-  shinyjs::onclick(
-    id = 'tab-model_2',
-    function() {
-      
-      temp <- model2UI(
-        id = "model2"
-      )
-      
-      
-      showModal(
-        ui = temp$body
-      )
-      
-      
-    }
-    
-  )
-  
-  shinyjs::onclick(
-    id = 'tab-documentation',
-    function() {
-      
-      runjs(
-        'window.open(
-        "documentation/_book/index.html"
-        )'
-      )
-      
-      
-    }
-    
-  )
-  
-  
-  
-  
-  shinyjs::onclick(
-    id = 'tab-model_1',
-    function() {
-      
-      ui <- model1UI(
-        id = "model1"
-      )
-      
-      output$gen_body <- renderUI({
-        ui$body
-      })
-      
-    }
-  )
-  
-  
-  
-  
-  
-  
-  # UI rendering; #####
-  # observeEvent(
-  #   input$tab,
-  #   ignoreInit = FALSE,
-  #   ignoreNULL = FALSE,
-  #   {
-  #     
-  #     if (input$tab %chin% c('front_page', 'model_1')){
-  #       
-  #       ui <- frontUI(
-  #         id = "front"
-  #       )
-  #       
-  #       if (input$tab != 'front_page') {
-  #         
-  #         if (input$tab == 'model_1'){
-  #           
-  #           ui <- model1UI(
-  #             id = "model1"
-  #           )
-  #           
-  #         }
-  #       }
-  #       
-  #       output$gen_body <- renderUI({
-  #         ui$body
-  #       })
-  #       
-  #     }
-  #     
-  #     
-  #     
-  #     
-  #     
-  #   }
-  # )
-  
- 
-  
-  
-  
-  
-  
-  
-  # server modules; #####
-  .data_downloader(
-    'exporter'
-  )
-  
-  
-  
-  .model1server_output(
-    id = "model1",
-    data_list = data_list[[1]],get_switch = reactive(input$customSwitch1)
-  )
-  
-  
-  .model1server_choices(
-    id = 'model1'
-  )
+# script: server logic
+# date: Thu Oct 27 11:28:31 2022
+# author: Serkan Korkmaz
+# objective: Generate a unified server
+# for the applikation
 
+
+server <- function(
+    input,
+    output,
+    session
+){
   
-    .model1server_warnings(
-      id = 'model1'
-    )
-  
-    
-  # .model2server_choices(id = 'model2')
-  # 
-  # 
-  # 
-  # 
-  # 
-  # .model2server_plot(
-  #   id = 'model2',
-  #   data_list = data_list[[2]]
-  # )
-  
-  
-    .model2server(id = 'model2', data_list = data_list[[2]],get_switch = reactive(input$customSwitch1))
-  
-  
-  
-  
-  
-  # NOTE: 
-  # 
   # The Controlbar is disabled and hidden
   # as bs4dash is bugged once changin skin color
   # without skinselector()
@@ -211,10 +21,127 @@ server <- function(input, output, session) {
     'controlbar-toggle'
   )
   
+  # Remove circle from the
+  # icon to force a flat
+  # image.
+  removeCssClass(
+    selector = '.brand-image',
+    class = 'img-circle elevation-3'
+  )
+  
+  
+  # Click help_switch otherwsie 
+  # its bugged.
+  # NOTE: This does not do anything
+  # as of now.
+  shinyjs::click(
+    id = 'help_switch'
+    )
+  
+  # On server start; ####
+  
+  # Load the front page as a modal
+  frontUI()
+  
+  # Load the main model
+  # for the user such that 
+  # it is not dependent on
+  # buttons pressed.
+  ui <- model1UI(
+    id = "model1"
+  )
+  
+  output$gen_body <- renderUI(
+    {
+      ui$body
+    }
+  )
+  
+
+  # Start of Server Logic; ####
+  
+  shinyjs::onclick(
+    id = 'tab-model_2',
+    function() {
+      ui <- model2UI(
+        id = "model2"
+      )
+      showModal(
+        ui = ui$body
+      )
+    }
+  )
+  
+  # The in-app documentation
+  # is removed for now. Will be
+  # implemented at a later time.
+  # shinyjs::onclick(
+  #   id = 'tab-documentation',
+  #   function() {
+  #     
+  #     runjs(
+  #       'window.open(
+  #       "documentation/_book/index.html"
+  #       )'
+  #     )
+  #     
+  #     
+  #   }
+  #   
+  # )
+  
+  # NOTE: This section
+  # is disabled ant the id is currently
+  # a boomer-proof button
+  # shinyjs::onclick(
+  #   id = 'tab-model_1',
+  #   function() {
+  # 
+  #     ui <- model1UI(
+  #       id = "model1"
+  #     )
+  # 
+  #     output$gen_body <- renderUI({
+  #       ui$body
+  #     })
+  # 
+  #   }
+  # )
+  
+  # Model 1 module:
+  .model1server_output(
+    id = "model1",
+    data_list = data_list[[1]],
+    get_switch = reactive(
+      input$customSwitch1
+    )
+  )
+  
+  
+  .model1server_choices(
+    id = 'model1'
+  )
+  
+  
+  .model1server_warnings(
+    id = 'model1'
+  )
+  
+  # Model2 module:
+  .model2server(
+    id = 'model2',
+    data_list = data_list[[2]],
+    get_switch = reactive(input$customSwitch1)
+  )
+  
+  
+  
+  
+  
   
   waiter::waiter_hide()
   
-  # end of server logic;
+  # end of server logic; ####
   
 }
 

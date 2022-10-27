@@ -1,8 +1,8 @@
-# script: scr_pick
+# script: 01-scr_pick
 # date: Sat Oct 22 18:56:50 2022
 # author: Serkan Korkmaz
-# objective: Create a class of functions
-# that picks data for further
+# objective: Create a class of picker functions
+# that filters the chosen assignments.
 
 # model 1 pick; ####
 
@@ -17,12 +17,25 @@
   #' 
   #' @param data_list a list of data.tables for
   #' model 1.
+  #' 
+  #' @param intervention a character vector of length 1.
+  #' has to be provided.
+  #' 
+  #' @param control a character vector of length 1. NULL
+  #' by default which choses the general population.
+  
+  # function logic; #####
   
   # 1) Extract the class of the
-  # list for appending at return
+  # list for appending at return and
+  # indicator for chosen control
   extract_class <- class(data_list)
+  indicator     <- isTRUE(
+    str_detect(control, '[:alpha:]+')
+    )
   
-  
+  # 2) Elementwise picking
+  # of intervention and control.
   data_list <- map(
     data_list,
     function(element) {
@@ -46,8 +59,18 @@
         assignment_factor := fcase(
           assignment %chin% intervention, 'intervention',
           assignment %chin% control, 'control',
+          
+          # If Control is NULL (Empty), then 
+          # default will come in play and
+          # output control for the matched
+          # population. Otherwise it is
+          # called population such that it can be
+          # plotted and presented along side 
+          # the chosen control.
           default = fifelse(
-            isTRUE(str_detect(control, '[:alpha:]+')), 'population', 'control'
+            indicator,
+            yes = 'population',
+            no = 'control'
           )
         )
         ,
@@ -61,6 +84,7 @@
   )
   
   
+  # return statement; ####
   return(
     structure(
       data_list,
@@ -80,6 +104,20 @@ pick <- function(
     control   = NULL
 ) {
   
+  #' function information
+  #' 
+  #' 
+  #' @param data_list a list of data.tables for
+  #' model 1.
+  #' 
+  #' @param intervention a character vector of length 1.
+  #' has to be provided.
+  #' 
+  #' @param control a character vector of length 1. NULL
+  #' by default which choses the general population.
+  message('Picking data')
+  
+  # function logic; ####
   if (inherits(data_list, 'model1')) {
     
     data_list <- .model1_pick(
@@ -91,7 +129,7 @@ pick <- function(
     
   }
   
-  
+  # return statement; #####
   return(
     data_list
   )

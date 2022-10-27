@@ -253,6 +253,7 @@ spread <- function(
   #' @returns a list of spreaded data tables.
   
   
+  message('Spreading data')
   
   # function preliminaries; #####
   export <- fcase(

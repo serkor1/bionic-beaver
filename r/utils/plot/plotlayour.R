@@ -8,7 +8,7 @@
 
 .layout_model1 <- function(
     plot_list,
-    background_color = 'white',
+    background_color = 'darkgray',
     intervention_color = '#4682B4',
     control_color = '#FFA500',
     alternate = TRUE
@@ -258,7 +258,7 @@
 
 plot_layout <- function(
     plot_list,
-    background_color = 'white',
+    background_color = 'darkgray',
     intervention_color = '#4682B4',
     control_color = '#FFA500',
     alternate = FALSE
