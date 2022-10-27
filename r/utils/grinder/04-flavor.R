@@ -217,6 +217,7 @@
             ) 
           )
           ,
+          by = allocator
         ]
 
         # 3) Discount all values
