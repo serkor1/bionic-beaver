@@ -1,5 +1,5 @@
 class;subclass;price
-Overførsel;Fleksjob;3913
-Overførsel;Førtidspension;3700
-Overførsel;Midlertidig Overførselsindkomst;2989
-Overførsel;Selvforsørgende;9549
+Indkomst;Fleksjob;3913
+Indkomst;Førtidspension;3700
+Indkomst;Midlertidig overførselsindkomst;2989
+Indkomst;Selvforsørgende;9549

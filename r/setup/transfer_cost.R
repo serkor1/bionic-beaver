@@ -7,13 +7,13 @@
 # transfer cost; #####
 transfer_price <- data.table(
   class = rep(
-    'Overførsel',
+    'Indkomst',
     4
   ),
   subclass = c(
     'Fleksjob',
     'Førtidspension',
-    'Midlertidig Overførselsindkomst',
+    'Midlertidig overførselsindkomst',
     'Selvforsørgende'
   ),
   price = c(

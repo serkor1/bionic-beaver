@@ -9,11 +9,11 @@
 
 primary_sector <- data.table(
   class = c(
-    rep('Primær Sektor',5)
+    rep('Primær sektor',5)
     ),
   subclass = c(
-    'Almen Praksis',
-    'Anden Speciale',
+    'Almen praksis',
+    'Anden speciale',
     'Fysioterapi',
     'Psykiater',
     'Psykolog'
@@ -31,7 +31,7 @@ primary_sector <- data.table(
 # psychiatric care; #####
 psychiatric_care <- data.table(
   class = c(
-    rep('psykiatrien', 3)
+    rep('Psykiatrien', 3)
   ),
   subclass = c(
     'Ambulant',
@@ -49,7 +49,7 @@ psychiatric_care <- data.table(
 # somatic care; #####
 somatic_care <- data.table(
   class = c(
-    rep('somatikken', 3)
+    rep('Somatikken', 3)
   ),
   subclass = c(
     'Ambulant',
