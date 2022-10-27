@@ -296,7 +296,7 @@
       {
         unique(
           fcase(
-            input$pt_outcome %chin% outcome[[1]]$Overførsel, 'Indkomst',
+            input$pt_outcome %chin% outcome[[1]]$Indkomst, 'Indkomst',
             input$pt_outcome %chin% outcome[[1]]$`Primær sektor`, 'Primær sundhedssektor',
             input$pt_outcome %chin% outcome[[1]]$Psykiatrien, 'Psykiatrisk hospitalskontakt',
             input$pt_outcome %chin% outcome[[1]]$Somatikken, 'Somatisk hospitalskontakt',
