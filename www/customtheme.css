@@ -1,30 +1,7 @@
-/* This is for additional theming */
-
-/*
-.navbar {
-    background-color:  #343a40;
-}
-
-
-.main-footer {
-  background-color:  #343a40;
-}
+/* 
+Additional CSS code not available within Shiny
 */
 
-/*
-.navbar-dark-mode {
-    background-color: #343a40;         
-      }
-.navbar-white {
-background-color: #ffc107; 
-}
-*/
-
-/*
-.main-header-navbar-navbar-expand-navbar-primary-navbar-ligth {
-  color: yellow;
-}
-*/
 
 .WebContainer{
     width:100%;
@@ -33,68 +10,18 @@ background-color: #ffc107;
 }
 
 
- .body {
-             -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
-             zoom: 0.8; /* Other non-webkit browsers */
-             zoom: 80%; /* Webkit browsers */
-             }
-             
-             
 /*
-div {
-  color: white;
-}
+Set Zoom for all browsers
+such that HD users can see
 */
 
-th {
-    background-color: #5E81AC;
-    color: white;
-    text-align: center;
-} 
-
-tr {
-  text-align: center;
-}
-
-.carousel-indicators li {
-    width: 10px;
-    height: 10px;
-    border-radius: 100%;
+.body {
+  -moz-transform: scale(0.8, 0.8); 
+  zoom: 0.8;
+  zoom: 80%;
 }
 
 
-.carousel-indicators {
-    bottom: -50px;
-}
-
-
-.carousel-indicators li {
-    background-color: gray;
-}
-
-.dark-mode .carousel-indicators li {
-    background-color: white;
-}
-
-/*
-.carousel-control-prev,
-.carousel-control-next{
-      bottom: -100%;
-}
-*/
-/*
-.carousel({
-  interval: 1000;
-});
-*/
-.carousel-control-prev,
-.carousel-control-next{
-    align-items: flex-end; /* Aligns it at the bottom */
-}
-
-.carousel-slide {
-  data-bs-interval: "false";
-}
 
 #id_placeholder {
   color: #6c757d;
@@ -104,60 +31,7 @@ tr {
   color: white;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  height: 0px;
-  width: 100px;
-  outline: black;
-  background-size: 0%, 0%;
-  border-radius: 0%;
-  border: 0px solid black;
-  background-image: none;
-  top: calc(-20% -25%);
-}
 
-
-.carousel-control-next-icon:after
-{
-  content: 'Næste >';
-  font-size: 25px;
-  color: gray;
-  bottom: -50px;
-}
-
-.carousel-control-prev-icon:after {
-  content: '< Forrige';
-  font-size: 25px;
-  color: gray;
-}
-
-
-.dark-mode .carousel-control-next-icon:after
-{
-  content: 'Næste >';
-  font-size: 25px;
-  color: white;
-  bottom: -50px;
-}
-
-.dark-mode .carousel-control-prev-icon:after {
-  content: '< Forrige';
-  font-size: 25px;
-  color: white;
-}
-
-
-/*
-.shiny-output-error {
-  color: white;
-  text-align: center;
-  position: absolute;
-  right: 0px;
-  width: auto;
-  border: 1px solid #dc3545;
-  padding: 10px;
-}
-*/
 
 
 .shiny-output-error {
@@ -173,19 +47,19 @@ tr {
 }
 
 
-.dtrg-group {
-  color: black;
-}
-
-
-
 .dropdown-header {
     font-size: 18px;
 }
 
 
-/* VIVE Icons */
 
+
+/* 
+VIVE Icons 
+
+Change the color of the VIVE icon
+according to chosen theme
+*/
 
 .dark-mode #vive_id {
   filter: invert(0%);
@@ -196,4 +70,18 @@ tr {
 }
 
 
+
+/* 
+Set table properties
+*/
+
+th {
+  background-color: #5E81AC;
+  color: white;
+  text-align: center;
+} 
+
+tr {
+  text-align: center;
+}
 
