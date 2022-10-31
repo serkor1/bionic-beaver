@@ -264,7 +264,9 @@
       # x <- setNames(
       #   x, str_to_sentence(names(x))
       # )
-      
+       # x <- str_replace(
+       #   x, pattern = 'Kol','KOL'
+       # )
       sort(x)
       
     }
@@ -278,7 +280,6 @@
   
   
 }
-
 
 
 

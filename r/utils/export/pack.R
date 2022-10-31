@@ -84,6 +84,26 @@
             )
           )
           
+          # set effect to percentage
+          # data[
+          #   x > 0
+          #   ,
+          #   `:=`(
+          #     effect = paste(
+          #       effect * 100, "%"
+          #     )
+          #   )
+          #   ,
+          # ]
+          
+          data[
+            x > 0
+            ,
+            effect := effect * 100
+            ,
+          ]
+          
+          
           setnames(
             data,
             old = c("x",

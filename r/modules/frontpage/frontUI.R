@@ -3,7 +3,7 @@ frontUI <- function(
   
   # generate modal
   front_modal <- modalDialog(
-    title = span(icon('home', verify_fa = FALSE), 'Velkommen til Beregner til Investeringer i Sundhed (BIS)'),
+    title = span(icon('home', verify_fa = FALSE), 'Velkommen til Beregner for Investeringer i Sundhed (BIS)'),
     size = 'xl',
     easyClose = TRUE,
     footer = modalButton(

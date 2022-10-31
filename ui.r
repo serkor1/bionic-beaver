@@ -43,7 +43,7 @@ bs4DashPage(
   # Title; ####
   # title on Navigation bar
   # on browser
-  title = "Beregner til Investeringer i Sundhed",
+  title = "Beregner for Investeringer i Sundhed",
   scrollToTop = TRUE,
   
   # header; ####
@@ -157,7 +157,7 @@ bs4DashPage(
     # Footer Start;
     fixed = TRUE,
     left = span(
-      "Beregner til Investeringer i Sundhed (BIS)",
+      "Beregner for Investeringer i Sundhed (BIS)",
       
       bs4Badge(
         color = "info",
