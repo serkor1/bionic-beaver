@@ -81,7 +81,7 @@ system.time(
 
 
 # version;
-version <- c("v0.9.0")
+version <- c("1.0.1")
 
 
 
