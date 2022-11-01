@@ -93,6 +93,11 @@ load_parameters <- .gen_option(
 
 
 chars      <- load_parameters$chars
+
+# Remove Arbejdsmarked
+# temporarily
+chars[[1]]$Arbejdsmarked <- NULL
+
 assignment <- load_parameters$assignment
 outcome    <- load_parameters$outcome
 lookup     <- .gen_lookup(data_list)
