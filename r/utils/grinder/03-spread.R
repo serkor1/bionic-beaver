@@ -27,13 +27,7 @@
     data_list,
     .f = function(element) {
       
-      if (nrow(element) == 0) {
-        
-        return(
-          NULL
-        )
-        
-      }
+      
       
       i <<- i + 1
       
@@ -52,6 +46,21 @@
         
       }
       
+      # As the grinder always
+      # returns a full dataset
+      # it is possible to establish
+      # that the chosen characters are
+      # problematic
+      
+      validate(
+        need(
+          nrow(element) != 0,
+          message = 'Sammenligningen er problematisk. Skift demografiske karakteristika.'
+          )
+      )
+      
+      
+      
       # 2) Calculate the
       # weighed outcomes
       element <- element[
@@ -66,7 +75,7 @@
           x, allocator, assignment,assignment_factor
         )
       ]
-      # 
+      
       # 2) Cast the data with the 
       # id in the data.
       element <- dcast(
@@ -75,6 +84,41 @@
         value.var = 'outcome'
         #,fun.aggregate = mean
       )
+      
+      # 3) Test wether there is 
+      # infintie values
+      idx <- which(
+        sapply(
+          colnames(element),
+          str_detect,
+          pattern = 'control|intervention|population'
+        )
+      )
+      
+      
+      control_value <- element[
+        ,
+        .(
+          value = sum(.SD)
+        )
+        ,
+        .SDcol = idx
+      ]$value
+      
+      
+      # Validate the output
+      # by checking if the value is 
+      # finite.
+      validate(
+        need(
+          is.finite(control_value),
+          label = NULL,
+          message = 'Grundet GDPR er det ikke muligt at fremvise data. Skift venligst sygdomsgruppe eller gør dine grupper større ved at fravælge demografiske karakteriska.'
+          
+          )
+      )
+      
+      
       
       return(
         element

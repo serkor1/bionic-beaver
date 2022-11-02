@@ -32,7 +32,7 @@
     id = 'main_card', 
     status = "primary",
     headerBorder = TRUE,
-    height = 'auto', # Was 1000px
+    height = 'inherit', # Was 1000px
     collapsible = FALSE,
     #sidebar = .sidebar(id, input, output),
     # This has been moved to sidebar
@@ -424,7 +424,7 @@ model1UI_performance <- function(id, output, input, id_value) {
       fluidRow(
         style = "height:90%; position:relative;",
         column(
-          width = 9,
+          width = 8,
           .model1UI_output(
             id,
             output,
@@ -432,7 +432,7 @@ model1UI_performance <- function(id, output, input, id_value) {
           )
         ),
         column(
-          width = 3,
+          width = 4,
           .sidebar(
             id,
             output,
