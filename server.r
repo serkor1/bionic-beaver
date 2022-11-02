@@ -75,20 +75,20 @@ server <- function(
   # The in-app documentation
   # is removed for now. Will be
   # implemented at a later time.
-  # shinyjs::onclick(
-  #   id = 'tab-documentation',
-  #   function() {
-  #     
-  #     runjs(
-  #       'window.open(
-  #       "documentation/_book/index.html"
-  #       )'
-  #     )
-  #     
-  #     
-  #   }
-  #   
-  # )
+  shinyjs::onclick(
+    id = 'tab-report',
+    function() {
+
+      runjs(
+        'window.open(
+        "https://www.vive.dk/da/udgivelser/teknisk-dokumentation-bis-beregner-for-investeringer-i-sundhed-18419/"
+        )'
+      )
+
+
+    }
+
+  )
   
   # NOTE: This section
   # is disabled ant the id is currently
