@@ -128,9 +128,6 @@
           # do_incidence     = input$do_incident
         )
         
-        
-        # Calculate total group size
-        # for the chosen disease groups
         group_size <- na.omit(rbindlist(
           grinded_data,
           fill = TRUE
@@ -172,26 +169,7 @@
             )
           ]$value
           
-          # if (as.logical(input$do_match)){
-          #   
-          #   value <- group_size[
-          #     assignment_factor %chin% c('population'),
-          #     .(
-          #       value = total_N
-          #     )
-          #   ]$value
-          #   
-          # } else {
-          #   
-          #   value <- group_size[
-          #     assignment_factor %chin% c('control'),
-          #     .(
-          #       value = total_N
-          #     )
-          #   ]$value
-          #   
-          #   
-          # }
+          
           
           
           formatC(
@@ -202,17 +180,6 @@
           
           
         })
-        
-        
-        # # Spread the data and 
-        # # and return it as a list.
-        # grinded_data <- spread(
-        #   data_list = grinded_data,
-        #   
-        #   # Should the data be in qty, or cost.
-        #   alternate = input$do_cost
-        #   
-        # )
         
         
         return(
@@ -255,9 +222,13 @@
       ),
       values            = paste(input$pt_demographic))
       
-      # data <- spread(
-      #   data()
-      # )
+      
+      
+      
+      
+      
+      
+      
       
       return(
         out
