@@ -21,6 +21,9 @@
   
   # function logic; ####
 
+  
+  
+  
   i <- 0
   
   data_list <- map(
@@ -46,6 +49,11 @@
         
       }
       
+      
+      
+      
+      
+      
       # As the grinder always
       # returns a full dataset
       # it is possible to establish
@@ -60,12 +68,17 @@
       )
       
       
-      
       # 2) Calculate the
-      # weighed outcomes
+      # weighed outcomes 
+      
       element <- element[
         ,
         .(
+          obs     = sum(
+            unique(
+              total_n
+            ), na.rm = TRUE
+          ),
           outcome = sum(
             outcome * weight, na.rm = TRUE
           )/sum(weight, na.rm = TRUE)
@@ -76,6 +89,9 @@
         )
       ]
       
+      
+      
+      
       # 2) Cast the data with the 
       # id in the data.
       element <- dcast(
@@ -85,7 +101,9 @@
         #,fun.aggregate = mean
       )
       
-      # 3) Test wether there is 
+      
+      
+      # 3) Test wether there is
       # infintie values
       idx <- which(
         sapply(
@@ -94,8 +112,8 @@
           pattern = 'control|intervention|population'
         )
       )
-      
-      
+
+
       control_value <- element[
         ,
         .(
@@ -104,17 +122,17 @@
         ,
         .SDcol = idx
       ]$value
-      
-      
+
+
       # Validate the output
-      # by checking if the value is 
+      # by checking if the value is
       # finite.
       validate(
         need(
           is.finite(control_value),
           label = NULL,
           message = 'Grundet GDPR er det ikke muligt at fremvise data. Skift venligst sygdomsgruppe eller gør dine grupper større ved at fravælge demografiske karakteriska.'
-          
+
           )
       )
       

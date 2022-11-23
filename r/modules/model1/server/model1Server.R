@@ -134,17 +134,17 @@
         )[
           ,
           .(
-            total_N   = sum(unique(total_n), na.rm = TRUE)
+            total_N   = sum(unique(total_N), na.rm = TRUE)
           )
           ,
           by = .(
             assignment_factor
           )
         ])
-        
-        
+
+
         output$n_treatment <- renderText({
-          
+
           formatC(
             x = group_size[
               assignment_factor %chin% c('intervention'),
@@ -155,30 +155,30 @@
             big.mark = '.',
             decimal.mark = ','
           )
-          
-          
+
+
         })
-        
+
         output$n_control <- renderText({
-          
-          
+
+
           value <- group_size[
             assignment_factor %chin% c('control'),
             .(
               value = total_N
             )
           ]$value
-          
-          
-          
-          
+
+
+
+
           formatC(
             x = value,
             big.mark = '.',
             decimal.mark = ','
           )
-          
-          
+
+
         })
         
         
@@ -221,9 +221,6 @@
         )
       ),
       values            = paste(input$pt_demographic))
-      
-      
-      
       
       
       

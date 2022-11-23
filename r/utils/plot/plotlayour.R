@@ -40,6 +40,7 @@
               
               yaxis_text <- fcase(
                 get_allocator %chin% outcome[[1]]$`Primær sektor`, 'Gennemsnitlige ydelser pr. person',
+                get_allocator %chin% c(outcome[[1]]$Psykiatrien[1],outcome[[1]]$Somatikken), 'Gennemsnitlige besøg pr. persion',
                 get_allocator %chin% outcome[[1]]$Psykiatrien, 'Gennemsnitlige sengedage pr. person',
                 get_allocator %chin% outcome[[1]]$Somatikken, 'Gennemsnitlige sengedage pr. person',
                 get_allocator %chin% outcome[[1]]$`Receptpligtig medicin`, 'Gennemsnitlige recepter pr. person',
