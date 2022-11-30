@@ -128,58 +128,58 @@
           # do_incidence     = input$do_incident
         )
         
-        group_size <- na.omit(rbindlist(
-          grinded_data,
-          fill = TRUE
-        )[
-          ,
-          .(
-            total_N   = sum(unique(total_N), na.rm = TRUE)
-          )
-          ,
-          by = .(
-            assignment_factor
-          )
-        ])
-
-
-        output$n_treatment <- renderText({
-
-          formatC(
-            x = group_size[
-              assignment_factor %chin% c('intervention'),
-              .(
-                value = total_N
-              )
-            ]$value,
-            big.mark = '.',
-            decimal.mark = ','
-          )
-
-
-        })
-
-        output$n_control <- renderText({
-
-
-          value <- group_size[
-            assignment_factor %chin% c('control'),
-            .(
-              value = total_N
-            )
-          ]$value
-
-
-
-
-          formatC(
-            x = value,
-            big.mark = '.',
-            decimal.mark = ','
-          )
-
-
-        })
+        # group_size <- na.omit(rbindlist(
+        #   grinded_data,
+        #   fill = TRUE
+        # )[
+        #   ,
+        #   .(
+        #     total_N   = sum(unique(total_N), na.rm = TRUE)
+        #   )
+        #   ,
+        #   by = .(
+        #     assignment_factor
+        #   )
+        # ])
+        # 
+        # 
+        # output$n_treatment <- renderText({
+        # 
+        #   formatC(
+        #     x = group_size[
+        #       assignment_factor %chin% c('intervention'),
+        #       .(
+        #         value = total_N
+        #       )
+        #     ]$value,
+        #     big.mark = '.',
+        #     decimal.mark = ','
+        #   )
+        # 
+        # 
+        # })
+        # 
+        # output$n_control <- renderText({
+        # 
+        # 
+        #   value <- group_size[
+        #     assignment_factor %chin% c('control'),
+        #     .(
+        #       value = total_N
+        #     )
+        #   ]$value
+        # 
+        # 
+        # 
+        # 
+        #   formatC(
+        #     x = value,
+        #     big.mark = '.',
+        #     decimal.mark = ','
+        #   )
+        # 
+        # 
+        # })
         
         
         return(
@@ -207,6 +207,51 @@
       )
     )
     
+    
+    # patient counter
+    observe({
+      
+      pt_count <- pt_counter(
+        intervention     = paste(input$pt_target),
+        control          = paste(input$pt_control),
+        incidence = fifelse(isTRUE(input$do_incident), 1, 0),
+        values = paste(input$pt_demographic)
+      )
+      
+      output$n_control <- renderText({
+        
+        
+        value <- pt_count[!(assignment_factor %chin% c('intervention'))]$obs
+        
+        
+        
+        
+        formatC(
+          x = value,
+          big.mark = '.',
+          decimal.mark = ','
+        )
+        
+        
+      })
+      
+      
+      output$n_treatment <- renderText({
+        
+        value <- pt_count[(assignment_factor %chin% c('intervention'))]$obs
+        
+          formatC(
+          x = value,
+          big.mark = '.',
+          decimal.mark = ','
+        )
+        
+        
+      })
+      
+      
+      
+    })
     
     spreaded_data <- reactive({
       

@@ -26,7 +26,31 @@ suppressPackageStartupMessages(
 )
 
 
-# Developper Mode;
+# Version history; #####
+
+# current version;
+version <- c("1.0.2")
+
+# version header;
+# create a variable that includes
+# all header text regarding the version
+version_text <- column(
+  width = 12,
+  h4(
+  paste(
+    'Version', version
+  )
+),
+
+p(
+  paste(
+    'Opdateret', '14-11-2022'
+  )
+)
+)
+
+
+# Developper Mode; ####
 developper_mode = as.logical(
   length(list.files(pattern = 'input')) == 0
 )
@@ -80,9 +104,6 @@ system.time(
 
 
 
-# version;
-version <- c("1.0.2")
-
 
 
 # Preloading Options; #####
@@ -96,4 +117,11 @@ chars      <- load_parameters$chars
 assignment <- load_parameters$assignment
 outcome    <- load_parameters$outcome
 lookup     <- .gen_lookup(data_list)
+pt_list <- fread(
+  'input/parameters/pt_counter.csv'
+)
+
+
+
+
 

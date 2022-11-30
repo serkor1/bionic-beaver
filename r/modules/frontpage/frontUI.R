@@ -42,17 +42,7 @@ frontUI <- function(
           column(
             width = 12,
             
-            h4(
-              paste(
-                'Version', version
-              )
-            ),
-            
-            p(
-              paste(
-                'Opdateret', Sys.Date()
-              )
-            ),
+            version_text,
             
             column(
               12,

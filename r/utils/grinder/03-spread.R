@@ -34,8 +34,6 @@
       
       i <<- i + 1
       
-      
-      
       # 1) Filter the data
       # according to chosen characteristics
       if (isTruthy(values)) {
@@ -48,12 +46,7 @@
         ]
         
       }
-      
-      
-      
-      
-      
-      
+
       # As the grinder always
       # returns a full dataset
       # it is possible to establish
@@ -85,7 +78,10 @@
           )
         ,
         by = .(
-          x, allocator, assignment,assignment_factor
+          x,
+          allocator,
+          assignment,
+          assignment_factor
         )
       ]
       
