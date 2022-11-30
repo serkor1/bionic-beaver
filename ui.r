@@ -109,6 +109,12 @@ bs4DashPage(
           text = "VIVEs dokumentation",
           tabName = "report",
           icon    = icon('books', verify_fa = FALSE)
+        ),
+        
+        menuSubItem(
+          text = "Versionshistorik",
+          tabName = "version_history",
+          icon    = icon('code-compare', verify_fa = FALSE)
         )
         
         

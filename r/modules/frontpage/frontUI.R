@@ -36,13 +36,44 @@ frontUI <- function(
           
         ),
         accordionItem(
+          title = span(icon(name = 'code-compare', verify_fa = FALSE), 'Versionshistorik'),
+          collapsed = TRUE,
+          status = 'info',
+          column(
+            width = 12,
+            
+            h4(
+              paste(
+                'Version', version
+              )
+            ),
+            
+            p(
+              paste(
+                'Opdateret', Sys.Date()
+              )
+            ),
+            
+            column(
+              12,
+              includeMarkdown(
+                'desc/version_hist.Rmd'
+              )
+            )
+            
+            
+            
+          )
+        ),
+        accordionItem(
           title = span(icon(name = 'heart', verify_fa = FALSE), 'Open source'),
           collapsed = TRUE,
-          status = 'primary',
+          status = 'warning',
           includeMarkdown(
             'desc/opensource.Rmd'
           )
         )
+        
       )
       
       

@@ -1,0 +1,8 @@
+> **Bemærk:** Modellens fulde versionshistorik kan findes på  [GitHub](https://github.com/serkor1/bionic-beaver).
+
+1. Rettet en fejl i databehandlingsproceduren for `indkomst`-relateret data.
+    - Fejlen betød at visse værdier blev kunstigt nedjusteret.
+    
+    
+2. Graferne for `somatisk hospitalskontakt` og `psykiatrisk hospitalskontakt` ved valgt af `ambulant` outcomes viste `sengedage`, istedet for `besøg`.
+    - Fejlen har ingen betydning for de faktiske værdier.

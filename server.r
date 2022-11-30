@@ -90,6 +90,55 @@ server <- function(
 
   )
   
+  
+  # The in-app version history
+  shinyjs::onclick(
+    id = 'tab-version_history',
+    function() {
+      
+      showModal(
+        modalDialog(
+          title     = span(icon('code-compare', verify_fa = FALSE),'Versionshistorik'),
+          size      = 'l',
+          easyClose = TRUE,footer = modalButton("Luk"),
+          
+          
+          column(
+            width = 12,
+            
+            h4(
+              paste(
+                'Version', version
+              )
+            ),
+            
+            p(
+              paste(
+                'Opdateret', Sys.Date()
+              )
+            ),
+            
+            column(
+              12,
+              includeMarkdown(
+                'desc/version_hist.Rmd'
+              )
+            )
+              
+              
+            
+          )
+          
+          
+          
+        )
+      )
+      
+      
+    }
+    
+  )
+  
   # NOTE: This section
   # is disabled ant the id is currently
   # a boomer-proof button
