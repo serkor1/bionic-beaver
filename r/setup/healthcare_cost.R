@@ -13,7 +13,7 @@ primary_sector <- data.table(
     ),
   subclass = c(
     'Almen praksis',
-    'Anden speciale',
+    'Andet speciale',
     'Fysioterapi',
     'Psykiater',
     'Psykolog'
