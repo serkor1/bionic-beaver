@@ -29,7 +29,7 @@ suppressPackageStartupMessages(
 # Version history; #####
 
 # current version;
-version <- c("1.0.2")
+version <- c("1.0.3")
 
 # version header;
 # create a variable that includes
@@ -44,7 +44,7 @@ version_text <- column(
 
 p(
   paste(
-    'Opdateret', '14-11-2022'
+    'Opdateret', '01-02-2023'
   )
 )
 )

@@ -66,14 +66,23 @@
         outcome_type %chin% recipe$outcome_measure 
       ]
       
-      if (indicator) {
-        
-        element <- element[
-          type == recipe$incidence
-        ]
-        
-      }
       
+      
+      # if (indicator) {
+      #   
+      #   element <- element[
+      #     type == recipe$incidence
+      #   ]
+      #   
+      # }
+      
+      # Note: As per version 1.0.3
+      # incidence is two sepereate populations
+      # and therefore it can be filtered
+      # in both cases.
+      element <- element[
+        type == recipe$incidence
+      ]
       
       # 4) Set year to x
       # for normalized approach

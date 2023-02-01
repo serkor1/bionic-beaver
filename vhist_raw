@@ -1,0 +1,6 @@
+1. `indkomst`-relateret er blevet justeret således at det er mere præcist.
+    - Justeringen betyder at værdier brugt før opdateringen skal regnes om.
+    
+    
+2. Graferne for `somatisk hospitalskontakt` og `psykiatrisk hospitalskontakt` ved valgt af `ambulant` outcomes viste `sengedage`, istedet for `besøg`.
+    - Fejlen har ingen betydning for de faktiske værdier.

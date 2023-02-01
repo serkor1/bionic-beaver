@@ -1,9 +1,11 @@
 > **Bemærk:** Modellens fulde versionshistorik kan findes på  [GitHub](https://github.com/serkor1/bionic-beaver).
 
 
-1. `indkomst`-relateret er blevet justeret således at det er mere præcist.
-    - Justeringen betyder at værdier brugt før opdateringen skal regnes om.
-    
-    
-2. Graferne for `somatisk hospitalskontakt` og `psykiatrisk hospitalskontakt` ved valgt af `ambulant` outcomes viste `sengedage`, istedet for `besøg`.
-    - Fejlen har ingen betydning for de faktiske værdier.
+1. `Andet speciale` viste ingen værdier for `omkostninger`. Fejlen er rettet.
+
+2. Justering af vægtning på tværs af alle sygdomsgrupper. Denne rekalibrering af vægtene har en lille betydning for resultaterne. Dette gælder kun for `prævalente` grupper.
+
+
+
+
+

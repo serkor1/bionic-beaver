@@ -37,5 +37,7 @@ Når du har installeret `devtools` og `renv`, kan du installere alle biblioteker
 renv::restore()
 ```
 
+### Opdateringer
 
+Modellen er sidst opdateret `01-02-2023`
 
