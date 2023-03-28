@@ -110,6 +110,7 @@ pt_counter <- function(
     ,
     .(
       obs = sum(
+        # Was unique
         unique(
           total_n
         ),
