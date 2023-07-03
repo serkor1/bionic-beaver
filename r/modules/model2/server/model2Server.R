@@ -171,10 +171,21 @@ second_dataserver <- function(id, data_list){
       
       
     })
-    
+  
     
     plot_data <- reactive(
       {
+        # Add valdidation
+        # validate(
+        #   need(
+        #     isTruthy(input$pt_target),
+        #     message = 'Vælg en målgruppe'
+        #   ),
+        #   need(
+        #     input$pt_control,
+        #     message = 'Vælg en sammenligningsgruppe'
+        #   )
+        # )
         
         baseline_plot()
         
@@ -196,11 +207,12 @@ second_dataserver <- function(id, data_list){
         # Add valdidation
         validate(
           need(
-            input$pt_target,
+            grepl(x = input$pt_target, pattern = '.+'),
             message = 'Vælg en målgruppe'
           ),
           need(
-            input$pt_control,
+            grepl(x = input$pt_control, pattern = '.+')
+            ,
             message = 'Vælg en sammenligningsgruppe'
           )
         )
@@ -275,7 +287,7 @@ second_dataserver <- function(id, data_list){
     # Generate Plots: #####
     output$plot <- renderPlotly({
       
-      
+      req(input$pt_group)
       
       
       plot_ly(
