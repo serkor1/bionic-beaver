@@ -221,7 +221,7 @@
       output$n_control <- renderText({
         
         
-        value <- pt_count[!(assignment_factor %chin% c('intervention'))]$obs
+        value <- pt_count[(assignment_factor %chin% c('control'))]$obs
         
         
         

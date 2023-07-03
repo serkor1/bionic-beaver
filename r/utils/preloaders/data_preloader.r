@@ -56,6 +56,15 @@
       
       if (str_detect(path, 'model1')) {
         
+        
+        data <- data[
+          !grepl(
+            x = assignment,
+            pattern = 'multipel sklerose',
+            ignore.case = TRUE
+          )
+        ]
+        
         if (str_detect(get_path[i], 'medication')) {
 
           message('Medication Data')
@@ -70,6 +79,8 @@
           cost := qty * price
           ,
         ]
+        
+        
 
       } else {
         

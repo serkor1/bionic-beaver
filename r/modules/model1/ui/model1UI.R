@@ -31,7 +31,7 @@ model1UI <- function(
   # return statement; ####
   return(
     list(
-      body       = ui_body
+      body = ui_body
     )
     
   )
